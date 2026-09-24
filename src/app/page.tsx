@@ -1,103 +1,95 @@
+import { AnalyticsPreview } from "@/components/analytics/analytics-preview";
+import { FeaturedInsights } from "@/components/analytics/featured-insights";
+import { FeaturedAnalysis } from "@/components/projects/featured-analysis";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ButtonLink } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
-export default function DesignSystemPreview() {
+const steps = [
+  {
+    number: "01",
+    title: "Discover",
+    description: "Find an analysis that interests you.",
+  },
+  {
+    number: "02",
+    title: "Understand",
+    description: "Follow the key findings and data story.",
+  },
+  {
+    number: "03",
+    title: "Explore",
+    description: "Use filters and visualizations to investigate the data yourself.",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="container-page page-frame">
-      <div className="section-separation flex items-start justify-between gap-6">
-        <div className="max-w-3xl space-y-4">
-          <Badge variant="accent">Temporary development preview</Badge>
-          <div className="space-y-3">
-            <p className="text-overline">databyloris design system</p>
-            <h1>Clear stories. Deeper exploration.</h1>
-            <p className="text-lead max-w-2xl">
-              This internal preview validates typography, semantic color tokens,
-              reusable primitives, and the light and dark themes. It is not the
-              product Home page.
-            </p>
+    <div>
+      <section className="container-page page-frame grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+        <div className="max-w-2xl">
+          <p className="text-overline">Interactive Data Stories</p>
+          <h1 className="mt-4">Explore what data has to say.</h1>
+          <p className="text-lead mt-6">
+            Interactive analyses that turn real-world datasets into insights, stories
+            and explorable dashboards.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/explore" size="lg">
+              Explore projects
+              <span aria-hidden="true">→</span>
+            </ButtonLink>
+            <ButtonLink href="/demo" size="lg" variant="secondary">
+              Try interactive demo
+            </ButtonLink>
           </div>
+          <p className="mt-8 text-sm font-medium text-text-muted">
+            Discover <span aria-hidden="true">→</span> Understand{" "}
+            <span aria-hidden="true">→</span> Explore
+          </p>
         </div>
-        <ThemeToggle />
-      </div>
 
-      <section
-        aria-labelledby="typography-title"
-        className="section-separation space-y-5"
-      >
-        <p className="text-overline">Typography</p>
-        <h2 id="typography-title">Designed for analytical clarity</h2>
-        <p className="max-w-2xl text-text-secondary">
-          Editorial surfaces can breathe, while future dashboard surfaces can use
-          a wider, denser canvas without changing the visual hierarchy.
-        </p>
-        <p className="text-sm text-text-muted">
-          Muted text supports metadata, annotations, and secondary context.
-        </p>
+        <AnalyticsPreview />
       </section>
 
-      <section aria-labelledby="components-title" className="space-y-6">
-        <div className="space-y-2">
-          <p className="text-overline">Core primitives</p>
-          <h2 id="components-title">Reusable foundations</h2>
+      <FeaturedAnalysis />
+      <FeaturedInsights />
+
+      <section aria-labelledby="how-it-works-title" className="container-page section-separation">
+        <div className="mb-7 max-w-2xl space-y-3">
+          <p className="text-overline">How it works</p>
+          <h2 id="how-it-works-title">From discovery to your own questions.</h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          <Card surface="elevated">
-            <CardHeader>
-              <CardTitle>Buttons</CardTitle>
-              <CardDescription>
-                Accessible actions with consistent sizing, focus, and state styling.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-3">
-              <Button>Primary action</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button disabled>Disabled</Button>
-            </CardContent>
-          </Card>
+        <ol className="grid gap-4 md:grid-cols-3">
+          {steps.map((step) => (
+            <li key={step.number}>
+              <Card className="h-full p-5 sm:p-6">
+                <Badge variant="accent">{step.number}</Badge>
+                <h3 className="mt-5">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-text-secondary">
+                  {step.description}
+                </p>
+              </Card>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Badges</CardTitle>
-              <CardDescription>
-                Compact semantic labels that never depend on color alone.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-2">
-              <Badge>Neutral</Badge>
-              <Badge variant="accent">Accent</Badge>
-              <Badge variant="success">Success</Badge>
-              <Badge variant="warning">Warning</Badge>
-              <Badge variant="danger">Danger</Badge>
-            </CardContent>
-          </Card>
-
-          <Card className="md:col-span-2" surface="secondary">
-            <CardHeader>
-              <CardTitle>Surface hierarchy</CardTitle>
-              <CardDescription>
-                Page, primary, secondary, and elevated surfaces retain their roles
-                across both themes.
-              </CardDescription>
-            </CardHeader>
-            <CardFooter>
-              <Badge variant="success">Theme ready</Badge>
-              <span className="text-sm text-text-muted">
-                Use the toggle above to compare modes.
-              </span>
-            </CardFooter>
-          </Card>
-        </div>
+      <section aria-labelledby="home-cta-title" className="container-page pb-16 sm:pb-24">
+        <Card
+          className="flex flex-col items-start justify-between gap-6 p-6 sm:flex-row sm:items-center sm:p-8"
+          surface="secondary"
+        >
+          <div className="space-y-2">
+            <p className="text-overline">Continue exploring</p>
+            <h2 id="home-cta-title">Ready to explore the data?</h2>
+          </div>
+          <ButtonLink className="shrink-0" href="/explore" size="lg">
+            Explore projects
+            <span aria-hidden="true">→</span>
+          </ButtonLink>
+        </Card>
       </section>
     </div>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ComponentPropsWithRef } from "react";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -7,6 +8,11 @@ export interface ButtonProps extends ComponentPropsWithRef<"button"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
 }
+
+export type ButtonLinkProps = ComponentPropsWithRef<typeof Link> & {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+};
 
 const variants: Record<ButtonVariant, string> = {
   primary:
@@ -26,6 +32,14 @@ const sizes: Record<ButtonSize, string> = {
   icon: "size-11 p-0",
 };
 
+function buttonClassName(
+  variant: ButtonVariant,
+  size: ButtonSize,
+  className: string,
+) {
+  return `inline-flex items-center justify-center gap-2 rounded-control border font-medium transition-colors ${variants[variant]} ${sizes[size]} ${className}`;
+}
+
 export function Button({
   className = "",
   type = "button",
@@ -36,8 +50,17 @@ export function Button({
   return (
     <button
       type={type}
-      className={`inline-flex items-center justify-center gap-2 rounded-control border font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`${buttonClassName(variant, size, className)} disabled:pointer-events-none disabled:opacity-50`}
       {...props}
     />
   );
+}
+
+export function ButtonLink({
+  className = "",
+  variant = "primary",
+  size = "md",
+  ...props
+}: ButtonLinkProps) {
+  return <Link className={buttonClassName(variant, size, className)} {...props} />;
 }
