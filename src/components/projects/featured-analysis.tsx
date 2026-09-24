@@ -1,8 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
 
-const metadata = ["2022–2025", "Artists", "Genres", "Countries"];
+const project = SPOTIFY_DEMO_PROJECT;
+const metadata = [project.period, ...project.tags];
 
 const rankingPreview = [82, 67, 54, 39];
 
@@ -17,19 +19,18 @@ export function FeaturedAnalysis() {
       <Card className="grid overflow-hidden lg:grid-cols-[1.05fr_0.95fr]" surface="elevated">
         <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
           <div className="mb-5 flex flex-wrap items-center gap-2">
-            <Badge variant="accent">Music</Badge>
+            <Badge variant="accent">{project.category}</Badge>
             <Badge>Interactive demo</Badge>
           </div>
 
           <h3 className="text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
-            Spotify Listening Trends
+            {project.title}
           </h3>
           <p className="mt-4 text-lg font-medium leading-7 text-text-primary">
-            What can streaming data tell us about how people listen?
+            {project.question}
           </p>
           <p className="mt-3 max-w-xl leading-7 text-text-secondary">
-            Explore listening patterns, artists, genres, markets and trends through an
-            interactive data story.
+            {project.description}
           </p>
 
           <ul className="mt-6 flex flex-wrap gap-2" aria-label="Analysis metadata">
@@ -44,7 +45,7 @@ export function FeaturedAnalysis() {
           </ul>
 
           <div className="mt-7">
-            <ButtonLink href="/demo" size="lg">
+            <ButtonLink href={project.href} size="lg">
               Explore analysis
               <span aria-hidden="true">→</span>
             </ButtonLink>
@@ -62,7 +63,7 @@ export function FeaturedAnalysis() {
                 <p className="text-sm font-semibold text-text-primary">Listening pulse</p>
                 <p className="text-xs text-text-muted">Demo interface preview</p>
               </div>
-              <Badge variant="accent">2022–2025</Badge>
+              <Badge variant="accent">{project.period}</Badge>
             </div>
 
             <svg
