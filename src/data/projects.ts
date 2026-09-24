@@ -1,5 +1,7 @@
 import type { ProjectDetail, ProjectSummary } from "@/types/project";
 
+import { SPOTIFY_OVERVIEW } from "./spotify-overview";
+
 const SPOTIFY_PROJECT_PATH = "/projects/spotify-listening-trends";
 
 export const SPOTIFY_DEMO_PROJECT = {
@@ -30,9 +32,8 @@ export const SPOTIFY_DEMO_PROJECT = {
     source: "Demonstration dataset",
     illustrative: true,
   },
+  overview: SPOTIFY_OVERVIEW,
   content: {
-    overview:
-      "This project frames listening behavior as a sequence of questions about change over time, artist concentration, genre momentum and differences between markets.",
     methodology:
       "The planned analysis aggregates listening measures over time and compares artists, genres and countries using shared definitions across the project.",
     limitations:

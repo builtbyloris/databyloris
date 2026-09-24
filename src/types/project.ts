@@ -1,3 +1,5 @@
+import type { ProjectOverviewData } from "@/types/analytics";
+
 export type ProjectCategory =
   | "Music"
   | "Entertainment"
@@ -45,8 +47,8 @@ export interface ProjectSummary {
 export interface ProjectDetail extends ProjectSummary {
   subtitle: string;
   dataset: DatasetMetadata;
+  overview: ProjectOverviewData;
   content: {
-    overview: string;
     methodology: string;
     limitations: string;
   };

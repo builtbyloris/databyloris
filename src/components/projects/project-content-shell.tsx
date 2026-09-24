@@ -4,6 +4,7 @@ import type { ProjectDetail } from "@/types/project";
 import { DatasetSnapshot } from "./dataset-snapshot";
 import { ProjectHero } from "./project-hero";
 import { ProjectNavigation } from "./project-navigation";
+import { ProjectOverview } from "./project-overview";
 
 interface ProjectContentShellProps {
   project: ProjectDetail;
@@ -49,31 +50,7 @@ export function ProjectContentShell({ project }: ProjectContentShellProps) {
       <ProjectNavigation />
 
       <div className="container-story py-14 sm:py-20">
-        <section
-          aria-labelledby="overview-title"
-          className="scroll-mt-32 border-b border-border pb-14 sm:pb-20"
-          id="overview"
-        >
-          <SectionHeading eyebrow="Overview" id="overview-title" title="Start with the question" />
-          <p className="mt-6 text-lg leading-8 text-text-secondary">{project.content.overview}</p>
-
-          <Card className="mt-8 overflow-hidden" surface="primary">
-            <div className="border-b border-border p-5 sm:p-6">
-              <p className="text-overline">Analytical question</p>
-              <p className="mt-3 text-xl font-semibold leading-8 text-text-primary">
-                {project.question}
-              </p>
-            </div>
-            <div className="grid gap-px bg-border sm:grid-cols-3">
-              {["Headline measures", "Main visualization", "Supporting context"].map((label) => (
-                <div className="bg-surface-secondary p-5" key={label}>
-                  <p className="text-sm font-medium text-text-primary">{label}</p>
-                  <p className="mt-2 text-sm leading-6 text-text-muted">Planned analysis module</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </section>
+        <ProjectOverview project={project} />
 
         <section
           aria-labelledby="insights-title"
