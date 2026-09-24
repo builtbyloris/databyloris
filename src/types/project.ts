@@ -14,6 +14,19 @@ export type ProjectCoverType =
 
 export type ProjectStatus = "draft" | "published" | "upcoming";
 
+export interface DatasetMetadata {
+  name: string;
+  summary: string;
+  period?: string;
+  records?: string;
+  entities?: string;
+  categories?: string;
+  markets?: string;
+  grain: string;
+  source: string;
+  illustrative: boolean;
+}
+
 export interface ProjectSummary {
   slug: string;
   title: string;
@@ -27,4 +40,14 @@ export interface ProjectSummary {
   demo: boolean;
   status: ProjectStatus;
   href?: string;
+}
+
+export interface ProjectDetail extends ProjectSummary {
+  subtitle: string;
+  dataset: DatasetMetadata;
+  content: {
+    overview: string;
+    methodology: string;
+    limitations: string;
+  };
 }

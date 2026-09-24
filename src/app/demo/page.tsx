@@ -1,10 +1,7 @@
+import { redirect } from "next/navigation";
+
+import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
+
 export default function DemoPage() {
-  return (
-    <div className="container-story page-frame content-stack">
-      <h1>Demo</h1>
-      <p className="text-lead">
-        This temporary page will become the platform&apos;s interactive demo.
-      </p>
-    </div>
-  );
+  redirect(SPOTIFY_DEMO_PROJECT.href);
 }

@@ -4,6 +4,7 @@ import { FeaturedAnalysis } from "@/components/projects/featured-analysis";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
 
 const steps = [
   {
@@ -39,7 +40,7 @@ export default function HomePage() {
               Explore projects
               <span aria-hidden="true">→</span>
             </ButtonLink>
-            <ButtonLink href="/demo" size="lg" variant="secondary">
+            <ButtonLink href={SPOTIFY_DEMO_PROJECT.href} size="lg" variant="secondary">
               Try interactive demo
             </ButtonLink>
           </div>
