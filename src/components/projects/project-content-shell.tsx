@@ -3,6 +3,7 @@ import type { ProjectDetail } from "@/types/project";
 
 import { DatasetSnapshot } from "./dataset-snapshot";
 import { ProjectHero } from "./project-hero";
+import { ProjectInsights } from "./project-insights";
 import { ProjectNavigation } from "./project-navigation";
 import { ProjectOverview } from "./project-overview";
 
@@ -51,22 +52,7 @@ export function ProjectContentShell({ project }: ProjectContentShellProps) {
 
       <div className="container-story py-14 sm:py-20">
         <ProjectOverview project={project} />
-
-        <section
-          aria-labelledby="insights-title"
-          className="scroll-mt-32 border-b border-border py-14 sm:py-20"
-          id="insights"
-        >
-          <SectionHeading eyebrow="Insights" id="insights-title" title="Follow the data story" />
-          <p className="mt-6 text-lg leading-8 text-text-secondary">
-            Authored findings will explain the strongest patterns before connecting them to
-            the interactive exploration experience.
-          </p>
-          <PlannedModule
-            label="Story modules"
-            text="This space will hold focused insight narratives, supporting evidence and clear paths into the relevant dashboard state."
-          />
-        </section>
+        <ProjectInsights project={project} />
 
         <section
           aria-labelledby="explore-title"
