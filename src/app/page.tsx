@@ -12,7 +12,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function DesignSystemPreview() {
   return (
-    <main className="container-page page-frame">
+    <div className="container-page page-frame">
       <div className="section-separation flex items-start justify-between gap-6">
         <div className="max-w-3xl space-y-4">
           <Badge variant="accent">Temporary development preview</Badge>
@@ -99,6 +99,6 @@ export default function DesignSystemPreview() {
           </Card>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

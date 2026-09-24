@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { PublicShell } from "@/components/layout/public-shell";
 import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
@@ -29,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {children}
+        <PublicShell>{children}</PublicShell>
       </body>
     </html>
   );
