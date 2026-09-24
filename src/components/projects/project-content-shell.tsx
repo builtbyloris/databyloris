@@ -1,7 +1,7 @@
-import { Card } from "@/components/ui/card";
 import type { ProjectDetail } from "@/types/project";
 
 import { DatasetSnapshot } from "./dataset-snapshot";
+import { ProjectExplore } from "./project-explore";
 import { ProjectHero } from "./project-hero";
 import { ProjectInsights } from "./project-insights";
 import { ProjectNavigation } from "./project-navigation";
@@ -28,18 +28,6 @@ function SectionHeading({ eyebrow, id, title }: SectionHeadingProps) {
   );
 }
 
-function PlannedModule({ label, text }: { label: string; text: string }) {
-  return (
-    <Card className="mt-7 p-6 sm:p-8" surface="secondary">
-      <div className="flex items-center gap-3">
-        <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
-        <p className="text-xs font-semibold uppercase tracking-wider text-accent">{label}</p>
-      </div>
-      <p className="mt-4 max-w-2xl leading-7 text-text-secondary">{text}</p>
-    </Card>
-  );
-}
-
 export function ProjectContentShell({ project }: ProjectContentShellProps) {
   return (
     <article>
@@ -53,22 +41,7 @@ export function ProjectContentShell({ project }: ProjectContentShellProps) {
       <div className="container-story py-14 sm:py-20">
         <ProjectOverview project={project} />
         <ProjectInsights project={project} />
-
-        <section
-          aria-labelledby="explore-title"
-          className="scroll-mt-32 border-b border-border py-14 sm:py-20"
-          id="explore"
-        >
-          <SectionHeading eyebrow="Explore" id="explore-title" title="Investigate your own questions" />
-          <p className="mt-6 text-lg leading-8 text-text-secondary">
-            The future dashboard will provide a denser workspace for comparing trends and
-            examining the dataset from different perspectives.
-          </p>
-          <PlannedModule
-            label="Interactive workspace"
-            text="Dashboard controls, visualizations and detailed comparisons will be introduced here in the next product phase."
-          />
-        </section>
+        <ProjectExplore project={project} />
 
         <section
           aria-labelledby="methodology-title"

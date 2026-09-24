@@ -1,4 +1,8 @@
-import type { ProjectInsightsData, ProjectOverviewData } from "@/types/analytics";
+import type {
+  DashboardConfiguration,
+  ProjectInsightsData,
+  ProjectOverviewData,
+} from "@/types/analytics";
 
 export type ProjectCategory =
   | "Music"
@@ -47,6 +51,7 @@ export interface ProjectSummary {
 export interface ProjectDetail extends ProjectSummary {
   subtitle: string;
   dataset: DatasetMetadata;
+  dashboard: DashboardConfiguration;
   overview: ProjectOverviewData;
   insights: ProjectInsightsData;
   content: {

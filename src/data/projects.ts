@@ -1,11 +1,12 @@
 import type { ProjectDetail, ProjectSummary } from "@/types/project";
 
+import { SPOTIFY_DASHBOARD } from "./spotify-demo-dataset";
 import { SPOTIFY_INSIGHTS } from "./spotify-insights";
 import { SPOTIFY_OVERVIEW } from "./spotify-overview";
 
 const SPOTIFY_PROJECT_PATH = "/projects/spotify-listening-trends";
 
-export const SPOTIFY_DEMO_PROJECT = {
+export const SPOTIFY_PROJECT_SUMMARY = {
   slug: "spotify-listening-trends",
   title: "Spotify Listening Trends",
   category: "Music",
@@ -19,13 +20,17 @@ export const SPOTIFY_DEMO_PROJECT = {
   demo: true,
   status: "published",
   href: SPOTIFY_PROJECT_PATH,
+} satisfies ProjectSummary;
+
+export const SPOTIFY_DEMO_PROJECT = {
+  ...SPOTIFY_PROJECT_SUMMARY,
   subtitle: "An interactive data story about streaming behavior across time and markets.",
   dataset: {
     name: "Spotify listening trends demo dataset",
     summary:
       "An illustrative streaming dataset configured to demonstrate the project story and future exploration experience.",
     period: "2022–2025 · illustrative coverage",
-    records: "Illustrative records",
+    records: "1,536 synthetic rows",
     entities: "Artists and tracks",
     categories: "Genres",
     markets: "Countries",
@@ -33,6 +38,7 @@ export const SPOTIFY_DEMO_PROJECT = {
     source: "Demonstration dataset",
     illustrative: true,
   },
+  dashboard: SPOTIFY_DASHBOARD,
   overview: SPOTIFY_OVERVIEW,
   insights: SPOTIFY_INSIGHTS,
   content: {
@@ -44,7 +50,7 @@ export const SPOTIFY_DEMO_PROJECT = {
 } satisfies ProjectDetail;
 
 export const MVP_PROJECTS = [
-  SPOTIFY_DEMO_PROJECT,
+  SPOTIFY_PROJECT_SUMMARY,
   {
     slug: "netflix-catalog-trends",
     title: "Netflix Catalog Trends",

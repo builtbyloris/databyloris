@@ -128,3 +128,47 @@ export interface ProjectInsightsData {
     text: string;
   };
 }
+
+export interface DashboardRow {
+  date: string;
+  month: string;
+  year: number;
+  trackId: string;
+  trackName: string;
+  artistId: string;
+  artistName: string;
+  genre: string;
+  country: string;
+  streams: number;
+  listeners: number;
+  popularity: number;
+  playlistReach: number;
+}
+
+export type DashboardFilterKey = "period" | "country" | "genre" | "artist";
+
+export type DashboardFilterState = Record<DashboardFilterKey, string | null>;
+
+export interface FilterOption {
+  label: string;
+  value: string;
+}
+
+export type DashboardFilterOptions = Record<
+  DashboardFilterKey,
+  readonly FilterOption[]
+>;
+
+export interface DashboardKPIResult {
+  totalStreams: number;
+  uniqueListeners: number;
+  topArtist: string | null;
+  topGenre: string | null;
+}
+
+export interface DashboardConfiguration {
+  datasetLabel: string;
+  datasetDescription: string;
+  synthetic: boolean;
+  rows: readonly DashboardRow[];
+}
