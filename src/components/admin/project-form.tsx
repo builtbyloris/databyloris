@@ -193,14 +193,28 @@ export function ProjectForm({ implementedSlug, mode, project }: ProjectFormProps
           </select>
           <FieldError field="status" state={state} />
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <label className={labelClassName} htmlFor="projectType">
+              Project type
+            </label>
+            <select
+              aria-describedby={describedBy("projectType")}
+              aria-invalid={Boolean(state.fieldErrors.projectType)}
+              className={inputClassName}
+              defaultValue={project?.demo ? "demo" : "project"}
+              disabled={pending}
+              id="projectType"
+              name="projectType"
+            >
+              <option value="project">Project</option>
+              <option value="demo">Demo</option>
+            </select>
+            <FieldError field="projectType" state={state} />
+          </div>
           <label className="flex min-h-11 items-center gap-3 rounded-control border border-control-border bg-surface-primary px-3.5 text-sm text-text-primary">
             <input defaultChecked={project?.featured} disabled={pending} name="featured" type="checkbox" />
             Featured project
-          </label>
-          <label className="flex min-h-11 items-center gap-3 rounded-control border border-control-border bg-surface-primary px-3.5 text-sm text-text-primary">
-            <input defaultChecked={project?.demo} disabled={pending} name="demo" type="checkbox" />
-            Demo project
           </label>
         </div>
       </section>

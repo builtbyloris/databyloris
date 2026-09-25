@@ -9,6 +9,8 @@ remain code-driven until a later migration.
 - Supabase Auth identifies the private administrator.
 - `admin_users` provides the database-level administrator allowlist.
 - `projects` stores core catalog, publishing, and dataset metadata for Admin CRUD.
+- `projects.demo` is the project classification: `false` identifies a standard
+  project and `true` identifies a demo.
 - `projects.cover_path` stores the project-scoped Supabase Storage object path
   for the project's optional single cover image; it never stores a signed or
   arbitrary external URL.
@@ -20,7 +22,9 @@ remain code-driven until a later migration.
 - Administrator membership is provisioned out of band by adding the existing
   Supabase Auth user UUID to `admin_users`; no personal identifier is seeded by
   the repository.
-- Public Home, Explore, and project routes query published Supabase metadata.
+- Public routes query published Supabase metadata. Explore lists standard
+  projects only; demos remain available through their dedicated entry points
+  and project routes.
 - A code-side implementation registry maps supported slugs to authored analytics,
   story, methodology, dashboard, and onboarding configuration.
 - Published records without a registered implementation receive a metadata-only

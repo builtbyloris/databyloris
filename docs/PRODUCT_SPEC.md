@@ -50,7 +50,8 @@ or unpublishing a record removes that project from public routes.
 ## Public information architecture
 
 - **Home:** introduce the platform and lead into project discovery.
-- **Explore Projects:** browse published projects.
+- **Explore Projects:** browse published standard projects; demos use their
+  dedicated entry points.
 - **Project:** a reusable project experience with Overview, Insights, Explore, and Methodology sections.
 - **Interactive Demo:** demonstrate the platform through a real project experience.
 - **About:** explain the platform and its approach.

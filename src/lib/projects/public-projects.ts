@@ -6,13 +6,23 @@ import type { PublicProjectMetadata } from "@/types/project";
 
 import { projectRowToPublicProject } from "./project-adapter";
 
-async function queryPublishedProjects(): Promise<ProjectDatabaseRow[]> {
+type PublishedProjectClassification = "all" | "project";
+
+async function queryPublishedProjects(
+  classification: PublishedProjectClassification,
+): Promise<ProjectDatabaseRow[]> {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    let query = supabase
       .from("projects")
       .select("*")
-      .eq("status", "published")
+      .eq("status", "published");
+
+    if (classification === "project") {
+      query = query.eq("demo", false);
+    }
+
+    const { data, error } = await query
       .order("featured", { ascending: false })
       .order("published_at", { ascending: false, nullsFirst: false });
 
@@ -24,11 +34,13 @@ async function queryPublishedProjects(): Promise<ProjectDatabaseRow[]> {
 }
 
 export async function listPublishedProjects(): Promise<PublicProjectMetadata[]> {
-  return (await queryPublishedProjects()).map(projectRowToPublicProject);
+  return (await queryPublishedProjects("project")).map(projectRowToPublicProject);
 }
 
 export async function listFeaturedPublishedProjects() {
-  const projects = await listPublishedProjects();
+  const projects = (await queryPublishedProjects("all")).map(
+    projectRowToPublicProject,
+  );
   return projects.filter((project) => project.featured);
 }
 

@@ -16,7 +16,7 @@ export function KPICard({ kpi }: KPICardProps) {
         </Badge>
       </div>
 
-      <p className="mt-5 text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
+      <p className="mt-5 break-normal text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
         {kpi.value}
       </p>
 

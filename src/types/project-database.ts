@@ -1,4 +1,5 @@
 export type StoredProjectStatus = "draft" | "published";
+export type ProjectClassification = "project" | "demo";
 
 export interface ProjectDatabaseRow {
   id: string;
@@ -58,6 +59,7 @@ export type ProjectFormField =
   | "datasetRecords"
   | "datasetGrain"
   | "datasetSource"
+  | "projectType"
   | "status";
 
 export interface ProjectFormState {

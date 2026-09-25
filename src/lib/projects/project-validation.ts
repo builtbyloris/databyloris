@@ -1,4 +1,5 @@
 import type {
+  ProjectClassification,
   ProjectFormField,
   ProjectFormState,
   ProjectWriteInput,
@@ -44,6 +45,7 @@ export function validateProjectForm(formData: FormData):
     datasetRecords: readString(formData, "datasetRecords"),
     datasetGrain: readString(formData, "datasetGrain"),
     datasetSource: readString(formData, "datasetSource"),
+    projectType: readString(formData, "projectType"),
     status: readString(formData, "status"),
   };
   const fieldErrors: ProjectFormState["fieldErrors"] = {};
@@ -70,6 +72,10 @@ export function validateProjectForm(formData: FormData):
 
   if (values.status !== "draft" && values.status !== "published") {
     fieldErrors.status = "Choose Draft or Published.";
+  }
+
+  if (values.projectType !== "project" && values.projectType !== "demo") {
+    fieldErrors.projectType = "Choose Project or Demo.";
   }
 
   const tags = values.tags
@@ -104,7 +110,7 @@ export function validateProjectForm(formData: FormData):
       dataset_grain: optional(values.datasetGrain),
       dataset_source: optional(values.datasetSource),
       featured: formData.get("featured") === "on",
-      demo: formData.get("demo") === "on",
+      demo: (values.projectType as ProjectClassification) === "demo",
       status: values.status as StoredProjectStatus,
     },
   };
