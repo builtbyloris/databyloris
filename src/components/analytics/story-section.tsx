@@ -10,6 +10,7 @@ interface StorySectionProps {
   index: number;
   story: InsightStoryData;
   total: number;
+  tourTarget?: boolean;
 }
 
 function StoryCopy({
@@ -17,6 +18,7 @@ function StoryCopy({
   index,
   story,
   total,
+  tourTarget,
 }: Omit<StorySectionProps, "children">) {
   return (
     <div className="flex flex-col items-start">
@@ -44,6 +46,8 @@ function StoryCopy({
       <ButtonLink
         aria-label={`Explore this insight: ${story.question}`}
         className="mt-7"
+        data-tour-action={tourTarget ? "insight-explore" : undefined}
+        data-tour-target={tourTarget ? "insight-explore" : undefined}
         href={exploreHref}
         variant="secondary"
       >
@@ -60,12 +64,13 @@ export function StorySection({
   index,
   story,
   total,
+  tourTarget = false,
 }: StorySectionProps) {
   if (story.layout === "full") {
     return (
       <article aria-labelledby={`${story.id}-title`} className="border-t border-border py-14 sm:py-20">
         <div className="max-w-2xl">
-          <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} />
+          <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} tourTarget={tourTarget} />
         </div>
         <div className="mt-8">{children}</div>
       </article>
@@ -81,7 +86,7 @@ export function StorySection({
       className="grid items-center gap-8 border-t border-border py-14 sm:py-20 lg:grid-cols-12 lg:gap-10"
     >
       <div className={`lg:col-span-5 ${copyOrder}`}>
-        <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} />
+        <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} tourTarget={tourTarget} />
       </div>
       <div className={`lg:col-span-7 ${visualOrder}`}>{children}</div>
     </article>

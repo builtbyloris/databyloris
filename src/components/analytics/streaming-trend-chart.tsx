@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { DotItemDotProps } from "recharts";
 
 import {
   chartTooltipStyle,
@@ -16,10 +17,45 @@ import {
 } from "@/components/analytics/chart-helpers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCompactMetric } from "@/lib/dashboard-analytics";
+import { reportDashboardChartInteraction } from "@/lib/dashboard-interactions";
 import type { MonthlyStreamsPoint } from "@/types/analytics";
 
 interface StreamingTrendChartProps {
   data: readonly MonthlyStreamsPoint[];
+}
+
+function InteractiveTrendDot({ cx, cy, payload }: DotItemDotProps) {
+  const point = payload as MonthlyStreamsPoint;
+  if (!point.period.endsWith("-01")) {
+    return <circle cx={cx} cy={cy} fill="none" r={0} />;
+  }
+
+  function reportInteraction() {
+    reportDashboardChartInteraction({
+      moduleId: "streaming-trend",
+      period: point.period,
+    });
+  }
+
+  return (
+    <circle
+      aria-label={`${formatDashboardMonth(point.period)}: ${point.streams.toLocaleString("en-US")} streams`}
+      className="cursor-pointer fill-surface-elevated stroke-accent"
+      cx={cx}
+      cy={cy}
+      data-dashboard-interaction="streaming-trend-point"
+      onClick={reportInteraction}
+      onFocus={reportInteraction}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") reportInteraction();
+      }}
+      onMouseEnter={reportInteraction}
+      r={5}
+      role="button"
+      strokeWidth={2}
+      tabIndex={0}
+    />
+  );
 }
 
 export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
@@ -73,7 +109,7 @@ export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
                   <Line
                     activeDot={{ fill: "var(--accent-hover)", r: 5, strokeWidth: 0 }}
                     dataKey="streams"
-                    dot={false}
+                    dot={InteractiveTrendDot}
                     stroke="var(--accent)"
                     strokeWidth={3}
                     type="monotone"

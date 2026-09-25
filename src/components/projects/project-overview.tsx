@@ -41,7 +41,12 @@ export function ProjectOverview({ project }: ProjectOverviewProps) {
         <p className="text-sm text-text-muted">All values are illustrative demo data.</p>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        aria-label="Overview key performance indicators"
+        className="mt-5 grid scroll-mt-32 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        data-tour-target="overview-kpis"
+        tabIndex={-1}
+      >
         {project.overview.kpis.map((kpi) => (
           <KPICard key={kpi.label} kpi={kpi} />
         ))}

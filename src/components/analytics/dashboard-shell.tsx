@@ -218,29 +218,36 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
 
   return (
     <div className="mt-8">
-      <FilterBar
-        filters={filters}
-        onChange={handleFilterChange}
-        onReset={resetFilters}
-        options={options}
-      />
+      <div
+        aria-label="Dashboard filters and active selection"
+        className="scroll-mt-32"
+        data-tour-target="dashboard-state"
+        tabIndex={-1}
+      >
+        <FilterBar
+          filters={filters}
+          onChange={handleFilterChange}
+          onReset={resetFilters}
+          options={options}
+        />
 
-      <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <span className="text-sm font-semibold text-text-primary">Showing:</span>
-          {activeFilters.length > 0 ? (
-            activeFilters.map((filter) => (
-              <Badge key={filter.label} variant="accent">
-                {filter.label}: {filter.value}
-              </Badge>
-            ))
-          ) : (
-            <Badge>All data</Badge>
-          )}
+        <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <span className="text-sm font-semibold text-text-primary">Showing:</span>
+            {activeFilters.length > 0 ? (
+              activeFilters.map((filter) => (
+                <Badge key={filter.label} variant="accent">
+                  {filter.label}: {filter.value}
+                </Badge>
+              ))
+            ) : (
+              <Badge>All data</Badge>
+            )}
+          </div>
+          <p aria-live="polite" className="shrink-0 text-sm text-text-muted">
+            {filteredRows.length.toLocaleString("en-US")} of {configuration.rows.length.toLocaleString("en-US")} records
+          </p>
         </div>
-        <p aria-live="polite" className="shrink-0 text-sm text-text-muted">
-          {filteredRows.length.toLocaleString("en-US")} of {configuration.rows.length.toLocaleString("en-US")} records
-        </p>
       </div>
 
       {filteredRows.length > 0 ? (

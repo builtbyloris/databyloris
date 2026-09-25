@@ -1,4 +1,10 @@
 import type { ProjectDetail } from "@/types/project";
+import { GuidedTourProvider } from "@/components/onboarding/guided-tour-provider";
+import {
+  SPOTIFY_TOUR_SESSION_KEY,
+  SPOTIFY_TOUR_STEPS,
+  SPOTIFY_TOUR_STORAGE_KEY,
+} from "@/data/spotify-tour";
 
 import { DatasetSnapshot } from "./dataset-snapshot";
 import { ProjectExplore } from "./project-explore";
@@ -29,7 +35,7 @@ function SectionHeading({ eyebrow, id, title }: SectionHeadingProps) {
 }
 
 export function ProjectContentShell({ project }: ProjectContentShellProps) {
-  return (
+  const content = (
     <article>
       <div className="container-page page-frame grid items-start gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,0.65fr)] lg:gap-14">
         <ProjectHero project={project} />
@@ -78,5 +84,20 @@ export function ProjectContentShell({ project }: ProjectContentShellProps) {
         </section>
       </div>
     </article>
+  );
+
+  if (project.slug !== "spotify-listening-trends") {
+    return content;
+  }
+
+  return (
+    <GuidedTourProvider
+      enabled
+      sessionKey={SPOTIFY_TOUR_SESSION_KEY}
+      steps={SPOTIFY_TOUR_STEPS}
+      storageKey={SPOTIFY_TOUR_STORAGE_KEY}
+    >
+      {content}
+    </GuidedTourProvider>
   );
 }

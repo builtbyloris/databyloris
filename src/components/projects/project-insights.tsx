@@ -62,6 +62,7 @@ export function ProjectInsights({ project }: ProjectInsightsProps) {
             key={story.id}
             story={story}
             total={insights.stories.length}
+            tourTarget={project.slug === "spotify-listening-trends" && index === 0}
           >
             <StoryVisualization data={story.visualization} />
           </StorySection>

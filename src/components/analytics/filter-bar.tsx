@@ -40,6 +40,7 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
           </label>
           <select
             className="min-h-10 w-full rounded-control border border-border bg-surface-primary px-3 text-sm text-text-primary"
+            data-tour-filter={key}
             id={id}
             onChange={(event) => onChange(key, event.target.value || null)}
             value={filters[key] ?? ""}
@@ -65,7 +66,11 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
         </Button>
       </div>
 
-      <details className="group md:hidden" open={activeCount > 0 || undefined}>
+      <details
+        className="group md:hidden"
+        data-tour-filter-panel
+        open={activeCount > 0 || undefined}
+      >
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-text-primary">
           <span>Global filters</span>
           <span className="rounded-badge bg-accent-subtle px-2 py-1 text-xs text-accent">
