@@ -10,28 +10,12 @@ import { DatasetSnapshot } from "./dataset-snapshot";
 import { ProjectExplore } from "./project-explore";
 import { ProjectHero } from "./project-hero";
 import { ProjectInsights } from "./project-insights";
+import { ProjectMethodology } from "./project-methodology";
 import { ProjectNavigation } from "./project-navigation";
 import { ProjectOverview } from "./project-overview";
 
 interface ProjectContentShellProps {
   project: ProjectDetail;
-}
-
-interface SectionHeadingProps {
-  eyebrow: string;
-  id: string;
-  title: string;
-}
-
-function SectionHeading({ eyebrow, id, title }: SectionHeadingProps) {
-  return (
-    <div className="max-w-2xl">
-      <p className="text-overline">{eyebrow}</p>
-      <h2 className="mt-3" id={id}>
-        {title}
-      </h2>
-    </div>
-  );
 }
 
 export function ProjectContentShell({ project }: ProjectContentShellProps) {
@@ -49,39 +33,7 @@ export function ProjectContentShell({ project }: ProjectContentShellProps) {
         <ProjectInsights project={project} />
         <ProjectExplore project={project} />
 
-        <section
-          aria-labelledby="methodology-title"
-          className="scroll-mt-32 pt-14 sm:pt-20"
-          id="methodology"
-        >
-          <SectionHeading
-            eyebrow="Methodology"
-            id="methodology-title"
-            title="How to interpret the analysis"
-          />
-          <p className="mt-6 text-lg leading-8 text-text-secondary">
-            {project.dataset.summary}
-          </p>
-
-          <dl className="mt-8 divide-y divide-border border-y border-border">
-            <div className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr] sm:gap-6">
-              <dt className="text-sm font-semibold text-text-primary">Analytical grain</dt>
-              <dd className="text-sm leading-6 text-text-secondary">{project.dataset.grain}</dd>
-            </div>
-            <div className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr] sm:gap-6">
-              <dt className="text-sm font-semibold text-text-primary">Approach</dt>
-              <dd className="text-sm leading-6 text-text-secondary">
-                {project.content.methodology}
-              </dd>
-            </div>
-            <div className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr] sm:gap-6">
-              <dt className="text-sm font-semibold text-text-primary">Limitations</dt>
-              <dd className="text-sm leading-6 text-text-secondary">
-                {project.content.limitations}
-              </dd>
-            </div>
-          </dl>
-        </section>
+        <ProjectMethodology methodology={project.methodology} />
       </div>
     </article>
   );

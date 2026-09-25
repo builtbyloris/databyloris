@@ -33,6 +33,34 @@ export interface DatasetMetadata {
   illustrative: boolean;
 }
 
+export interface ProjectMethodologyData {
+  title: string;
+  introduction: string;
+  objective: string;
+  dataset: {
+    description: string;
+    grain: string;
+    period: string;
+    dimensions: readonly string[];
+    metrics: readonly string[];
+  };
+  preparation: readonly string[];
+  techniques: readonly {
+    label: string;
+    description: string;
+  }[];
+  metricDefinitions: readonly {
+    label: string;
+    description: string;
+  }[];
+  tools: readonly {
+    label: string;
+    description: string;
+  }[];
+  limitations: readonly string[];
+  takeaways: readonly string[];
+}
+
 export interface ProjectSummary {
   slug: string;
   title: string;
@@ -54,8 +82,5 @@ export interface ProjectDetail extends ProjectSummary {
   dashboard: DashboardConfiguration;
   overview: ProjectOverviewData;
   insights: ProjectInsightsData;
-  content: {
-    methodology: string;
-    limitations: string;
-  };
+  methodology: ProjectMethodologyData;
 }

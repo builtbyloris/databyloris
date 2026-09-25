@@ -2,6 +2,7 @@ import type { ProjectDetail, ProjectSummary } from "@/types/project";
 
 import { SPOTIFY_DASHBOARD } from "./spotify-demo-dataset";
 import { SPOTIFY_INSIGHTS } from "./spotify-insights";
+import { SPOTIFY_METHODOLOGY } from "./spotify-methodology";
 import { SPOTIFY_OVERVIEW } from "./spotify-overview";
 
 const SPOTIFY_PROJECT_PATH = "/projects/spotify-listening-trends";
@@ -41,12 +42,7 @@ export const SPOTIFY_DEMO_PROJECT = {
   dashboard: SPOTIFY_DASHBOARD,
   overview: SPOTIFY_OVERVIEW,
   insights: SPOTIFY_INSIGHTS,
-  content: {
-    methodology:
-      "The planned analysis aggregates listening measures over time and compares artists, genres and countries using shared definitions across the project.",
-    limitations:
-      "Methodology notes, source constraints and coverage limitations will be documented here when the analytical dataset is finalized.",
-  },
+  methodology: SPOTIFY_METHODOLOGY,
 } satisfies ProjectDetail;
 
 export const MVP_PROJECTS = [
