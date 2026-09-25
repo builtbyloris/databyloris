@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import type { PublicProjectMetadata } from "@/types/project";
 
+import { ProjectCoverImage } from "./project-cover-image";
+
 interface ProjectHeroProps {
   project: PublicProjectMetadata;
   ctaHref?: string | null;
@@ -32,6 +34,16 @@ export function ProjectHero({ project, ctaHref = "#explore" }: ProjectHeroProps)
       ) : null}
 
       <p className="text-lead mt-7 max-w-2xl">{project.description}</p>
+
+      {project.coverUrl ? (
+        <ProjectCoverImage
+          className="mt-8 rounded-card border border-border shadow-elevated"
+          coverUrl={project.coverUrl}
+          priority
+          sizes="(max-width: 1023px) 100vw, 720px"
+          title={project.title}
+        />
+      ) : null}
 
       {ctaHref ? (
         <div className="mt-8">

@@ -9,6 +9,12 @@ remain code-driven until a later migration.
 - Supabase Auth identifies the private administrator.
 - `admin_users` provides the database-level administrator allowlist.
 - `projects` stores core catalog, publishing, and dataset metadata for Admin CRUD.
+- `projects.cover_path` stores the project-scoped Supabase Storage object path
+  for the project's optional single cover image; it never stores a signed or
+  arbitrary external URL.
+- The public `project-covers` bucket serves published cover images. Storage RLS
+  restricts insert, update, and delete operations to the database Admin
+  allowlist, and server actions independently verify the configured Admin.
 - Row Level Security limits anonymous reads to published records and mutations to
   database administrators.
 - Administrator membership is provisioned out of band by adding the existing
@@ -37,6 +43,13 @@ The root publishing unit for one data analysis.
 - Relationships: owns dataset metadata, KPIs, insights, story sections, and dashboard configuration.
 
 Only published projects appear publicly.
+
+Cover replacement uses a new project-scoped, versioned object path before
+updating metadata, then removes the previous object. Cover removal clears the
+database reference before Storage cleanup. Project deletion removes the
+database record first and then attempts object cleanup, so a Storage failure can
+leave an explicitly reported inert orphan but cannot leave public metadata
+pointing to a missing object.
 
 ## Dataset metadata
 

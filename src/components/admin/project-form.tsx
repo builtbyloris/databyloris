@@ -121,6 +121,24 @@ export function ProjectForm({ implementedSlug, mode, project }: ProjectFormProps
         </div>
       </section>
 
+      {mode === "create" ? (
+        <section
+          className="space-y-3 border-t border-border pt-8"
+          aria-labelledby="cover-heading"
+        >
+          <div>
+            <h2 className="text-xl" id="cover-heading">
+              Cover
+            </h2>
+            <p className="text-sm text-text-muted">
+              Create the project first, then upload its cover from the edit
+              screen. This keeps every Storage object attached to a saved
+              project.
+            </p>
+          </div>
+        </section>
+      ) : null}
+
       <section className="space-y-5 border-t border-border pt-8" aria-labelledby="dataset-heading">
         <div>
           <h2 className="text-xl" id="dataset-heading">Dataset metadata</h2>

@@ -35,6 +35,12 @@ configured administrator, while database access is independently restricted by
 the `admin_users` allowlist and Row Level Security. Supabase now controls public
 project metadata, featured state, and draft/published visibility.
 
+Each saved project may have one cover image in the public Supabase Storage
+`project-covers` bucket. The project record stores only its validated
+`cover_path`; Admin-only mutations manage the object, while published public
+surfaces derive the public URL. The MVP does not include a media library,
+galleries, or multiple images per project.
+
 Analytical experiences remain code-driven in the MVP. Publishing project
 metadata does not generate KPIs, stories, charts, dashboards, or methodology.
 Only slugs in the implementation registry receive those modules. Supabase is the

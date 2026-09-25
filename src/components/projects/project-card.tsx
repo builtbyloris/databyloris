@@ -3,6 +3,8 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { ProjectCoverType, ProjectSummary } from "@/types/project";
 
+import { ProjectCoverImage } from "./project-cover-image";
+
 interface ProjectCardProps {
   project: ProjectSummary;
 }
@@ -66,7 +68,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="h-full">
       <Card className="flex h-full flex-col overflow-hidden" surface="primary">
-        <ProjectCover coverType={project.coverType} />
+        {project.coverUrl ? (
+          <ProjectCoverImage
+            className="border-b border-border"
+            coverUrl={project.coverUrl}
+            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+            title={project.title}
+          />
+        ) : (
+          <ProjectCover coverType={project.coverType} />
+        )}
 
         <div className="flex flex-1 flex-col p-5 sm:p-6">
           <div className="mb-4 flex flex-wrap items-center gap-2">

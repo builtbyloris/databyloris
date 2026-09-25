@@ -16,6 +16,7 @@ export interface ProjectDatabaseRow {
   dataset_records: string | null;
   dataset_grain: string | null;
   dataset_source: string | null;
+  cover_path: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -66,4 +67,9 @@ export interface ProjectFormState {
 
 export interface DeleteProjectState {
   error: string | null;
+}
+
+export interface ProjectCoverActionState {
+  message: string | null;
+  status: "idle" | "success" | "warning" | "error";
 }

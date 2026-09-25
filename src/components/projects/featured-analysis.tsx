@@ -3,6 +3,8 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { ProjectSummary } from "@/types/project";
 
+import { ProjectCoverImage } from "./project-cover-image";
+
 const rankingPreview = [82, 67, 54, 39];
 
 export function FeaturedAnalysis({ project }: { project: ProjectSummary }) {
@@ -56,57 +58,49 @@ export function FeaturedAnalysis({ project }: { project: ProjectSummary }) {
           </div>
         </div>
 
-        <div
-          aria-label={`Illustrative ${project.title} analysis interface preview`}
-          className="border-t border-border bg-surface-secondary p-5 sm:p-7 lg:border-l lg:border-t-0"
-          role="img"
-        >
-          <div className="rounded-card border border-border bg-surface-primary p-5 shadow-elevated">
-            <div className="mb-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-text-primary">Analysis preview</p>
-                <p className="text-xs text-text-muted">Published project interface</p>
-              </div>
-              {project.period ? <Badge variant="accent">{project.period}</Badge> : null}
-            </div>
-
-            <svg
-              aria-hidden="true"
-              className="mb-7 h-auto w-full"
-              viewBox="0 0 420 150"
-            >
-              <path
-                className="text-border"
-                d="M0 30H420M0 75H420M0 120H420"
-                fill="none"
-                stroke="currentColor"
-                strokeDasharray="4 7"
-              />
-              <path
-                className="text-accent"
-                d="M0 116C44 120 53 88 94 94C135 100 153 62 196 73C239 84 258 48 298 55C340 62 366 32 420 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="4"
-              />
-            </svg>
-
-            <div className="space-y-3">
-              {rankingPreview.map((width, index) => (
-                <div className="grid grid-cols-[4.5rem_1fr] items-center gap-3" key={width}>
-                  <span className="text-xs text-text-muted">Signal {index + 1}</span>
-                  <span className="h-2.5 rounded-badge bg-surface-secondary">
-                    <span
-                      className="block h-full rounded-badge bg-accent"
-                      style={{ width: `${width}%` }}
-                    />
-                  </span>
+        {project.coverUrl ? (
+          <div className="flex items-center border-t border-border bg-surface-secondary p-5 sm:p-7 lg:border-l lg:border-t-0">
+            <ProjectCoverImage
+              className="w-full rounded-card border border-border shadow-elevated"
+              coverUrl={project.coverUrl}
+              priority
+              sizes="(max-width: 1023px) 100vw, 46vw"
+              title={project.title}
+            />
+          </div>
+        ) : (
+          <div
+            aria-label={`Illustrative ${project.title} analysis interface preview`}
+            className="border-t border-border bg-surface-secondary p-5 sm:p-7 lg:border-l lg:border-t-0"
+            role="img"
+          >
+            <div className="rounded-card border border-border bg-surface-primary p-5 shadow-elevated">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-text-primary">Analysis preview</p>
+                  <p className="text-xs text-text-muted">Published project interface</p>
                 </div>
-              ))}
+                {project.period ? <Badge variant="accent">{project.period}</Badge> : null}
+              </div>
+
+              <svg aria-hidden="true" className="mb-7 h-auto w-full" viewBox="0 0 420 150">
+                <path className="text-border" d="M0 30H420M0 75H420M0 120H420" fill="none" stroke="currentColor" strokeDasharray="4 7" />
+                <path className="text-accent" d="M0 116C44 120 53 88 94 94C135 100 153 62 196 73C239 84 258 48 298 55C340 62 366 32 420 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="4" />
+              </svg>
+
+              <div className="space-y-3">
+                {rankingPreview.map((width, index) => (
+                  <div className="grid grid-cols-[4.5rem_1fr] items-center gap-3" key={width}>
+                    <span className="text-xs text-text-muted">Signal {index + 1}</span>
+                    <span className="h-2.5 rounded-badge bg-surface-secondary">
+                      <span className="block h-full rounded-badge bg-accent" style={{ width: `${width}%` }} />
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </Card>
     </section>
   );

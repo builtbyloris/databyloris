@@ -89,9 +89,11 @@ export async function deleteProjectAction(
   previousState: DeleteProjectState,
 ): Promise<DeleteProjectState> {
   void previousState;
+  let cleanupFailed = false;
 
   try {
-    await deleteAdminProject(id);
+    const result = await deleteAdminProject(id);
+    cleanupFailed = result.coverCleanupFailed;
   } catch (error) {
     if (error instanceof AdminProjectError && error.code === "unauthorized") {
       return { error: "Your Admin session has expired. Sign in and try again." };
@@ -103,5 +105,5 @@ export async function deleteProjectAction(
   revalidatePath("/admin");
   revalidatePath("/admin/projects");
   revalidateProjectSurfaces();
-  redirect("/admin/projects?deleted=1");
+  redirect(`/admin/projects?deleted=${cleanupFailed ? "cover-cleanup" : "1"}`);
 }

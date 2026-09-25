@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { getAdminAccess } from "@/lib/auth/admin";
+import { removeDeletedProjectCover } from "@/lib/projects/project-covers";
 import { createClient } from "@/lib/supabase/server";
 import type {
   AdminProjectCounts,
@@ -138,9 +139,27 @@ export async function updateAdminProject(
 
 export async function deleteAdminProject(id: string) {
   const { supabase } = await getAuthorizedClient();
+  const existing = await getAdminProjectById(id);
+
+  if (!existing) {
+    throw new AdminProjectError("Project not found.", "database");
+  }
+
   const { error } = await supabase.from("projects").delete().eq("id", id);
 
   if (error) throwDatabaseError(error);
+
+  if (!existing.cover_path) return { coverCleanupFailed: false };
+
+  // The database row is removed first so a Storage failure cannot leave a
+  // public project pointing at a missing image. Failed cleanup is surfaced to
+  // Admin and can only leave an unreachable orphaned object.
+  try {
+    await removeDeletedProjectCover(existing.id, existing.cover_path);
+    return { coverCleanupFailed: false };
+  } catch {
+    return { coverCleanupFailed: true };
+  }
 }
 
 export async function publishAdminProject(id: string) {

@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 
 import { AdminDataError } from "@/components/admin/admin-data-error";
 import { DeleteProjectButton } from "@/components/admin/delete-project-button";
+import { ProjectCoverManager } from "@/components/admin/project-cover-manager";
 import { ProjectForm } from "@/components/admin/project-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getAdminProjectById } from "@/lib/projects/admin-projects";
+import { getProjectCoverPublicUrl } from "@/lib/projects/project-covers";
 import { getProjectImplementation } from "@/lib/projects/project-implementations";
 import type { ProjectDatabaseRow } from "@/types/project-database";
 
@@ -62,6 +64,16 @@ export default async function EditAdminProjectPage({
           {saved === "created" ? "Project created." : "Project changes saved."}
         </p>
       ) : null}
+
+      <Card>
+        <CardContent className="pt-5 sm:pt-6">
+          <ProjectCoverManager
+            coverUrl={getProjectCoverPublicUrl(project.cover_path) ?? undefined}
+            projectId={project.id}
+            title={project.title}
+          />
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="pt-5 sm:pt-6">

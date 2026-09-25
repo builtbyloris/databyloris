@@ -65,6 +65,7 @@ export interface ProjectSummary {
   description: string;
   question?: string;
   coverType: ProjectCoverType;
+  coverUrl?: string;
   period?: string;
   tags: string[];
   featured: boolean;

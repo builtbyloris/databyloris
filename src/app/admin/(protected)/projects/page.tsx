@@ -53,6 +53,16 @@ export default async function AdminProjectsPage({
         </p>
       ) : null}
 
+      {deleted === "cover-cleanup" ? (
+        <p
+          className="rounded-control border border-warning/25 bg-warning-subtle px-4 py-3 text-sm text-warning"
+          role="status"
+        >
+          Project deleted, but its cover object could not be cleaned up. Review
+          the project-covers bucket when convenient.
+        </p>
+      ) : null}
+
       {projects === null ? <AdminDataError /> : null}
 
       {projects?.length === 0 ? (

@@ -6,6 +6,8 @@ import type {
   PublicProjectMetadata,
 } from "@/types/project";
 
+import { getProjectCoverPublicUrl } from "./project-covers";
+
 const categoryCovers: Record<string, ProjectCoverType> = {
   music: "listening",
   entertainment: "catalog",
@@ -37,6 +39,7 @@ export function projectRowToPublicProject(
     description: row.description,
     question: row.question ?? undefined,
     coverType: coverForCategory(row.category),
+    coverUrl: getProjectCoverPublicUrl(row.cover_path) ?? undefined,
     period: row.period ?? undefined,
     tags: row.tags,
     featured: row.featured,
