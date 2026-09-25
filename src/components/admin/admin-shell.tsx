@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+
+import { AdminNavigation } from "./admin-navigation";
 
 interface AdminShellProps {
   children: ReactNode;
@@ -36,39 +37,7 @@ export function AdminShell({ children, signOutAction }: AdminShellProps) {
 
       <div className="container-dashboard grid gap-0 md:grid-cols-[13rem_minmax(0,1fr)]">
         <aside className="border-b border-border py-4 md:min-h-[calc(100vh-4rem)] md:border-b-0 md:border-r md:py-8 md:pr-6">
-          <nav aria-label="Admin navigation">
-            <ul className="flex gap-2 overflow-x-auto md:flex-col">
-              <li>
-                <Link
-                  aria-current="page"
-                  className="flex min-h-10 items-center rounded-control bg-accent-subtle px-3 text-sm font-medium text-accent"
-                  href="/admin"
-                >
-                  Overview
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="flex min-h-10 items-center rounded-control px-3 text-sm font-medium text-text-secondary hover:bg-surface-secondary hover:text-text-primary"
-                  href="/admin#projects"
-                >
-                  Projects
-                </Link>
-              </li>
-              <li className="md:mt-4 md:border-t md:border-border md:pt-4">
-                <form action={signOutAction}>
-                  <Button
-                    className="w-full justify-start"
-                    size="md"
-                    type="submit"
-                    variant="ghost"
-                  >
-                    Sign out
-                  </Button>
-                </form>
-              </li>
-            </ul>
-          </nav>
+          <AdminNavigation signOutAction={signOutAction} />
         </aside>
 
         <main

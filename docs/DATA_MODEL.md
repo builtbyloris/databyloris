@@ -1,6 +1,21 @@
 # Conceptual data model
 
-This document defines product concepts and relationships. It is not a final database schema; storage types, tables, IDs, and provider-specific details remain undecided.
+This document defines product concepts and relationships. The current Admin MVP
+persists core project metadata in Supabase; analytical modules and the public
+catalog remain configuration-driven and local until a later migration.
+
+## Current persistence boundary
+
+- Supabase Auth identifies the private administrator.
+- `admin_users` provides the database-level administrator allowlist.
+- `projects` stores core catalog, publishing, and dataset metadata for Admin CRUD.
+- Row Level Security limits anonymous reads to published records and mutations to
+  database administrators.
+- Administrator membership is provisioned out of band by adding the existing
+  Supabase Auth user UUID to `admin_users`; no personal identifier is seeded by
+  the repository.
+- Public Home, Explore, and project pages still read `src/data/projects.ts`; they
+  do not query Supabase yet.
 
 ## Project
 

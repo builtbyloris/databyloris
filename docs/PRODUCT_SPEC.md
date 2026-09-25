@@ -30,6 +30,11 @@ Public visitors remain unauthenticated. Admin authentication requires
 `ADMIN_EMAIL`; credentials and secret/service-role keys are never stored in the
 repository.
 
+Admin project records are persisted in Supabase. Application actions verify the
+configured administrator, while database access is independently restricted by
+the `admin_users` allowlist and Row Level Security. The public catalog continues
+to use local project data until a later migration phase.
+
 ## Public information architecture
 
 - **Home:** introduce the platform and lead into project discovery.
@@ -98,4 +103,4 @@ Only the Spotify demo includes onboarding. The tour is optional, uses the real i
 - No public accounts or authentication; Supabase Auth is limited to the private
   single-administrator area.
 - No public upload, editing, or data-management tools.
-- Project persistence remains a later roadmap phase.
+- Public project-data migration remains a later roadmap phase.
