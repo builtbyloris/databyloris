@@ -71,8 +71,16 @@ export function TrackTable({ data }: TrackTableProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto rounded-control border border-border">
+        <div
+          aria-label="Track results; scroll horizontally to view all columns"
+          className="overflow-x-auto overscroll-x-contain rounded-control border border-border"
+          role="region"
+          tabIndex={0}
+        >
           <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
+            <caption className="sr-only">
+              Aggregated tracks in the current dashboard selection
+            </caption>
             <thead className="bg-surface-secondary text-xs uppercase tracking-wide text-text-muted">
               <tr>
                 {columns.map((column) => (
@@ -83,7 +91,7 @@ export function TrackTable({ data }: TrackTableProps) {
                     scope="col"
                   >
                     <button
-                      className={`inline-flex w-full items-center gap-1 hover:text-text-primary ${column.numeric ? "justify-end" : ""}`}
+                      className={`inline-flex min-h-9 w-full items-center gap-1 hover:text-text-primary ${column.numeric ? "justify-end" : ""}`}
                       onClick={() => changeSort(column.key)}
                       type="button"
                     >
@@ -115,11 +123,11 @@ export function TrackTable({ data }: TrackTableProps) {
           <p aria-live="polite" className="text-text-muted">
             Page {page} of {totalPages} · {data.length} tracks
           </p>
-          <div className="flex gap-2">
-            <Button disabled={page <= 1} onClick={() => setRequestedPage(page - 1)} size="sm" variant="secondary">
+          <div aria-label="Track table pagination" className="flex gap-2" role="group">
+            <Button aria-label="Previous track table page" disabled={page <= 1} onClick={() => setRequestedPage(page - 1)} size="sm" variant="secondary">
               Previous
             </Button>
-            <Button disabled={page >= totalPages} onClick={() => setRequestedPage(page + 1)} size="sm" variant="secondary">
+            <Button aria-label="Next track table page" disabled={page >= totalPages} onClick={() => setRequestedPage(page + 1)} size="sm" variant="secondary">
               Next
             </Button>
           </div>

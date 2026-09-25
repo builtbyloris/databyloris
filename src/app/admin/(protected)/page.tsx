@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { AdminDataError } from "@/components/admin/admin-data-error";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAdminProjectCounts } from "@/lib/projects/admin-projects";
@@ -73,11 +72,10 @@ export default async function AdminPage() {
           <AdminDataError />
         )}
 
-        <div className="mt-5 flex items-center gap-3">
+        <div className="mt-5">
           <ButtonLink href="/admin/projects" variant="secondary">
             Manage projects
           </ButtonLink>
-          <Badge variant="neutral">Public catalog remains local</Badge>
         </div>
       </section>
     </div>

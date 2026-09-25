@@ -22,7 +22,7 @@ export function AdminNavigation({
 
   return (
     <nav aria-label="Admin navigation">
-      <ul className="flex gap-2 overflow-x-auto md:flex-col">
+      <ul className="flex gap-2 overflow-x-auto overscroll-x-contain md:flex-col">
         <li>
           <Link
             aria-current={pathname === "/admin" ? "page" : undefined}

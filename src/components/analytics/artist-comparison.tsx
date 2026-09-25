@@ -57,7 +57,7 @@ export function ArtistComparison({ data }: ArtistComparisonProps) {
               <label className="grid gap-1.5 text-sm font-medium text-text-secondary">
                 Artist A
                 <select
-                  className="min-h-11 w-full rounded-control border border-border bg-surface-primary px-3 text-sm text-text-primary"
+                  className="min-h-11 w-full rounded-control border border-control-border bg-surface-primary px-3 text-sm text-text-primary"
                   onChange={(event) => setArtistAChoice(event.target.value)}
                   value={artistA.artistName}
                 >
@@ -71,7 +71,7 @@ export function ArtistComparison({ data }: ArtistComparisonProps) {
               <label className="grid gap-1.5 text-sm font-medium text-text-secondary">
                 Artist B
                 <select
-                  className="min-h-11 w-full rounded-control border border-border bg-surface-primary px-3 text-sm text-text-primary"
+                  className="min-h-11 w-full rounded-control border border-control-border bg-surface-primary px-3 text-sm text-text-primary"
                   onChange={(event) => setArtistBChoice(event.target.value)}
                   value={artistB.artistName}
                 >

@@ -39,7 +39,7 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
             {label}
           </label>
           <select
-            className="min-h-10 w-full rounded-control border border-border bg-surface-primary px-3 text-sm text-text-primary"
+            className="min-h-11 w-full rounded-control border border-control-border bg-surface-primary px-3 text-sm text-text-primary"
             data-tour-filter={key}
             id={id}
             onChange={(event) => onChange(key, event.target.value || null)}
@@ -73,8 +73,16 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
       >
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-text-primary">
           <span>Global filters</span>
-          <span className="rounded-badge bg-accent-subtle px-2 py-1 text-xs text-accent">
-            {activeCount > 0 ? `${activeCount} active` : "All data"}
+          <span className="flex items-center gap-2">
+            <span className="rounded-badge bg-accent-subtle px-2 py-1 text-xs text-accent">
+              {activeCount > 0 ? `${activeCount} active` : "All data"}
+            </span>
+            <span
+              aria-hidden="true"
+              className="text-text-muted transition-transform group-open:rotate-180"
+            >
+              ↓
+            </span>
           </span>
         </summary>
         <div className="mt-4 grid gap-4 border-t border-border pt-4">

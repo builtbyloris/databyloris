@@ -38,7 +38,10 @@ export function ProjectNavigation() {
 
   return (
     <div className="sticky top-16 z-40 border-y border-border bg-page-background/95 backdrop-blur-md">
-      <nav aria-label="Project sections" className="container-story overflow-x-auto">
+      <nav
+        aria-label="Project sections"
+        className="container-story overflow-x-auto overscroll-x-contain"
+      >
         <ul className="flex min-w-max items-center gap-1 py-2">
           {sections.map((section) => {
             const active = activeSection === section.id;

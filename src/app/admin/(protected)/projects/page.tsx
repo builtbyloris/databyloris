@@ -71,8 +71,7 @@ export default async function AdminProjectsPage({
             <div className="space-y-1">
               <h2 className="text-xl">No stored projects yet</h2>
               <p className="text-sm text-text-secondary">
-                Create the first Admin project record. Public catalog data will
-                remain unchanged.
+                Create the first persisted project record for the catalog.
               </p>
             </div>
             <ButtonLink href="/admin/projects/new">New project</ButtonLink>
@@ -82,8 +81,14 @@ export default async function AdminProjectsPage({
 
       {projects && projects.length > 0 ? (
         <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+          <div
+            aria-label="Admin projects; scroll horizontally to view all columns"
+            className="overflow-x-auto overscroll-x-contain"
+            role="region"
+            tabIndex={0}
+          >
             <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
+              <caption className="sr-only">Admin projects and publishing status</caption>
               <thead className="bg-surface-secondary text-xs uppercase tracking-[0.08em] text-text-muted">
                 <tr>
                   <th className="px-5 py-3 font-semibold" scope="col">Project</th>

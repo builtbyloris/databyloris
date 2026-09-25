@@ -117,7 +117,7 @@ Defines one selectable analytical constraint.
 - Scope: global dashboard or local visualization.
 - Value type and allowed values or range.
 - Default and active value.
-- URL serialization key when shareable state is introduced.
+- URL serialization key for the current shareable dashboard state.
 
 Global filters affect all compatible dashboard modules. Local filters or controls affect only their owning module.
 

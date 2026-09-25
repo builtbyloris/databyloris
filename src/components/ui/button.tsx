@@ -37,7 +37,7 @@ function buttonClassName(
   size: ButtonSize,
   className: string,
 ) {
-  return `inline-flex items-center justify-center gap-2 rounded-control border font-medium transition-colors ${variants[variant]} ${sizes[size]} ${className}`;
+  return `inline-flex max-w-full items-center justify-center gap-2 whitespace-normal rounded-control border text-center font-medium transition-colors ${variants[variant]} ${sizes[size]} ${className}`;
 }
 
 export function Button({

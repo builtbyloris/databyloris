@@ -40,6 +40,11 @@ export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
                 dataKey="genre"
                 interval={0}
                 tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+                tickFormatter={(value) =>
+                  String(value).length > 7
+                    ? `${String(value).slice(0, 6)}…`
+                    : String(value)
+                }
                 tickLine={false}
               />
               <YAxis
@@ -58,7 +63,7 @@ export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
                 }}
                 cursor={{ fill: "var(--accent-subtle)" }}
               />
-              <Bar dataKey="streams" fill="var(--accent)" maxBarSize={44} radius={[5, 5, 0, 0]} />
+              <Bar dataKey="streams" fill="var(--accent)" isAnimationActive={false} maxBarSize={44} radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

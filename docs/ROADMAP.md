@@ -2,6 +2,12 @@
 
 Each phase should leave the application usable and avoid pulling later infrastructure into earlier work.
 
+## V1 delivery status
+
+Phases 0–16 are complete. Phase 17 release preparation is complete; tagging and
+publishing the release remain explicit manual steps. Items under **Explicitly
+out of scope** remain future work.
+
 ## 0. Repository and documentation
 
 - Establish the source structure and project conventions.
@@ -82,7 +88,7 @@ Each phase should leave the application usable and avoid pulling later infrastru
 
 ## 16. Testing and cleanup
 
-- Add proportionate tests for configuration, state transitions, routes, and critical interactions.
+- Run proportionate validation for configuration, state transitions, routes, and critical interactions.
 - Remove dead code and resolve performance or accessibility regressions.
 
 ## 17. README and first release

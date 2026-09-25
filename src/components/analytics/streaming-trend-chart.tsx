@@ -47,7 +47,10 @@ function InteractiveTrendDot({ cx, cy, payload }: DotItemDotProps) {
       onClick={reportInteraction}
       onFocus={reportInteraction}
       onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") reportInteraction();
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          reportInteraction();
+        }
       }}
       onMouseEnter={reportInteraction}
       r={5}
@@ -110,6 +113,7 @@ export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
                     activeDot={{ fill: "var(--accent-hover)", r: 5, strokeWidth: 0 }}
                     dataKey="streams"
                     dot={InteractiveTrendDot}
+                    isAnimationActive={false}
                     stroke="var(--accent)"
                     strokeWidth={3}
                     type="monotone"

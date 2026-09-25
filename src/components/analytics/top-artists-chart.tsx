@@ -76,7 +76,7 @@ export function TopArtistsChart({ data }: TopArtistsChartProps) {
                 formatter={(value) => [formatCompactMetric(Number(value)), "Streams"]}
                 cursor={{ fill: "var(--accent-subtle)" }}
               />
-              <Bar dataKey="streams" fill="var(--accent)" maxBarSize={22} radius={[0, 5, 5, 0]} />
+              <Bar dataKey="streams" fill="var(--accent)" isAnimationActive={false} maxBarSize={22} radius={[0, 5, 5, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

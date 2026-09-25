@@ -370,6 +370,7 @@ export function GuidedTourProvider({
 
       {enabled && phase === "complete" ? (
         <TourPrompt
+          autoFocusPrimary
           description="Use filters, rankings and insights to discover your own patterns in the data."
           onDismiss={finishCompletion}
           onPrimaryAction={finishCompletion}

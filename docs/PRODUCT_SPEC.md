@@ -78,7 +78,9 @@ Project content and analytics must be data-driven. Do not couple the platform ar
 
 An insight presents a title, an optional key value, an explanation, a supporting visualization, and a destination dashboard state. Selecting **Explore this insight** opens the project's Explore dashboard with the relevant global filters and visualization state applied.
 
-Dashboard state should eventually be URL-representable so a filtered exploration or insight can be shared.
+Dashboard filters and target visualization state are URL-representable so an
+insight can open the intended Explore context and that state survives reloads.
+Broader sharing affordances remain a future enhancement.
 
 ## Demo project
 

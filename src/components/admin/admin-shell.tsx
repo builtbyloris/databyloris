@@ -12,7 +12,7 @@ interface AdminShellProps {
 
 export function AdminShell({ children, signOutAction }: AdminShellProps) {
   return (
-    <div className="min-h-screen bg-page-background">
+    <div className="min-h-screen min-w-0 bg-page-background">
       <a
         className="sr-only z-50 rounded-control bg-accent px-4 py-2 text-accent-contrast focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         href="#admin-content"

@@ -73,7 +73,7 @@ export function GenreGrowthChart({ result }: GenreGrowthChartProps) {
                     }}
                     cursor={{ fill: "var(--accent-subtle)" }}
                   />
-                  <Bar dataKey="growthPercent" fill="var(--accent)" maxBarSize={22} radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="growthPercent" fill="var(--accent)" isAnimationActive={false} maxBarSize={22} radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

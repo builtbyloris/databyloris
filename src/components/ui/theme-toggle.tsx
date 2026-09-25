@@ -18,18 +18,20 @@ function applyTheme(theme: Theme) {
 export function ThemeToggle() {
   function toggleTheme() {
     const currentTheme = document.documentElement.dataset.theme;
-    applyTheme(currentTheme === "dark" ? "light" : "dark");
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
   }
 
   return (
     <Button
-      aria-label="Switch color theme"
       className="theme-toggle"
       onClick={toggleTheme}
       size="icon"
       title="Switch color theme"
       variant="secondary"
     >
+      <span className="theme-toggle__sun sr-only">Switch to light theme</span>
+      <span className="theme-toggle__moon sr-only">Switch to dark theme</span>
       <svg
         aria-hidden="true"
         className="theme-toggle__sun size-4.5"

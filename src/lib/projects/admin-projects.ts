@@ -161,36 +161,3 @@ export async function deleteAdminProject(id: string) {
     return { coverCleanupFailed: true };
   }
 }
-
-export async function publishAdminProject(id: string) {
-  const existing = await getAdminProjectById(id);
-  if (!existing) throw new AdminProjectError("Project not found.", "database");
-
-  return updateAdminProject(id, { ...toWriteInput(existing), status: "published" });
-}
-
-export async function moveAdminProjectToDraft(id: string) {
-  const existing = await getAdminProjectById(id);
-  if (!existing) throw new AdminProjectError("Project not found.", "database");
-
-  return updateAdminProject(id, { ...toWriteInput(existing), status: "draft" });
-}
-
-function toWriteInput(project: ProjectDatabaseRow): ProjectWriteInput {
-  return {
-    slug: project.slug,
-    title: project.title,
-    subtitle: project.subtitle,
-    description: project.description,
-    category: project.category,
-    question: project.question,
-    period: project.period,
-    tags: project.tags,
-    featured: project.featured,
-    demo: project.demo,
-    status: project.status,
-    dataset_records: project.dataset_records,
-    dataset_grain: project.dataset_grain,
-    dataset_source: project.dataset_source,
-  };
-}

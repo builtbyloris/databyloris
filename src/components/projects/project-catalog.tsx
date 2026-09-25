@@ -69,7 +69,7 @@ export function ProjectCatalog({ projects }: ProjectCatalogProps) {
               />
             </svg>
             <input
-              className="min-h-12 w-full rounded-control border border-border bg-surface-primary py-2.5 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-muted"
+              className="min-h-12 w-full rounded-control border border-control-border bg-surface-primary py-2.5 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-muted"
               id="project-search"
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search titles, topics or tags"

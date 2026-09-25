@@ -11,7 +11,7 @@ export function PublicShell({ children }: PublicShellProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteNavbar />
-      <main className="flex flex-1 flex-col" id="main-content" tabIndex={-1}>
+      <main className="flex min-w-0 flex-1 flex-col" id="main-content" tabIndex={-1}>
         {children}
       </main>
       <SiteFooter />

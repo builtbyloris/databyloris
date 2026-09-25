@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 interface TourPromptProps {
+  autoFocusPrimary?: boolean;
   description: string;
   meta?: string;
   onDismiss: () => void;
@@ -12,6 +13,7 @@ interface TourPromptProps {
 }
 
 export function TourPrompt({
+  autoFocusPrimary = false,
   description,
   meta,
   onDismiss,
@@ -21,7 +23,10 @@ export function TourPrompt({
   title,
 }: TourPromptProps) {
   return (
-    <div className="fixed inset-x-4 bottom-4 z-80 sm:left-auto sm:right-6 sm:w-[25rem]">
+    <div
+      aria-live="polite"
+      className="fixed inset-x-4 bottom-4 z-80 sm:left-auto sm:right-6 sm:w-[25rem]"
+    >
       <Card
         aria-describedby="guided-tour-prompt-description"
         aria-labelledby="guided-tour-prompt-title"
@@ -46,7 +51,9 @@ export function TourPrompt({
               {secondaryLabel}
             </Button>
           ) : null}
-          <Button autoFocus onClick={onPrimaryAction}>{primaryLabel}</Button>
+          <Button autoFocus={autoFocusPrimary} onClick={onPrimaryAction}>
+            {primaryLabel}
+          </Button>
         </div>
       </Card>
     </div>

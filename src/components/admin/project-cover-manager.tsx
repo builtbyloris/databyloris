@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
   removeProjectCoverAction,
@@ -33,6 +33,7 @@ export function ProjectCoverManager({
 }) {
   const [lastAction, setLastAction] = useState<"upload" | "remove">("upload");
   const [selectedFilename, setSelectedFilename] = useState<string | null>(null);
+  const feedbackRef = useRef<HTMLParagraphElement>(null);
   const uploadAction = uploadProjectCoverAction.bind(null, projectId);
   const removeAction = removeProjectCoverAction.bind(null, projectId);
   const [uploadState, uploadFormAction, uploadPending] = useActionState(
@@ -44,6 +45,10 @@ export function ProjectCoverManager({
     initialState,
   );
   const feedback = lastAction === "upload" ? uploadState : removeState;
+
+  useEffect(() => {
+    if (feedback.message) feedbackRef.current?.focus();
+  }, [feedback.message]);
 
   return (
     <section className="space-y-5" aria-labelledby="cover-heading">
@@ -71,11 +76,12 @@ export function ProjectCoverManager({
 
       <form
         action={uploadFormAction}
+        aria-busy={uploadPending}
         className="space-y-3"
         onSubmit={() => setLastAction("upload")}
       >
         <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-          <label className="inline-flex min-h-10 cursor-pointer items-center rounded-control border border-border bg-surface-primary px-4 text-sm font-medium text-text-primary hover:border-accent hover:text-accent">
+          <label className="inline-flex min-h-11 cursor-pointer items-center rounded-control border border-control-border bg-surface-primary px-4 text-sm font-medium text-text-primary hover:border-accent hover:text-accent">
             <span>{coverUrl ? "Choose replacement" : "Choose cover"}</span>
             <input
               accept="image/jpeg,image/png,image/webp"
@@ -89,7 +95,7 @@ export function ProjectCoverManager({
               type="file"
             />
           </label>
-          <span className="text-sm text-text-muted">
+          <span className="min-w-0 break-all text-sm text-text-muted">
             {selectedFilename ?? "No file selected"}
           </span>
         </div>
@@ -105,7 +111,17 @@ export function ProjectCoverManager({
       </form>
 
       {coverUrl ? (
-        <form action={removeFormAction} onSubmit={() => setLastAction("remove")}>
+        <form
+          action={removeFormAction}
+          aria-busy={removePending}
+          onSubmit={(event) => {
+            if (!window.confirm("Remove this cover? Public pages will return to the generated fallback.")) {
+              event.preventDefault();
+              return;
+            }
+            setLastAction("remove");
+          }}
+        >
           <Button
             disabled={uploadPending || removePending}
             type="submit"
@@ -119,7 +135,9 @@ export function ProjectCoverManager({
       {feedback.message ? (
         <p
           className={`rounded-control border px-4 py-3 text-sm ${statusClasses[feedback.status]}`}
+          ref={feedbackRef}
           role={feedback.status === "error" ? "alert" : "status"}
+          tabIndex={-1}
         >
           {feedback.message}
         </p>

@@ -108,7 +108,7 @@ export function TourOverlay({
         aria-describedby="guided-tour-step-description"
         aria-labelledby="guided-tour-step-title"
         aria-modal="false"
-        className="pointer-events-auto fixed inset-x-4 bottom-4 md:inset-x-auto md:bottom-auto md:w-96"
+        className="pointer-events-auto fixed inset-x-4 bottom-4 max-h-[calc(100dvh-2rem)] overflow-y-auto md:inset-x-auto md:bottom-auto md:w-96"
         ref={panelRef}
         role="dialog"
         style={panelStyle}

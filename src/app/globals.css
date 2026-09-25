@@ -9,8 +9,9 @@
   --surface-elevated: #ffffff;
   --text-primary: #14182b;
   --text-secondary: #444c68;
-  --text-muted: #707995;
+  --text-muted: #636d87;
   --border: #dce1ed;
+  --control-border: #7f8ba9;
   --accent: #5959dc;
   --accent-hover: #4747c5;
   --accent-subtle: #eceefe;
@@ -47,6 +48,7 @@
   --text-secondary: #bbc3dd;
   --text-muted: #8993b3;
   --border: #29314b;
+  --control-border: #59647f;
   --accent: #8791ff;
   --accent-hover: #a0a8ff;
   --accent-subtle: #1d2346;
@@ -71,6 +73,7 @@
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   --color-border: var(--border);
+  --color-control-border: var(--control-border);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-subtle: var(--accent-subtle);
@@ -102,6 +105,7 @@
     --text-secondary: #bbc3dd;
     --text-muted: #8993b3;
     --border: #29314b;
+    --control-border: #59647f;
     --accent: #8791ff;
     --accent-hover: #a0a8ff;
     --accent-subtle: #1d2346;
@@ -133,6 +137,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
 }
 
 h1,
@@ -260,5 +265,7 @@ textarea {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
