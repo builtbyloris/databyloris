@@ -3,13 +3,25 @@
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { ArtistComparison } from "@/components/analytics/artist-comparison";
 import { FilterBar } from "@/components/analytics/filter-bar";
+import { GenreDistributionChart } from "@/components/analytics/genre-distribution-chart";
+import { GenreGrowthChart } from "@/components/analytics/genre-growth-chart";
 import { KPICard } from "@/components/analytics/kpi-card";
+import { StreamingTrendChart } from "@/components/analytics/streaming-trend-chart";
+import { TopArtistsChart } from "@/components/analytics/top-artists-chart";
+import { TrackTable } from "@/components/analytics/track-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
+  aggregateArtistMetrics,
+  aggregateArtistStreams,
+  aggregateGenreDistribution,
+  aggregateMonthlyStreams,
+  aggregateTracks,
   calculateDashboardKpis,
+  calculateGenreGrowth,
   createDashboardFilterOptions,
   EMPTY_DASHBOARD_FILTERS,
   filterDashboardRows,
@@ -34,24 +46,6 @@ const filterLabels: Record<DashboardFilterKey, string> = {
   artist: "Artist",
 };
 
-const placeholderModules = [
-  {
-    title: "Streaming activity",
-    description: "A time-series module will show how the current selection changes month by month.",
-    size: "lg:col-span-2",
-  },
-  {
-    title: "Audience composition",
-    description: "A comparison module will break the current selection down by its leading dimensions.",
-    size: "",
-  },
-  {
-    title: "Top performers",
-    description: "A ranking module will surface the strongest artists and tracks for this selection.",
-    size: "",
-  },
-] as const;
-
 export function DashboardShell({ configuration }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -69,6 +63,22 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
     [configuration.rows, filters],
   );
   const kpis = useMemo(() => calculateDashboardKpis(filteredRows), [filteredRows]);
+  const trendData = useMemo(() => aggregateMonthlyStreams(filteredRows), [filteredRows]);
+  const artistRanking = useMemo(() => aggregateArtistStreams(filteredRows), [filteredRows]);
+  const genreDistribution = useMemo(
+    () => aggregateGenreDistribution(filteredRows),
+    [filteredRows],
+  );
+  const genreGrowth = useMemo(() => calculateGenreGrowth(filteredRows), [filteredRows]);
+  const comparisonRows = useMemo(
+    () => filterDashboardRows(configuration.rows, { ...filters, artist: null }),
+    [configuration.rows, filters],
+  );
+  const artistMetrics = useMemo(
+    () => aggregateArtistMetrics(comparisonRows),
+    [comparisonRows],
+  );
+  const trackData = useMemo(() => aggregateTracks(filteredRows), [filteredRows]);
 
   function updateUrl(nextFilters: DashboardFilterState) {
     const query = serializeDashboardFilters(nextFilters);
@@ -135,7 +145,7 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
           )}
         </div>
         <p aria-live="polite" className="shrink-0 text-sm text-text-muted">
-          {filteredRows.length.toLocaleString()} of {configuration.rows.length.toLocaleString()} records
+          {filteredRows.length.toLocaleString("en-US")} of {configuration.rows.length.toLocaleString("en-US")} records
         </p>
       </div>
 
@@ -147,22 +157,22 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
             ))}
           </div>
 
-          <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            {placeholderModules.map((module) => (
-              <Card className={`min-h-44 p-5 sm:p-6 ${module.size}`} key={module.title} surface="primary">
-                <div className="flex items-center gap-2">
-                  <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
-                  <p className="text-xs font-semibold uppercase tracking-wider text-accent">
-                    Chart module
-                  </p>
-                </div>
-                <h3 className="mt-5 text-lg">{module.title}</h3>
-                <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
-                  {module.description}
-                </p>
-                <p className="mt-5 text-xs text-text-muted">Ready for the next dashboard phase</p>
-              </Card>
-            ))}
+          <div className="mt-5">
+            <StreamingTrendChart data={trendData} />
+          </div>
+
+          <div className="mt-4 grid min-w-0 gap-4 lg:grid-cols-2">
+            <TopArtistsChart data={artistRanking} />
+            <GenreDistributionChart data={genreDistribution} />
+          </div>
+
+          <div className="mt-4 grid min-w-0 gap-4 lg:grid-cols-2">
+            <GenreGrowthChart result={genreGrowth} />
+            <ArtistComparison data={artistMetrics} />
+          </div>
+
+          <div className="mt-4">
+            <TrackTable data={trackData} />
           </div>
         </>
       ) : (

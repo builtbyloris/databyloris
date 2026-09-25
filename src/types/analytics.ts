@@ -166,6 +166,61 @@ export interface DashboardKPIResult {
   topGenre: string | null;
 }
 
+export interface MonthlyStreamsPoint {
+  period: string;
+  streams: number;
+}
+
+export interface ArtistRankingItem {
+  artistName: string;
+  streams: number;
+}
+
+export interface GenreDistributionItem {
+  genre: string;
+  streams: number;
+  percentage: number;
+}
+
+export interface GenreGrowthItem {
+  genre: string;
+  growthPercent: number;
+  earliestStreams: number;
+  latestStreams: number;
+  totalStreams: number;
+}
+
+export type GenreGrowthResult =
+  | {
+      status: "ready";
+      earliestPeriod: string;
+      latestPeriod: string;
+      items: readonly GenreGrowthItem[];
+    }
+  | {
+      status: "insufficient";
+      reason: string;
+      items: readonly [];
+    };
+
+export interface ArtistComparisonMetric {
+  artistName: string;
+  totalStreams: number;
+  uniqueListeners: number;
+  averagePopularity: number;
+  playlistReach: number;
+}
+
+export interface TrackAggregate {
+  trackId: string;
+  trackName: string;
+  artistName: string;
+  genre: string;
+  streams: number;
+  listeners: number;
+  popularity: number;
+}
+
 export interface DashboardConfiguration {
   datasetLabel: string;
   datasetDescription: string;

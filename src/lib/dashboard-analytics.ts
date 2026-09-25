@@ -1,10 +1,16 @@
 import type {
+  ArtistComparisonMetric,
+  ArtistRankingItem,
   DashboardFilterKey,
   DashboardFilterOptions,
   DashboardFilterState,
   DashboardKPIResult,
   DashboardRow,
   FilterOption,
+  GenreDistributionItem,
+  GenreGrowthResult,
+  MonthlyStreamsPoint,
+  TrackAggregate,
 } from "@/types/analytics";
 
 export const DASHBOARD_FILTER_KEYS = [
@@ -110,6 +116,210 @@ export function calculateDashboardKpis(
     topArtist: findTopValue(rows, (row) => row.artistName),
     topGenre: findTopValue(rows, (row) => row.genre),
   };
+}
+
+export function aggregateMonthlyStreams(
+  rows: readonly DashboardRow[],
+): MonthlyStreamsPoint[] {
+  const totals = new Map<string, number>();
+
+  rows.forEach((row) => {
+    totals.set(row.month, (totals.get(row.month) ?? 0) + row.streams);
+  });
+
+  return [...totals.entries()]
+    .sort(([periodA], [periodB]) => periodA.localeCompare(periodB))
+    .map(([period, streams]) => ({ period, streams }));
+}
+
+export function aggregateArtistStreams(
+  rows: readonly DashboardRow[],
+): ArtistRankingItem[] {
+  const totals = new Map<string, number>();
+
+  rows.forEach((row) => {
+    totals.set(row.artistName, (totals.get(row.artistName) ?? 0) + row.streams);
+  });
+
+  return [...totals.entries()]
+    .sort(
+      ([artistA, streamsA], [artistB, streamsB]) =>
+        streamsB - streamsA || artistA.localeCompare(artistB),
+    )
+    .map(([artistName, streams]) => ({ artistName, streams }));
+}
+
+export function aggregateGenreDistribution(
+  rows: readonly DashboardRow[],
+): GenreDistributionItem[] {
+  const totals = new Map<string, number>();
+  const totalStreams = rows.reduce((total, row) => total + row.streams, 0);
+
+  rows.forEach((row) => {
+    totals.set(row.genre, (totals.get(row.genre) ?? 0) + row.streams);
+  });
+
+  return [...totals.entries()]
+    .sort(
+      ([genreA, streamsA], [genreB, streamsB]) =>
+        streamsB - streamsA || genreA.localeCompare(genreB),
+    )
+    .map(([genre, streams]) => ({
+      genre,
+      streams,
+      percentage: totalStreams > 0 ? (streams / totalStreams) * 100 : 0,
+    }));
+}
+
+export function calculateGenreGrowth(
+  rows: readonly DashboardRow[],
+): GenreGrowthResult {
+  const periods = [...new Set(rows.map((row) => row.month))].sort();
+
+  if (periods.length < 2) {
+    return {
+      status: "insufficient",
+      reason: "Select at least two months to compare genre growth.",
+      items: [],
+    };
+  }
+
+  const earliestPeriod = periods[0];
+  const latestPeriod = periods.at(-1)!;
+  const totals = new Map<
+    string,
+    { earliest: number; latest: number; total: number }
+  >();
+
+  rows.forEach((row) => {
+    const current = totals.get(row.genre) ?? {
+      earliest: 0,
+      latest: 0,
+      total: 0,
+    };
+    current.total += row.streams;
+    if (row.month === earliestPeriod) current.earliest += row.streams;
+    if (row.month === latestPeriod) current.latest += row.streams;
+    totals.set(row.genre, current);
+  });
+
+  const items = [...totals.entries()]
+    .flatMap(([genre, values]) => {
+      if (values.earliest <= 0 || values.latest <= 0) return [];
+      const growthPercent =
+        ((values.latest - values.earliest) / values.earliest) * 100;
+      if (!Number.isFinite(growthPercent)) return [];
+
+      return [
+        {
+          genre,
+          growthPercent,
+          earliestStreams: values.earliest,
+          latestStreams: values.latest,
+          totalStreams: values.total,
+        },
+      ];
+    })
+    .sort(
+      (itemA, itemB) =>
+        itemB.growthPercent - itemA.growthPercent ||
+        itemA.genre.localeCompare(itemB.genre),
+    );
+
+  if (items.length === 0) {
+    return {
+      status: "insufficient",
+      reason: "The current selection has no genres with data in both boundary months.",
+      items: [],
+    };
+  }
+
+  return { status: "ready", earliestPeriod, latestPeriod, items };
+}
+
+export function aggregateArtistMetrics(
+  rows: readonly DashboardRow[],
+): ArtistComparisonMetric[] {
+  const totals = new Map<
+    string,
+    {
+      streams: number;
+      listeners: number;
+      popularityTotal: number;
+      popularityCount: number;
+      playlistReach: number;
+    }
+  >();
+
+  rows.forEach((row) => {
+    const current = totals.get(row.artistName) ?? {
+      streams: 0,
+      listeners: 0,
+      popularityTotal: 0,
+      popularityCount: 0,
+      playlistReach: 0,
+    };
+    current.streams += row.streams;
+    current.listeners += row.listeners;
+    current.popularityTotal += row.popularity;
+    current.popularityCount += 1;
+    current.playlistReach += row.playlistReach;
+    totals.set(row.artistName, current);
+  });
+
+  return [...totals.entries()]
+    .map(([artistName, values]) => ({
+      artistName,
+      totalStreams: values.streams,
+      uniqueListeners: values.listeners,
+      averagePopularity:
+        values.popularityCount > 0
+          ? values.popularityTotal / values.popularityCount
+          : 0,
+      playlistReach: values.playlistReach,
+    }))
+    .sort(
+      (artistA, artistB) =>
+        artistB.totalStreams - artistA.totalStreams ||
+        artistA.artistName.localeCompare(artistB.artistName),
+    );
+}
+
+export function aggregateTracks(rows: readonly DashboardRow[]): TrackAggregate[] {
+  const totals = new Map<
+    string,
+    TrackAggregate & { popularityTotal: number; popularityCount: number }
+  >();
+
+  rows.forEach((row) => {
+    const current = totals.get(row.trackId) ?? {
+      trackId: row.trackId,
+      trackName: row.trackName,
+      artistName: row.artistName,
+      genre: row.genre,
+      streams: 0,
+      listeners: 0,
+      popularity: 0,
+      popularityTotal: 0,
+      popularityCount: 0,
+    };
+    current.streams += row.streams;
+    current.listeners += row.listeners;
+    current.popularityTotal += row.popularity;
+    current.popularityCount += 1;
+    totals.set(row.trackId, current);
+  });
+
+  return [...totals.values()]
+    .map(({ popularityCount, popularityTotal, ...track }) => ({
+      ...track,
+      popularity: popularityCount > 0 ? popularityTotal / popularityCount : 0,
+    }))
+    .sort(
+      (trackA, trackB) =>
+        trackB.streams - trackA.streams ||
+        trackA.trackName.localeCompare(trackB.trackName),
+    );
 }
 
 export function formatCompactMetric(value: number) {

@@ -31,8 +31,8 @@ export function ProjectExplore({ project }: ProjectExploreProps) {
             Investigate your own questions
           </h2>
           <p className="mt-5 text-lg leading-8 text-text-secondary">
-            Apply global filters to update the current data selection and headline measures.
-            Chart modules will build on this shared state in the next phase.
+            Apply global filters to update the current data selection, headline measures,
+            visual analysis and track detail together.
           </p>
         </div>
         {project.dashboard.synthetic ? (
