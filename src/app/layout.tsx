@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import type { ReactNode } from "react";
 
-import { PublicShell } from "@/components/layout/public-shell";
 import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description: "A modular data storytelling platform.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <PublicShell>{children}</PublicShell>
+        {children}
       </body>
     </html>
   );

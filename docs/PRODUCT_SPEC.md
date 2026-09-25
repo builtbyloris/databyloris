@@ -20,8 +20,15 @@ Projects explain their important findings before giving users tools to investiga
 ### Administrator
 
 - One private administrator.
+- Signs in through Supabase Auth and must match the server-only `ADMIN_EMAIL`
+  allowlist.
 - Can create, edit, publish, unpublish, and remove projects.
 - MVP editing covers title, slug, subtitle, description, category, cover, dataset metadata, editorial content, and draft/published status.
+
+Public visitors remain unauthenticated. Admin authentication requires
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and
+`ADMIN_EMAIL`; credentials and secret/service-role keys are never stored in the
+repository.
 
 ## Public information architecture
 
@@ -88,6 +95,7 @@ Only the Spotify demo includes onboarding. The tour is optional, uses the real i
 
 - Dashboard composition is developer/configuration driven.
 - No drag-and-drop dashboard builder.
-- No public accounts or authentication.
+- No public accounts or authentication; Supabase Auth is limited to the private
+  single-administrator area.
 - No public upload, editing, or data-management tools.
-- Admin authentication and persistence are later roadmap phases, not part of the current foundation.
+- Project persistence remains a later roadmap phase.
