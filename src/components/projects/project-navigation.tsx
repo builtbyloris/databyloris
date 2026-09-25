@@ -40,9 +40,9 @@ export function ProjectNavigation() {
     <div className="sticky top-16 z-40 border-y border-border bg-page-background/95 backdrop-blur-md">
       <nav
         aria-label="Project sections"
-        className="container-story overflow-x-auto overscroll-x-contain"
+        className="container-story overflow-x-auto overscroll-x-contain py-2"
       >
-        <ul className="flex min-w-max items-center gap-1 py-2">
+        <ul className="mx-auto flex w-max min-w-max items-center gap-2">
           {sections.map((section) => {
             const active = activeSection === section.id;
 
@@ -50,10 +50,10 @@ export function ProjectNavigation() {
               <li key={section.id}>
                 <a
                   aria-current={active ? "location" : undefined}
-                  className={`inline-flex min-h-10 items-center rounded-control px-3 text-sm font-medium transition-colors ${
+                  className={`inline-flex min-h-10 shrink-0 items-center whitespace-nowrap rounded-control px-3.5 py-2 text-sm font-medium transition-colors ${
                     active
                       ? "bg-accent-subtle text-accent"
-                      : "text-text-secondary hover:bg-surface-secondary hover:text-text-primary"
+                      : "text-text-primary/80 hover:bg-surface-secondary hover:text-text-primary"
                   }`}
                   href={`#${section.id}`}
                   onClick={() => setActiveSection(section.id)}
