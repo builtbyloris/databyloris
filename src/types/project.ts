@@ -3,6 +3,7 @@ import type {
   ProjectInsightsData,
   ProjectOverviewData,
 } from "@/types/analytics";
+import type { GuidedTourStep } from "@/types/onboarding";
 
 export type ProjectCategory = string;
 
@@ -14,7 +15,7 @@ export type ProjectCoverType =
   | "economy"
   | "generic";
 
-export type ProjectStatus = "draft" | "published" | "upcoming";
+export type ProjectStatus = "published";
 
 export interface DatasetMetadata {
   name: string;
@@ -24,8 +25,8 @@ export interface DatasetMetadata {
   entities?: string;
   categories?: string;
   markets?: string;
-  grain: string;
-  source: string;
+  grain?: string;
+  source?: string;
   illustrative: boolean;
 }
 
@@ -83,10 +84,26 @@ export interface PublicProjectMetadata extends ProjectSummary {
 }
 
 export interface ProjectDetail extends ProjectSummary {
-  subtitle: string;
+  subtitle?: string;
   dataset: DatasetMetadata;
   dashboard: DashboardConfiguration;
   overview: ProjectOverviewData;
   insights: ProjectInsightsData;
   methodology: ProjectMethodologyData;
+}
+
+export interface ProjectAnalyticsImplementation {
+  dataset: Pick<
+    DatasetMetadata,
+    "name" | "summary" | "entities" | "categories" | "markets" | "illustrative"
+  >;
+  dashboard: DashboardConfiguration;
+  overview: ProjectOverviewData;
+  insights: ProjectInsightsData;
+  methodology: ProjectMethodologyData;
+  tour?: {
+    sessionKey: string;
+    steps: readonly GuidedTourStep[];
+    storageKey: string;
+  };
 }

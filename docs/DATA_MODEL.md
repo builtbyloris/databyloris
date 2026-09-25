@@ -19,8 +19,13 @@ remain code-driven until a later migration.
   story, methodology, dashboard, and onboarding configuration.
 - Published records without a registered implementation receive a metadata-only
   overview and never receive inferred analytical content.
-- Spotify retains a transitional local fallback so the demo remains available
-  before its corresponding published database record is created.
+- Implemented-project slugs are the explicit join between Supabase metadata and
+  code modules. Removing or unpublishing the database record removes the project
+  publicly without deleting its analytical implementation.
+- The canonical Spotify metadata record can be created with the idempotent
+  `supabase/seeds/spotify_project.sql` template after the single Admin allowlist
+  row exists. The template resolves `created_by` from `admin_users` and stores no
+  personal UUID.
 
 ## Project
 

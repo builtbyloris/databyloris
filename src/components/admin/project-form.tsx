@@ -28,11 +28,12 @@ function FieldError({ field, state }: { field: ProjectFormField; state: ProjectF
 }
 
 interface ProjectFormProps {
+  implementedSlug?: string;
   mode: "create" | "edit";
   project?: ProjectDatabaseRow;
 }
 
-export function ProjectForm({ mode, project }: ProjectFormProps) {
+export function ProjectForm({ implementedSlug, mode, project }: ProjectFormProps) {
   const action =
     mode === "edit" && project
       ? updateProjectAction.bind(null, project.id)
@@ -70,6 +71,13 @@ export function ProjectForm({ mode, project }: ProjectFormProps) {
           <div className="space-y-2">
             <label className={labelClassName} htmlFor="slug">Slug</label>
             <input aria-describedby={describedBy("slug")} autoCapitalize="none" className={inputClassName} defaultValue={project?.slug} disabled={pending} id="slug" maxLength={100} name="slug" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="project-name" required />
+            {implementedSlug ? (
+              <p className="rounded-control border border-warning/25 bg-warning-subtle px-3 py-2 text-xs leading-5 text-warning">
+                This slug connects the project to its code-driven analytical
+                implementation. Changing it will disconnect that experience
+                until the implementation registry is updated.
+              </p>
+            ) : null}
             <FieldError field="slug" state={state} />
           </div>
         </div>
@@ -140,7 +148,7 @@ export function ProjectForm({ mode, project }: ProjectFormProps) {
       <section className="space-y-5 border-t border-border pt-8" aria-labelledby="publishing-heading">
         <div>
           <h2 className="text-xl" id="publishing-heading">Publishing</h2>
-          <p className="text-sm text-text-muted">Control Admin storage state. Public pages still use local project data.</p>
+          <p className="text-sm text-text-muted">Control the project&apos;s public visibility and featured state.</p>
         </div>
         <div className="max-w-sm space-y-2">
           <label className={labelClassName} htmlFor="status">Status</label>

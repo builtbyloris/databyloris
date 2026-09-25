@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
+import { SPOTIFY_PROJECT_PATH } from "@/lib/projects/project-identifiers";
 
 export default function DemoPage() {
-  redirect(SPOTIFY_DEMO_PROJECT.href);
+  redirect(SPOTIFY_PROJECT_PATH);
 }

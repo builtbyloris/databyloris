@@ -41,10 +41,12 @@ export function DatasetSnapshot({ dataset }: DatasetSnapshotProps) {
         ))}
       </dl>
 
-      <div className="mt-5 border-t border-border pt-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Source</p>
-        <p className="mt-1 text-sm text-text-secondary">{dataset.source}</p>
-      </div>
+      {dataset.source ? (
+        <div className="mt-5 border-t border-border pt-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Source</p>
+          <p className="mt-1 text-sm text-text-secondary">{dataset.source}</p>
+        </div>
+      ) : null}
     </Card>
   );
 }

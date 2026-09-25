@@ -1,6 +1,7 @@
 import type { ProjectDatabaseRow } from "@/types/project-database";
 import type {
   ProjectCoverType,
+  ProjectAnalyticsImplementation,
   ProjectDetail,
   PublicProjectMetadata,
 } from "@/types/project";
@@ -48,21 +49,21 @@ export function projectRowToPublicProject(
 
 export function mergeProjectImplementation(
   metadata: PublicProjectMetadata,
-  implementation: ProjectDetail,
+  implementation: ProjectAnalyticsImplementation,
 ): ProjectDetail {
   return {
-    ...implementation,
     ...metadata,
-    subtitle: metadata.subtitle ?? implementation.subtitle,
-    question: metadata.question ?? implementation.question,
-    period: metadata.period ?? implementation.period,
     href: `/projects/${metadata.slug}`,
     dataset: {
       ...implementation.dataset,
-      period: metadata.period ?? implementation.dataset.period,
-      records: metadata.dataset?.records ?? implementation.dataset.records,
-      grain: metadata.dataset?.grain ?? implementation.dataset.grain,
-      source: metadata.dataset?.source ?? implementation.dataset.source,
+      period: metadata.period,
+      records: metadata.dataset?.records,
+      grain: metadata.dataset?.grain,
+      source: metadata.dataset?.source,
     },
+    dashboard: implementation.dashboard,
+    overview: implementation.overview,
+    insights: implementation.insights,
+    methodology: implementation.methodology,
   };
 }

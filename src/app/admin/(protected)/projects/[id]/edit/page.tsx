@@ -7,6 +7,7 @@ import { ProjectForm } from "@/components/admin/project-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getAdminProjectById } from "@/lib/projects/admin-projects";
+import { getProjectImplementation } from "@/lib/projects/project-implementations";
 import type { ProjectDatabaseRow } from "@/types/project-database";
 
 export const metadata: Metadata = {
@@ -35,6 +36,8 @@ export default async function EditAdminProjectPage({
     return <AdminDataError title="This project could not be loaded" />;
   }
 
+  const hasImplementation = Boolean(getProjectImplementation(project.slug));
+
   return (
     <div className="space-y-7">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -62,7 +65,11 @@ export default async function EditAdminProjectPage({
 
       <Card>
         <CardContent className="pt-5 sm:pt-6">
-          <ProjectForm mode="edit" project={project} />
+          <ProjectForm
+            implementedSlug={hasImplementation ? project.slug : undefined}
+            mode="edit"
+            project={project}
+          />
         </CardContent>
       </Card>
     </div>

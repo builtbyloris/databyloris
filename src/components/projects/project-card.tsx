@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { ProjectCoverType, ProjectSummary } from "@/types/project";
 
@@ -61,7 +61,7 @@ function ProjectCover({ coverType }: { coverType: ProjectCoverType }) {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const href = project.status === "published" ? project.href : undefined;
+  const href = project.href ?? `/projects/${project.slug}`;
 
   return (
     <article className="h-full">
@@ -72,9 +72,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <Badge variant="accent">{project.category}</Badge>
             {project.demo ? <Badge>Interactive demo</Badge> : null}
-            {project.status === "upcoming" ? (
-              <Badge variant="warning">Upcoming</Badge>
-            ) : null}
           </div>
 
           <h2 className="text-xl font-semibold tracking-tight text-text-primary">
@@ -112,20 +109,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
           ) : null}
 
           <div className="mt-auto pt-6">
-            {href ? (
-              <ButtonLink
-                aria-label={`Explore ${project.title}`}
-                className="w-full"
-                href={href}
-              >
-                Explore project
-                <span aria-hidden="true">→</span>
-              </ButtonLink>
-            ) : (
-              <Button className="w-full" disabled variant="secondary">
-                Coming soon
-              </Button>
-            )}
+            <ButtonLink
+              aria-label={`Explore ${project.title}`}
+              className="w-full"
+              href={href}
+            >
+              Explore project
+              <span aria-hidden="true">→</span>
+            </ButtonLink>
           </div>
         </div>
       </Card>

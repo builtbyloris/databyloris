@@ -4,8 +4,11 @@ import { FeaturedAnalysis } from "@/components/projects/featured-analysis";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
-import { listFeaturedPublishedProjects } from "@/lib/projects/public-projects";
+import { SPOTIFY_PROJECT_PATH, SPOTIFY_PROJECT_SLUG } from "@/lib/projects/project-identifiers";
+import {
+  getPublishedProjectBySlug,
+  listFeaturedPublishedProjects,
+} from "@/lib/projects/public-projects";
 
 const steps = [
   {
@@ -26,7 +29,11 @@ const steps = [
 ];
 
 export default async function HomePage() {
-  const [featuredProject] = await listFeaturedPublishedProjects();
+  const [featuredProjects, spotifyProject] = await Promise.all([
+    listFeaturedPublishedProjects(),
+    getPublishedProjectBySlug(SPOTIFY_PROJECT_SLUG),
+  ]);
+  const [featuredProject] = featuredProjects;
 
   return (
     <div>
@@ -43,9 +50,11 @@ export default async function HomePage() {
               Explore projects
               <span aria-hidden="true">→</span>
             </ButtonLink>
-            <ButtonLink href={SPOTIFY_DEMO_PROJECT.href} size="lg" variant="secondary">
-              Try interactive demo
-            </ButtonLink>
+            {spotifyProject ? (
+              <ButtonLink href={SPOTIFY_PROJECT_PATH} size="lg" variant="secondary">
+                Try interactive demo
+              </ButtonLink>
+            ) : null}
           </div>
           <p className="mt-8 text-sm font-medium text-text-muted">
             Discover <span aria-hidden="true">→</span> Understand{" "}
@@ -56,8 +65,8 @@ export default async function HomePage() {
         <AnalyticsPreview />
       </section>
 
-      <FeaturedAnalysis project={featuredProject} />
-      <FeaturedInsights />
+      {featuredProject ? <FeaturedAnalysis project={featuredProject} /> : null}
+      {spotifyProject ? <FeaturedInsights /> : null}
 
       <section aria-labelledby="how-it-works-title" className="container-page section-separation">
         <div className="mb-7 max-w-2xl space-y-3">

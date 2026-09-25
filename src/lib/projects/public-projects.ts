@@ -1,13 +1,10 @@
 import "server-only";
 
-import { SPOTIFY_PROJECT_SUMMARY } from "@/data/projects";
 import { createClient } from "@/lib/supabase/server";
 import type { ProjectDatabaseRow } from "@/types/project-database";
 import type { PublicProjectMetadata } from "@/types/project";
 
 import { projectRowToPublicProject } from "./project-adapter";
-
-const spotifySlug = "spotify-listening-trends";
 
 async function queryPublishedProjects(): Promise<ProjectDatabaseRow[]> {
   try {
@@ -27,27 +24,12 @@ async function queryPublishedProjects(): Promise<ProjectDatabaseRow[]> {
 }
 
 export async function listPublishedProjects(): Promise<PublicProjectMetadata[]> {
-  const projects = (await queryPublishedProjects()).map(projectRowToPublicProject);
-
-  // Transitional fallback: keep the implemented demo public until its persisted
-  // published record exists. Remove this branch after Spotify is seeded.
-  if (!projects.some((project) => project.slug === spotifySlug)) {
-    projects.push(SPOTIFY_PROJECT_SUMMARY);
-  }
-
-  return projects.sort(
-    (left, right) => Number(right.featured) - Number(left.featured),
-  );
+  return (await queryPublishedProjects()).map(projectRowToPublicProject);
 }
 
 export async function listFeaturedPublishedProjects() {
   const projects = await listPublishedProjects();
-  const featured = projects.filter((project) => project.featured);
-
-  if (featured.length > 0) return featured;
-
-  const spotify = projects.find((project) => project.slug === spotifySlug);
-  return spotify ? [spotify] : [SPOTIFY_PROJECT_SUMMARY];
+  return projects.filter((project) => project.featured);
 }
 
 export async function getPublishedProjectBySlug(
@@ -66,8 +48,8 @@ export async function getPublishedProjectBySlug(
       return projectRowToPublicProject(data as ProjectDatabaseRow);
     }
   } catch {
-    // The isolated Spotify fallback below remains available during outages.
+    // Public metadata is unavailable; never substitute a local project record.
   }
 
-  return slug === spotifySlug ? SPOTIFY_PROJECT_SUMMARY : null;
+  return null;
 }

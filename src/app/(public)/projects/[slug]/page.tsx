@@ -22,7 +22,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
   return (
     <ProjectContentShell
-      project={mergeProjectImplementation(project, implementation.project)}
+      project={mergeProjectImplementation(project, implementation)}
       tour={implementation.tour}
     />
   );

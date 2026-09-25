@@ -37,9 +37,9 @@ project metadata, featured state, and draft/published visibility.
 
 Analytical experiences remain code-driven in the MVP. Publishing project
 metadata does not generate KPIs, stories, charts, dashboards, or methodology.
-Only slugs in the implementation registry receive those modules. The local
-Spotify project remains a temporary, isolated fallback until its published
-Supabase record exists.
+Only slugs in the implementation registry receive those modules. Supabase is the
+single source of public metadata for every project, including Spotify. Removing
+or unpublishing a record removes that project from public routes.
 
 ## Public information architecture
 
