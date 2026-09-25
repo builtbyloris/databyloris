@@ -1,14 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
-
-const project = SPOTIFY_DEMO_PROJECT;
-const metadata = [project.period, ...project.tags];
+import type { ProjectSummary } from "@/types/project";
 
 const rankingPreview = [82, 67, 54, 39];
 
-export function FeaturedAnalysis() {
+export function FeaturedAnalysis({ project }: { project: ProjectSummary }) {
+  const href = project.href ?? `/projects/${project.slug}`;
+  const metadata = [project.period, ...project.tags].filter(
+    (item): item is string => Boolean(item),
+  );
+
   return (
     <section aria-labelledby="featured-analysis-title" className="container-page section-separation">
       <div className="mb-7 space-y-3">
@@ -20,15 +22,17 @@ export function FeaturedAnalysis() {
         <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
           <div className="mb-5 flex flex-wrap items-center gap-2">
             <Badge variant="accent">{project.category}</Badge>
-            <Badge>Interactive demo</Badge>
+            <Badge>{project.demo ? "Interactive demo" : "Published project"}</Badge>
           </div>
 
           <h3 className="text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
             {project.title}
           </h3>
-          <p className="mt-4 text-lg font-medium leading-7 text-text-primary">
-            {project.question}
-          </p>
+          {project.question ? (
+            <p className="mt-4 text-lg font-medium leading-7 text-text-primary">
+              {project.question}
+            </p>
+          ) : null}
           <p className="mt-3 max-w-xl leading-7 text-text-secondary">
             {project.description}
           </p>
@@ -45,7 +49,7 @@ export function FeaturedAnalysis() {
           </ul>
 
           <div className="mt-7">
-            <ButtonLink href={project.href} size="lg">
+            <ButtonLink href={href} size="lg">
               Explore analysis
               <span aria-hidden="true">→</span>
             </ButtonLink>
@@ -53,17 +57,17 @@ export function FeaturedAnalysis() {
         </div>
 
         <div
-          aria-label="Illustrative Spotify analysis interface preview"
+          aria-label={`Illustrative ${project.title} analysis interface preview`}
           className="border-t border-border bg-surface-secondary p-5 sm:p-7 lg:border-l lg:border-t-0"
           role="img"
         >
           <div className="rounded-card border border-border bg-surface-primary p-5 shadow-elevated">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-text-primary">Listening pulse</p>
-                <p className="text-xs text-text-muted">Demo interface preview</p>
+                <p className="text-sm font-semibold text-text-primary">Analysis preview</p>
+                <p className="text-xs text-text-muted">Published project interface</p>
               </div>
-              <Badge variant="accent">{project.period}</Badge>
+              {project.period ? <Badge variant="accent">{project.period}</Badge> : null}
             </div>
 
             <svg
@@ -91,7 +95,7 @@ export function FeaturedAnalysis() {
             <div className="space-y-3">
               {rankingPreview.map((width, index) => (
                 <div className="grid grid-cols-[4.5rem_1fr] items-center gap-3" key={width}>
-                  <span className="text-xs text-text-muted">Artist {index + 1}</span>
+                  <span className="text-xs text-text-muted">Signal {index + 1}</span>
                   <span className="h-2.5 rounded-badge bg-surface-secondary">
                     <span
                       className="block h-full rounded-badge bg-accent"

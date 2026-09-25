@@ -1,8 +1,8 @@
 # Conceptual data model
 
-This document defines product concepts and relationships. The current Admin MVP
-persists core project metadata in Supabase; analytical modules and the public
-catalog remain configuration-driven and local until a later migration.
+This document defines product concepts and relationships. Supabase persists core
+project metadata and controls public catalog visibility. Analytical modules
+remain code-driven until a later migration.
 
 ## Current persistence boundary
 
@@ -14,8 +14,13 @@ catalog remain configuration-driven and local until a later migration.
 - Administrator membership is provisioned out of band by adding the existing
   Supabase Auth user UUID to `admin_users`; no personal identifier is seeded by
   the repository.
-- Public Home, Explore, and project pages still read `src/data/projects.ts`; they
-  do not query Supabase yet.
+- Public Home, Explore, and project routes query published Supabase metadata.
+- A code-side implementation registry maps supported slugs to authored analytics,
+  story, methodology, dashboard, and onboarding configuration.
+- Published records without a registered implementation receive a metadata-only
+  overview and never receive inferred analytical content.
+- Spotify retains a transitional local fallback so the demo remains available
+  before its corresponding published database record is created.
 
 ## Project
 

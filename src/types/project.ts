@@ -4,19 +4,15 @@ import type {
   ProjectOverviewData,
 } from "@/types/analytics";
 
-export type ProjectCategory =
-  | "Music"
-  | "Entertainment"
-  | "Gaming"
-  | "Travel"
-  | "Business";
+export type ProjectCategory = string;
 
 export type ProjectCoverType =
   | "listening"
   | "catalog"
   | "market"
   | "geography"
-  | "economy";
+  | "economy"
+  | "generic";
 
 export type ProjectStatus = "draft" | "published" | "upcoming";
 
@@ -66,14 +62,24 @@ export interface ProjectSummary {
   title: string;
   category: ProjectCategory;
   description: string;
-  question: string;
+  question?: string;
   coverType: ProjectCoverType;
-  period: string;
+  period?: string;
   tags: string[];
   featured: boolean;
   demo: boolean;
   status: ProjectStatus;
   href?: string;
+}
+
+export interface PublicProjectMetadata extends ProjectSummary {
+  id?: string;
+  subtitle?: string;
+  dataset?: {
+    records?: string;
+    grain?: string;
+    source?: string;
+  };
 }
 
 export interface ProjectDetail extends ProjectSummary {

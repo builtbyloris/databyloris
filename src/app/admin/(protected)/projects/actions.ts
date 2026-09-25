@@ -15,6 +15,12 @@ import type {
   ProjectFormState,
 } from "@/types/project-database";
 
+function revalidateProjectSurfaces() {
+  revalidatePath("/");
+  revalidatePath("/explore");
+  revalidatePath("/projects/[slug]", "page");
+}
+
 function actionError(error: unknown): ProjectFormState {
   if (error instanceof AdminProjectError) {
     if (error.code === "duplicate_slug") {
@@ -53,6 +59,7 @@ export async function createProjectAction(
 
   revalidatePath("/admin");
   revalidatePath("/admin/projects");
+  revalidateProjectSurfaces();
   redirect(`/admin/projects/${projectId}/edit?saved=created`);
 }
 
@@ -73,6 +80,7 @@ export async function updateProjectAction(
   revalidatePath("/admin");
   revalidatePath("/admin/projects");
   revalidatePath(`/admin/projects/${id}/edit`);
+  revalidateProjectSurfaces();
   redirect(`/admin/projects/${id}/edit?saved=updated`);
 }
 
@@ -94,5 +102,6 @@ export async function deleteProjectAction(
 
   revalidatePath("/admin");
   revalidatePath("/admin/projects");
+  revalidateProjectSurfaces();
   redirect("/admin/projects?deleted=1");
 }

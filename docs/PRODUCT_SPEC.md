@@ -32,8 +32,14 @@ repository.
 
 Admin project records are persisted in Supabase. Application actions verify the
 configured administrator, while database access is independently restricted by
-the `admin_users` allowlist and Row Level Security. The public catalog continues
-to use local project data until a later migration phase.
+the `admin_users` allowlist and Row Level Security. Supabase now controls public
+project metadata, featured state, and draft/published visibility.
+
+Analytical experiences remain code-driven in the MVP. Publishing project
+metadata does not generate KPIs, stories, charts, dashboards, or methodology.
+Only slugs in the implementation registry receive those modules. The local
+Spotify project remains a temporary, isolated fallback until its published
+Supabase record exists.
 
 ## Public information architecture
 
@@ -103,4 +109,4 @@ Only the Spotify demo includes onboarding. The tour is optional, uses the real i
 - No public accounts or authentication; Supabase Auth is limited to the private
   single-administrator area.
 - No public upload, editing, or data-management tools.
-- Public project-data migration remains a later roadmap phase.
+- Analytical content and dashboard configuration remain code-driven.

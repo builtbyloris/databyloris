@@ -1,7 +1,9 @@
 import { ProjectCatalog } from "@/components/projects/project-catalog";
-import { MVP_PROJECTS } from "@/data/projects";
+import { listPublishedProjects } from "@/lib/projects/public-projects";
 
-export default function ExplorePage() {
+export default async function ExplorePage() {
+  const projects = await listPublishedProjects();
+
   return (
     <div className="container-dashboard page-frame">
       <header className="max-w-3xl">
@@ -12,7 +14,7 @@ export default function ExplorePage() {
         </p>
       </header>
 
-      <ProjectCatalog projects={MVP_PROJECTS} />
+      <ProjectCatalog projects={projects} />
     </div>
   );
 }

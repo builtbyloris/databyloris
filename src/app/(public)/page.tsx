@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SPOTIFY_DEMO_PROJECT } from "@/data/projects";
+import { listFeaturedPublishedProjects } from "@/lib/projects/public-projects";
 
 const steps = [
   {
@@ -24,7 +25,9 @@ const steps = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [featuredProject] = await listFeaturedPublishedProjects();
+
   return (
     <div>
       <section className="container-page page-frame grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
@@ -53,7 +56,7 @@ export default function HomePage() {
         <AnalyticsPreview />
       </section>
 
-      <FeaturedAnalysis />
+      <FeaturedAnalysis project={featuredProject} />
       <FeaturedInsights />
 
       <section aria-labelledby="how-it-works-title" className="container-page section-separation">

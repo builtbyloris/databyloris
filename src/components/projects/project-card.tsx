@@ -13,6 +13,7 @@ const coverLabels: Record<ProjectCoverType, string> = {
   market: "Market movement",
   geography: "Travel flows",
   economy: "Digital adoption",
+  generic: "Data signals",
 };
 
 const coverPaths: Record<ProjectCoverType, string> = {
@@ -21,6 +22,7 @@ const coverPaths: Record<ProjectCoverType, string> = {
   market: "M0 92C36 90 53 81 84 72C116 63 139 75 171 51C204 27 228 47 280 21",
   geography: "M0 82C32 48 59 73 91 54C124 34 146 75 178 56C214 35 242 54 280 25",
   economy: "M0 94C31 88 55 92 86 71C118 49 144 61 176 43C211 23 242 40 280 16",
+  generic: "M0 88C34 74 55 81 88 62C120 44 148 70 181 48C215 26 244 43 280 24",
 };
 
 function ProjectCover({ coverType }: { coverType: ProjectCoverType }) {
@@ -78,28 +80,36 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <h2 className="text-xl font-semibold tracking-tight text-text-primary">
             {project.title}
           </h2>
-          <p className="mt-3 text-sm font-medium leading-6 text-text-primary">
-            {project.question}
-          </p>
+          {project.question ? (
+            <p className="mt-3 text-sm font-medium leading-6 text-text-primary">
+              {project.question}
+            </p>
+          ) : null}
           <p className="mt-2 text-sm leading-6 text-text-secondary">
             {project.description}
           </p>
 
-          <div className="mt-5 border-t border-border pt-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
-              {project.period}
-            </p>
-            <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} tags`}>
-              {project.tags.map((tag) => (
-                <li
-                  className="rounded-badge bg-surface-secondary px-2 py-1 text-xs text-text-secondary"
-                  key={tag}
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {project.period || project.tags.length > 0 ? (
+            <div className="mt-5 border-t border-border pt-4">
+              {project.period ? (
+                <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
+                  {project.period}
+                </p>
+              ) : null}
+              {project.tags.length > 0 ? (
+                <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} tags`}>
+                  {project.tags.map((tag) => (
+                    <li
+                      className="rounded-badge bg-surface-secondary px-2 py-1 text-xs text-text-secondary"
+                      key={tag}
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="mt-auto pt-6">
             {href ? (
