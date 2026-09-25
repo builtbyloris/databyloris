@@ -14,9 +14,10 @@ export const SPOTIFY_INSIGHTS = {
         "A small group of artists accounts for a disproportionate share of demo streams. The leading artist stands apart, while the remaining audience is distributed across a much longer tail.",
       takeaway:
         "In this illustrative sample, the top artist captures 12.4% of streams and the top ten together account for 38%.",
-      ctaHref: "#explore",
       layout: "text-left",
-      exploreHint: "ranking=artists",
+      exploreState: {
+        target: "top-artists",
+      },
       visualization: {
         type: "ranking",
         title: "Top artists by stream share",
@@ -40,9 +41,10 @@ export const SPOTIFY_INSIGHTS = {
         "Growth and popularity answer different questions. Electronic grows fastest in the demo period, while Pop remains the largest category by the separate popularity index.",
       takeaway:
         "The fastest-growing genre is not necessarily the most popular: Electronic rises 42% while Pop retains the highest demo popularity index.",
-      ctaHref: "#explore",
       layout: "text-right",
-      exploreHint: "ranking=genres&metric=growth",
+      exploreState: {
+        target: "genre-growth",
+      },
       visualization: {
         type: "growth",
         title: "Genre momentum versus popularity",
@@ -66,9 +68,13 @@ export const SPOTIFY_INSIGHTS = {
         "The same genres appear across markets, but their relative weight changes. Local preference reshapes the ranking even when the overall catalog is shared.",
       takeaway:
         "Three different genres lead across the four demo markets, and Electronic's share varies by 1.8× between Brazil and the United Kingdom.",
-      ctaHref: "#explore",
       layout: "full",
-      exploreHint: "compare=markets",
+      exploreState: {
+        filters: {
+          country: "Brazil",
+        },
+        target: "genre-distribution",
+      },
       visualization: {
         type: "market-comparison",
         title: "Genre mix by market",
@@ -128,9 +134,13 @@ export const SPOTIFY_INSIGHTS = {
         "Tracks can reach and retain attention in very different ways. Some peak immediately, some build through discovery, and others sustain a steady audience over time.",
       takeaway:
         "The illustrative patterns show that peak size alone does not explain longevity: shape and retention matter too.",
-      ctaHref: "#explore",
       layout: "text-left",
-      exploreHint: "view=track-lifecycle",
+      exploreState: {
+        filters: {
+          artist: "Artist 01",
+        },
+        target: "streaming-trend",
+      },
       visualization: {
         type: "lifecycle",
         title: "Three paths through a hit's lifecycle",

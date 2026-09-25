@@ -107,16 +107,28 @@ export type StoryVisualizationData =
   | MarketComparisonData
   | LifecycleVisualizationData;
 
+export type DashboardModuleId =
+  | "streaming-trend"
+  | "top-artists"
+  | "genre-distribution"
+  | "genre-growth"
+  | "artist-comparison"
+  | "track-table";
+
+export interface InsightExploreState {
+  filters?: Partial<DashboardFilterState>;
+  target?: DashboardModuleId;
+}
+
 export interface InsightStoryData {
   id: string;
   label: string;
   question: string;
   explanation: string;
   takeaway: string;
-  ctaHref: string;
   layout: "text-left" | "text-right" | "full";
   visualization: StoryVisualizationData;
-  exploreHint?: string;
+  exploreState: InsightExploreState;
 }
 
 export interface ProjectInsightsData {

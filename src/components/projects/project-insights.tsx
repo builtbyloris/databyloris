@@ -5,6 +5,7 @@ import { RankingVisualization } from "@/components/analytics/ranking-visualizati
 import { StorySection } from "@/components/analytics/story-section";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { buildInsightExploreHref } from "@/lib/dashboard-navigation";
 import type { StoryVisualizationData } from "@/types/analytics";
 import type { ProjectDetail } from "@/types/project";
 
@@ -53,6 +54,10 @@ export function ProjectInsights({ project }: ProjectInsightsProps) {
       <div className="mt-10">
         {insights.stories.map((story, index) => (
           <StorySection
+            exploreHref={buildInsightExploreHref(
+              `/projects/${project.slug}`,
+              story.exploreState,
+            )}
             index={index}
             key={story.id}
             story={story}

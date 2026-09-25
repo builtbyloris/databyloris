@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ArtistComparison } from "@/components/analytics/artist-comparison";
@@ -29,10 +29,17 @@ import {
   parseDashboardFilters,
   serializeDashboardFilters,
 } from "@/lib/dashboard-analytics";
+import {
+  DASHBOARD_MODULE_QUERY_KEY,
+  getDashboardModuleId,
+  getDashboardModuleElementId,
+  getDashboardModuleIdFromHash,
+} from "@/lib/dashboard-navigation";
 import type {
   DashboardConfiguration,
   DashboardFilterKey,
   DashboardFilterState,
+  DashboardModuleId,
 } from "@/types/analytics";
 
 interface DashboardShellProps {
@@ -46,10 +53,59 @@ const filterLabels: Record<DashboardFilterKey, string> = {
   artist: "Artist",
 };
 
+const moduleLabels: Record<DashboardModuleId, string> = {
+  "streaming-trend": "Streaming Trend",
+  "top-artists": "Top Artists",
+  "genre-distribution": "Genre Distribution",
+  "genre-growth": "Genre Growth",
+  "artist-comparison": "Artist Comparison",
+  "track-table": "Track Table",
+};
+
+interface DashboardModuleProps {
+  children: ReactNode;
+  highlighted: boolean;
+  moduleId: DashboardModuleId;
+}
+
+function DashboardModule({
+  children,
+  highlighted,
+  moduleId,
+}: DashboardModuleProps) {
+  const label = moduleLabels[moduleId];
+
+  return (
+    <section
+      aria-label={`${label} dashboard module`}
+      className={`relative min-w-0 scroll-mt-32 rounded-card ${
+        highlighted
+          ? "outline outline-2 outline-offset-4 outline-accent shadow-elevated"
+          : ""
+      }`}
+      id={getDashboardModuleElementId(moduleId)}
+      tabIndex={-1}
+    >
+      {highlighted ? (
+        <span
+          className="absolute -top-3 right-4 z-10 rounded-badge border border-accent bg-surface-elevated px-2.5 py-1 text-xs font-semibold text-accent shadow-elevated"
+          role="status"
+        >
+          Insight focus
+        </span>
+      ) : null}
+      {children}
+    </section>
+  );
+}
+
 export function DashboardShell({ configuration }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
+  const [highlightedModule, setHighlightedModule] =
+    useState<DashboardModuleId | null>(null);
   const options = useMemo(
     () => createDashboardFilterOptions(configuration.rows),
     [configuration.rows],
@@ -79,6 +135,44 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
     [comparisonRows],
   );
   const trackData = useMemo(() => aggregateTracks(filteredRows), [filteredRows]);
+
+  useEffect(() => {
+    let highlightTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function focusTargetModule() {
+      if (highlightTimer) clearTimeout(highlightTimer);
+
+      const moduleId =
+        getDashboardModuleId(
+          new URLSearchParams(searchParamsString).get(
+            DASHBOARD_MODULE_QUERY_KEY,
+          ),
+        ) ??
+        getDashboardModuleIdFromHash(window.location.hash);
+      if (!moduleId) {
+        setHighlightedModule(null);
+        return;
+      }
+
+      const element = document.getElementById(
+        getDashboardModuleElementId(moduleId),
+      );
+      if (!element) return;
+
+      element.scrollIntoView({ behavior: "auto", block: "start" });
+      element.focus({ preventScroll: true });
+      setHighlightedModule(moduleId);
+      highlightTimer = setTimeout(() => setHighlightedModule(null), 2400);
+    }
+
+    focusTargetModule();
+    window.addEventListener("hashchange", focusTargetModule);
+
+    return () => {
+      window.removeEventListener("hashchange", focusTargetModule);
+      if (highlightTimer) clearTimeout(highlightTimer);
+    };
+  }, [searchParamsString]);
 
   function updateUrl(nextFilters: DashboardFilterState) {
     const query = serializeDashboardFilters(nextFilters);
@@ -158,21 +252,51 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
           </div>
 
           <div className="mt-5">
-            <StreamingTrendChart data={trendData} />
+            <DashboardModule
+              highlighted={highlightedModule === "streaming-trend"}
+              moduleId="streaming-trend"
+            >
+              <StreamingTrendChart data={trendData} />
+            </DashboardModule>
           </div>
 
           <div className="mt-4 grid min-w-0 gap-4 lg:grid-cols-2">
-            <TopArtistsChart data={artistRanking} />
-            <GenreDistributionChart data={genreDistribution} />
+            <DashboardModule
+              highlighted={highlightedModule === "top-artists"}
+              moduleId="top-artists"
+            >
+              <TopArtistsChart data={artistRanking} />
+            </DashboardModule>
+            <DashboardModule
+              highlighted={highlightedModule === "genre-distribution"}
+              moduleId="genre-distribution"
+            >
+              <GenreDistributionChart data={genreDistribution} />
+            </DashboardModule>
           </div>
 
           <div className="mt-4 grid min-w-0 gap-4 lg:grid-cols-2">
-            <GenreGrowthChart result={genreGrowth} />
-            <ArtistComparison data={artistMetrics} />
+            <DashboardModule
+              highlighted={highlightedModule === "genre-growth"}
+              moduleId="genre-growth"
+            >
+              <GenreGrowthChart result={genreGrowth} />
+            </DashboardModule>
+            <DashboardModule
+              highlighted={highlightedModule === "artist-comparison"}
+              moduleId="artist-comparison"
+            >
+              <ArtistComparison data={artistMetrics} />
+            </DashboardModule>
           </div>
 
           <div className="mt-4">
-            <TrackTable data={trackData} />
+            <DashboardModule
+              highlighted={highlightedModule === "track-table"}
+              moduleId="track-table"
+            >
+              <TrackTable data={trackData} />
+            </DashboardModule>
           </div>
         </>
       ) : (

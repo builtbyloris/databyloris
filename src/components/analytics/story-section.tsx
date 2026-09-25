@@ -6,12 +6,18 @@ import type { InsightStoryData } from "@/types/analytics";
 
 interface StorySectionProps {
   children: ReactNode;
+  exploreHref: string;
   index: number;
   story: InsightStoryData;
   total: number;
 }
 
-function StoryCopy({ index, story, total }: Omit<StorySectionProps, "children">) {
+function StoryCopy({
+  exploreHref,
+  index,
+  story,
+  total,
+}: Omit<StorySectionProps, "children">) {
   return (
     <div className="flex flex-col items-start">
       <div className="flex flex-wrap items-center gap-3">
@@ -38,7 +44,7 @@ function StoryCopy({ index, story, total }: Omit<StorySectionProps, "children">)
       <ButtonLink
         aria-label={`Explore this insight: ${story.question}`}
         className="mt-7"
-        href={story.ctaHref}
+        href={exploreHref}
         variant="secondary"
       >
         Explore this insight
@@ -48,12 +54,18 @@ function StoryCopy({ index, story, total }: Omit<StorySectionProps, "children">)
   );
 }
 
-export function StorySection({ children, index, story, total }: StorySectionProps) {
+export function StorySection({
+  children,
+  exploreHref,
+  index,
+  story,
+  total,
+}: StorySectionProps) {
   if (story.layout === "full") {
     return (
       <article aria-labelledby={`${story.id}-title`} className="border-t border-border py-14 sm:py-20">
         <div className="max-w-2xl">
-          <StoryCopy index={index} story={story} total={total} />
+          <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} />
         </div>
         <div className="mt-8">{children}</div>
       </article>
@@ -69,7 +81,7 @@ export function StorySection({ children, index, story, total }: StorySectionProp
       className="grid items-center gap-8 border-t border-border py-14 sm:py-20 lg:grid-cols-12 lg:gap-10"
     >
       <div className={`lg:col-span-5 ${copyOrder}`}>
-        <StoryCopy index={index} story={story} total={total} />
+        <StoryCopy exploreHref={exploreHref} index={index} story={story} total={total} />
       </div>
       <div className={`lg:col-span-7 ${visualOrder}`}>{children}</div>
     </article>
