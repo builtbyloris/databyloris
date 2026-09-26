@@ -19,28 +19,31 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCompactMetric } from "@/lib/dashboard-analytics";
 import type { GenreGrowthResult } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface GenreGrowthChartProps {
   result: GenreGrowthResult;
+  strings: PublicDictionary["dashboard"];
 }
 
-export function GenreGrowthChart({ result }: GenreGrowthChartProps) {
+export function GenreGrowthChart({ result, strings }: GenreGrowthChartProps) {
+  const readyDescription = result.status === "ready"
+    ? strings.charts.growth.readyDescription
+        .replace("{start}", formatDashboardMonth(result.earliestPeriod, strings.locale))
+        .replace("{end}", formatDashboardMonth(result.latestPeriod, strings.locale))
+    : strings.charts.growth.defaultDescription;
   return (
     <Card className="min-w-0">
       <CardHeader>
-        <p className="text-overline">Relative growth</p>
-        <CardTitle>Which genres are growing fastest?</CardTitle>
-        <CardDescription>
-          {result.status === "ready"
-            ? `${formatDashboardMonth(result.earliestPeriod)} versus ${formatDashboardMonth(result.latestPeriod)}. Growth is distinct from total popularity.`
-            : "Compares the first and last month available in the current selection."}
-        </CardDescription>
+        <p className="text-overline">{strings.charts.growth.eyebrow}</p>
+        <CardTitle>{strings.charts.growth.title}</CardTitle>
+        <CardDescription>{readyDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         {result.status === "ready" ? (
           <>
             <p className="sr-only">
-              {result.items.map((item) => `${item.genre}: ${formatPercent(item.growthPercent)} growth`).join("; ")}.
+              {result.items.map((item) => `${item.genre}: ${formatPercent(item.growthPercent)} ${strings.charts.growth.growthSuffix}`).join("; ")}.
             </p>
             <div className="min-w-0" style={{ height: Math.max(260, result.items.length * 48) }}>
               <ResponsiveContainer height="100%" width="100%">
@@ -67,8 +70,8 @@ export function GenreGrowthChart({ result }: GenreGrowthChartProps) {
                     formatter={(value, name, item) => {
                       if (name !== "growthPercent") return [value, name];
                       return [
-                        `${formatPercent(Number(value))} · ${formatCompactMetric(Number(item.payload?.totalStreams ?? 0))} total streams`,
-                        "Growth",
+                        `${formatPercent(Number(value))} · ${formatCompactMetric(Number(item.payload?.totalStreams ?? 0))} ${strings.charts.totalStreamsSuffix}`,
+                        strings.charts.growthLabel,
                       ];
                     }}
                     cursor={{ fill: "var(--accent-subtle)" }}
@@ -80,14 +83,16 @@ export function GenreGrowthChart({ result }: GenreGrowthChartProps) {
             <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-text-muted">
               {result.items.map((item) => (
                 <span key={item.genre}>
-                  {item.genre}: {formatCompactMetric(item.totalStreams)} total
+                  {item.genre}: {formatCompactMetric(item.totalStreams)} {strings.charts.total}
                 </span>
               ))}
             </div>
           </>
         ) : (
           <div className="rounded-control border border-dashed border-border bg-surface-secondary p-5 text-sm leading-6 text-text-secondary">
-            {result.reason}
+            {result.reason === "period"
+              ? strings.charts.growth.insufficientPeriod
+              : strings.charts.growth.insufficientComparison}
           </div>
         )}
       </CardContent>

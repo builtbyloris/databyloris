@@ -14,22 +14,24 @@ import { chartTooltipStyle } from "@/components/analytics/chart-helpers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCompactMetric } from "@/lib/dashboard-analytics";
 import type { GenreDistributionItem } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface GenreDistributionChartProps {
   data: readonly GenreDistributionItem[];
+  strings: PublicDictionary["dashboard"];
 }
 
-export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
+export function GenreDistributionChart({ data, strings }: GenreDistributionChartProps) {
   return (
     <Card className="min-w-0">
       <CardHeader>
-        <p className="text-overline">Genre distribution</p>
-        <CardTitle>Which genres account for the most listening?</CardTitle>
-        <CardDescription>Share of illustrative streams in the current selection.</CardDescription>
+        <p className="text-overline">{strings.charts.genres.eyebrow}</p>
+        <CardTitle>{strings.charts.genres.title}</CardTitle>
+        <CardDescription>{strings.charts.genres.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <p className="sr-only">
-          {data.map((item) => `${item.genre}: ${item.percentage.toFixed(1)} percent`).join("; ")}.
+          {data.map((item) => `${item.genre}: ${item.percentage.toFixed(1)} ${strings.charts.genres.percent}`).join("; ")}.
         </p>
         <div className="h-64 min-w-0">
           <ResponsiveContainer height="100%" width="100%">
@@ -59,7 +61,7 @@ export function GenreDistributionChart({ data }: GenreDistributionChartProps) {
                 formatter={(value, name, item) => {
                   if (name !== "streams") return [value, name];
                   const percentage = Number(item.payload?.percentage ?? 0);
-                  return [`${formatCompactMetric(Number(value))} (${percentage.toFixed(1)}%)`, "Streams"];
+                  return [`${formatCompactMetric(Number(value))} (${percentage.toFixed(1)}%)`, strings.charts.streams];
                 }}
                 cursor={{ fill: "var(--accent-subtle)" }}
               />

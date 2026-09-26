@@ -179,7 +179,7 @@ export function calculateGenreGrowth(
   if (periods.length < 2) {
     return {
       status: "insufficient",
-      reason: "Select at least two months to compare genre growth.",
+      reason: "period",
       items: [],
     };
   }
@@ -229,7 +229,7 @@ export function calculateGenreGrowth(
   if (items.length === 0) {
     return {
       status: "insufficient",
-      reason: "The current selection has no genres with data in both boundary months.",
+      reason: "comparison",
       items: [],
     };
   }

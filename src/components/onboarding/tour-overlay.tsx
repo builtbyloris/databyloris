@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { GuidedTourStep } from "@/types/onboarding";
 import type { RefObject } from "react";
+import type { PublicDictionary } from "@/i18n/types";
 
 export interface TourTargetRect {
   height: number;
@@ -21,6 +22,7 @@ interface TourOverlayProps {
   step: GuidedTourStep;
   targetRect: TourTargetRect | null;
   total: number;
+  strings: PublicDictionary["onboarding"];
 }
 
 const SPOTLIGHT_GAP = 8;
@@ -36,6 +38,7 @@ export function TourOverlay({
   step,
   targetRect,
   total,
+  strings,
 }: TourOverlayProps) {
   const panelHeight = 280;
   const spaceBelow = targetRect
@@ -117,10 +120,10 @@ export function TourOverlay({
         <Card className="p-5 shadow-elevated" surface="elevated">
           <div className="flex items-center justify-between gap-4">
           <p className="font-mono text-xs font-semibold tracking-wider text-accent">
-            {current + 1} of {total}
+            {current + 1} {strings.stepOf} {total}
           </p>
           <Button onClick={onSkip} size="sm" variant="ghost">
-            Skip tour
+            {strings.skip}
           </Button>
           </div>
           <h2 className="mt-3 text-xl" id="guided-tour-step-title">
@@ -135,7 +138,7 @@ export function TourOverlay({
 
           {step.completion ? (
             <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
-              Complete the highlighted action to continue
+              {strings.instruction}
             </p>
           ) : null}
 
@@ -146,15 +149,15 @@ export function TourOverlay({
               size="sm"
               variant="ghost"
             >
-              Back
+              {strings.back}
             </Button>
             {step.completion ? (
               <Button onClick={onFocusTarget} size="sm" variant="secondary">
-                {step.targetActionLabel ?? "Focus highlighted control"}
+                {step.targetActionLabel ?? strings.focus}
               </Button>
             ) : (
               <Button onClick={onNext} size="sm">
-                Next
+                {strings.next}
               </Button>
             )}
           </div>

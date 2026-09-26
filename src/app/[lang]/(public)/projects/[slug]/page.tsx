@@ -6,6 +6,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { isLocale, localizePath } from "@/i18n/config";
 import { mergeProjectImplementation } from "@/lib/projects/project-adapter";
 import { getProjectImplementation } from "@/lib/projects/project-implementations";
+import { localizeProjectImplementation } from "@/lib/projects/localize-project-implementation";
 import { getPublishedProjectBySlug } from "@/lib/projects/public-projects";
 
 export default async function ProjectPage({
@@ -25,20 +26,23 @@ export default async function ProjectPage({
     notFound();
   }
 
+  const dictionary = await getDictionary(lang);
   const implementation = getProjectImplementation(slug);
 
   if (!implementation) {
-    return <GenericProjectContent project={project} />;
+    return <GenericProjectContent dictionary={dictionary} project={project} />;
   }
-
-  const dictionary = await getDictionary(lang);
+  const localizedImplementation = localizeProjectImplementation(
+    implementation,
+    dictionary.spotify,
+  );
 
   return (
     <ProjectContentShell
-      project={mergeProjectImplementation(project, implementation)}
-      projectNavigationLabels={dictionary.projectNavigation}
+      dictionary={dictionary}
+      project={mergeProjectImplementation(project, localizedImplementation)}
       projectPath={localizePath(lang, `/projects/${project.slug}`)}
-      tour={implementation.tour}
+      tour={localizedImplementation.tour}
     />
   );
 }

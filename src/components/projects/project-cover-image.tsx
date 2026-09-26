@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface ProjectCoverImageProps {
   className?: string;
@@ -9,6 +10,7 @@ interface ProjectCoverImageProps {
   priority?: boolean;
   sizes: string;
   title: string;
+  strings?: PublicDictionary["project"]["cover"];
 }
 
 function LoadableProjectCover({
@@ -17,6 +19,7 @@ function LoadableProjectCover({
   priority = false,
   sizes,
   title,
+  strings,
 }: ProjectCoverImageProps) {
   const [failed, setFailed] = useState(false);
 
@@ -26,13 +29,13 @@ function LoadableProjectCover({
     >
       {failed ? (
         <div
-          aria-label={`${title} project cover unavailable`}
+          aria-label={`${title} ${strings?.unavailable ?? "project cover unavailable"}`}
           className="absolute inset-0 flex flex-col justify-between bg-surface-secondary p-5"
           role="img"
         >
           <div className="flex items-center justify-between gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-accent">
-              Project cover
+              {strings?.label ?? "Project cover"}
             </span>
             <span className="size-2 rounded-full bg-accent" aria-hidden="true" />
           </div>
@@ -61,7 +64,7 @@ function LoadableProjectCover({
         </div>
       ) : (
         <Image
-          alt={`${title} project cover`}
+          alt={`${title} ${strings?.alt ?? "project cover"}`}
           className="object-cover"
           fill
           onError={() => setFailed(true)}

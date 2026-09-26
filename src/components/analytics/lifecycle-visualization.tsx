@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { LifecycleVisualizationData } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface LifecycleVisualizationProps {
   data: LifecycleVisualizationData;
+  strings: PublicDictionary["project"]["insights"];
 }
 
 const lineClasses = ["stroke-accent", "stroke-success", "stroke-warning"];
@@ -12,7 +14,7 @@ const dashPatterns = [undefined, "9 7", "2 6"];
 
 const bounds = { left: 48, right: 620, top: 24, bottom: 218 };
 
-export function LifecycleVisualization({ data }: LifecycleVisualizationProps) {
+export function LifecycleVisualization({ data, strings }: LifecycleVisualizationProps) {
   const width = bounds.right - bounds.left;
   const height = bounds.bottom - bounds.top;
 
@@ -23,11 +25,11 @@ export function LifecycleVisualization({ data }: LifecycleVisualizationProps) {
           <h4 className="text-lg font-semibold text-text-primary">{data.title}</h4>
           <p className="mt-1 text-xs text-text-muted">{data.context}</p>
         </div>
-        <Badge className="self-start" variant="warning">Demo data</Badge>
+        <Badge className="self-start" variant="warning">{strings.demoData}</Badge>
       </div>
       <p className="sr-only">{data.summary}</p>
 
-      <ul className="mt-6 grid gap-2 sm:grid-cols-3" aria-label="Lifecycle pattern legend">
+      <ul className="mt-6 grid gap-2 sm:grid-cols-3" aria-label={strings.lifecycleLegend}>
         {data.series.map((series, index) => (
           <li className="rounded-control bg-surface-secondary px-3 py-2" key={series.label}>
             <div className="flex items-center gap-2">

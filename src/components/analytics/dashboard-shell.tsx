@@ -41,43 +41,31 @@ import type {
   DashboardFilterState,
   DashboardModuleId,
 } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface DashboardShellProps {
   configuration: DashboardConfiguration;
+  strings: PublicDictionary["dashboard"];
 }
-
-const filterLabels: Record<DashboardFilterKey, string> = {
-  period: "Period",
-  country: "Country",
-  genre: "Genre",
-  artist: "Artist",
-};
-
-const moduleLabels: Record<DashboardModuleId, string> = {
-  "streaming-trend": "Streaming Trend",
-  "top-artists": "Top Artists",
-  "genre-distribution": "Genre Distribution",
-  "genre-growth": "Genre Growth",
-  "artist-comparison": "Artist Comparison",
-  "track-table": "Track Table",
-};
 
 interface DashboardModuleProps {
   children: ReactNode;
   highlighted: boolean;
   moduleId: DashboardModuleId;
+  strings: PublicDictionary["dashboard"];
 }
 
 function DashboardModule({
   children,
   highlighted,
   moduleId,
+  strings,
 }: DashboardModuleProps) {
-  const label = moduleLabels[moduleId];
+  const label = strings.modules[moduleId];
 
   return (
     <section
-      aria-label={`${label} dashboard module`}
+      aria-label={`${label} ${strings.moduleAriaSuffix}`}
       className={`relative min-w-0 scroll-mt-32 rounded-card ${
         highlighted
           ? "outline outline-2 outline-offset-4 outline-accent shadow-elevated"
@@ -91,7 +79,7 @@ function DashboardModule({
           className="absolute -top-3 right-4 z-10 rounded-badge border border-accent bg-surface-elevated px-2.5 py-1 text-xs font-semibold text-accent shadow-elevated"
           role="status"
         >
-          Insight focus
+          {strings.insightFocus}
         </span>
       ) : null}
       {children}
@@ -99,7 +87,7 @@ function DashboardModule({
   );
 }
 
-export function DashboardShell({ configuration }: DashboardShellProps) {
+export function DashboardShell({ configuration, strings }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -191,35 +179,35 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
 
   const activeFilters = (Object.entries(filters) as [DashboardFilterKey, string | null][])
     .filter((entry): entry is [DashboardFilterKey, string] => Boolean(entry[1]))
-    .map(([key, value]) => ({ label: filterLabels[key], value }));
+    .map(([key, value]) => ({ label: strings.filterLabels[key], value }));
 
   const kpiCards = [
     {
-      label: "Total Streams",
+      label: strings.kpis.totalStreams,
       value: formatCompactMetric(kpis.totalStreams),
-      context: "Across the current synthetic selection",
+      context: strings.kpis.selectionContext,
     },
     {
-      label: "Unique Listeners",
+      label: strings.kpis.uniqueListeners,
       value: formatCompactMetric(kpis.uniqueListeners),
-      context: "Illustrative additive listener cohorts",
+      context: strings.kpis.listenerContext,
     },
     {
-      label: "Top Artist",
+      label: strings.kpis.topArtist,
       value: kpis.topArtist ?? "—",
-      context: "Ranked by illustrative streams",
+      context: strings.kpis.rankingContext,
     },
     {
-      label: "Top Genre",
+      label: strings.kpis.topGenre,
       value: kpis.topGenre ?? "—",
-      context: "Ranked by illustrative streams",
+      context: strings.kpis.rankingContext,
     },
   ];
 
   return (
     <div className="mt-8">
       <div
-        aria-label="Dashboard filters and active selection"
+        aria-label={strings.filtersAria}
         className="scroll-mt-32"
         data-tour-target="dashboard-state"
         tabIndex={-1}
@@ -229,11 +217,12 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
           onChange={handleFilterChange}
           onReset={resetFilters}
           options={options}
+          strings={strings}
         />
 
         <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <span className="text-sm font-semibold text-text-primary">Showing:</span>
+            <span className="text-sm font-semibold text-text-primary">{strings.showing}</span>
             {activeFilters.length > 0 ? (
               activeFilters.map((filter) => (
                 <Badge key={filter.label} variant="accent">
@@ -241,11 +230,11 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
                 </Badge>
               ))
             ) : (
-              <Badge>All data</Badge>
+              <Badge>{strings.allData}</Badge>
             )}
           </div>
           <p aria-live="polite" className="shrink-0 text-sm text-text-muted">
-            {filteredRows.length.toLocaleString("en-US")} of {configuration.rows.length.toLocaleString("en-US")} records
+            {filteredRows.length.toLocaleString(strings.locale)} {strings.recordsOf} {configuration.rows.length.toLocaleString(strings.locale)} {strings.records}
           </p>
         </div>
       </div>
@@ -254,7 +243,7 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
         <>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {kpiCards.map((kpi) => (
-              <KPICard key={kpi.label} kpi={kpi} />
+              <KPICard demoLabel={strings.demoBadge} key={kpi.label} kpi={kpi} />
             ))}
           </div>
 
@@ -262,8 +251,9 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
             <DashboardModule
               highlighted={highlightedModule === "streaming-trend"}
               moduleId="streaming-trend"
+              strings={strings}
             >
-              <StreamingTrendChart data={trendData} />
+              <StreamingTrendChart data={trendData} strings={strings} />
             </DashboardModule>
           </div>
 
@@ -271,14 +261,16 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
             <DashboardModule
               highlighted={highlightedModule === "top-artists"}
               moduleId="top-artists"
+              strings={strings}
             >
-              <TopArtistsChart data={artistRanking} />
+              <TopArtistsChart data={artistRanking} strings={strings} />
             </DashboardModule>
             <DashboardModule
               highlighted={highlightedModule === "genre-distribution"}
               moduleId="genre-distribution"
+              strings={strings}
             >
-              <GenreDistributionChart data={genreDistribution} />
+              <GenreDistributionChart data={genreDistribution} strings={strings} />
             </DashboardModule>
           </div>
 
@@ -286,14 +278,16 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
             <DashboardModule
               highlighted={highlightedModule === "genre-growth"}
               moduleId="genre-growth"
+              strings={strings}
             >
-              <GenreGrowthChart result={genreGrowth} />
+              <GenreGrowthChart result={genreGrowth} strings={strings} />
             </DashboardModule>
             <DashboardModule
               highlighted={highlightedModule === "artist-comparison"}
               moduleId="artist-comparison"
+              strings={strings}
             >
-              <ArtistComparison data={artistMetrics} />
+              <ArtistComparison data={artistMetrics} strings={strings} />
             </DashboardModule>
           </div>
 
@@ -301,23 +295,23 @@ export function DashboardShell({ configuration }: DashboardShellProps) {
             <DashboardModule
               highlighted={highlightedModule === "track-table"}
               moduleId="track-table"
+              strings={strings}
             >
-              <TrackTable data={trackData} />
+              <TrackTable data={trackData} strings={strings} />
             </DashboardModule>
           </div>
         </>
       ) : (
         <Card className="mt-5 flex flex-col items-start gap-5 p-6 sm:p-8" surface="secondary">
           <div>
-            <p className="text-overline">No matching data</p>
-            <h3 className="mt-2 text-xl">This filter combination has no records.</h3>
+            <p className="text-overline">{strings.noDataEyebrow}</p>
+            <h3 className="mt-2 text-xl">{strings.noDataTitle}</h3>
             <p className="mt-3 max-w-xl text-sm leading-6 text-text-secondary">
-              Try changing one of the active dimensions or reset the dashboard to return to
-              the complete synthetic dataset.
+              {strings.noDataDescription}
             </p>
           </div>
           <Button onClick={resetFilters} variant="secondary">
-            Reset filters
+            {strings.resetFilters}
           </Button>
         </Card>
       )}

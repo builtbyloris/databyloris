@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { TrendVisualizationData } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface TrendVisualizationProps {
   data: TrendVisualizationData;
+  strings: PublicDictionary["project"]["overview"];
 }
 
 const chart = {
@@ -13,7 +15,7 @@ const chart = {
   bottom: 236,
 };
 
-export function TrendVisualization({ data }: TrendVisualizationProps) {
+export function TrendVisualization({ data, strings }: TrendVisualizationProps) {
   const width = chart.right - chart.left;
   const height = chart.bottom - chart.top;
   const range = data.yAxis.maximum - data.yAxis.minimum;
@@ -41,7 +43,7 @@ export function TrendVisualization({ data }: TrendVisualizationProps) {
           <p className="mt-2 text-sm text-text-muted">{data.context}</p>
         </div>
         <Badge className="self-start" variant="warning">
-          Illustrative data
+          {strings.illustrativeData}
         </Badge>
       </div>
 
@@ -100,7 +102,7 @@ export function TrendVisualization({ data }: TrendVisualizationProps) {
                 r="6"
                 strokeWidth="4"
               >
-                <title>{`${point.label}: ${point.displayValue} illustrative streams`}</title>
+                <title>{`${point.label}: ${point.displayValue} ${strings.illustrativeStreams}`}</title>
               </circle>
               <text
                 className="fill-text-secondary text-[12px] font-medium"
@@ -115,7 +117,7 @@ export function TrendVisualization({ data }: TrendVisualizationProps) {
         </svg>
 
         <ul
-          aria-label="Illustrative annual streaming values"
+          aria-label={strings.annualValuesAria}
           className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4"
         >
           {data.points.map((point) => (

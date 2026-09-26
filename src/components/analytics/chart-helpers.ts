@@ -6,9 +6,9 @@ export const chartTooltipStyle = {
   boxShadow: "var(--elevation-shadow)",
 };
 
-export function formatDashboardMonth(period: string) {
+export function formatDashboardMonth(period: string, locale = "en-US") {
   const [year, month] = period.split("-").map(Number);
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     year: "2-digit",
     timeZone: "UTC",

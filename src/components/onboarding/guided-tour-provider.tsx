@@ -12,6 +12,7 @@ import { TourOverlay, type TourTargetRect } from "@/components/onboarding/tour-o
 import { TourPrompt } from "@/components/onboarding/tour-prompt";
 import { Button } from "@/components/ui/button";
 import type { GuidedTourStep } from "@/types/onboarding";
+import type { PublicDictionary } from "@/i18n/types";
 
 type TourPhase = "initializing" | "prompt" | "active" | "complete" | "idle";
 type TourPreference = "active" | "completed" | "skipped";
@@ -22,6 +23,7 @@ interface GuidedTourProviderProps {
   sessionKey: string;
   steps: readonly GuidedTourStep[];
   storageKey: string;
+  strings: PublicDictionary["onboarding"];
 }
 
 function readStorage(key: string) {
@@ -90,6 +92,7 @@ export function GuidedTourProvider({
   sessionKey,
   steps,
   storageKey,
+  strings,
 }: GuidedTourProviderProps) {
   const [phase, setPhase] = useState<TourPhase>("initializing");
   const [stepIndex, setStepIndex] = useState(0);
@@ -344,12 +347,13 @@ export function GuidedTourProvider({
 
       {enabled && phase === "prompt" ? (
         <TourPrompt
-          description="Learn how to read insights, use filters and explore the dashboard."
-          meta="About 1 minute"
+          description={strings.promptDescription}
+          meta={strings.promptMeta}
           onDismiss={() => endTour("skipped")}
           onPrimaryAction={startTour}
-          primaryLabel="Start guided tour"
-          title="Explore this data story"
+          primaryLabel={strings.start}
+          secondaryLabel={strings.dismiss}
+          title={strings.promptTitle}
         />
       ) : null}
 
@@ -363,6 +367,7 @@ export function GuidedTourProvider({
           onSkip={() => endTour("skipped")}
           panelRef={panelRef}
           step={steps[stepIndex]}
+          strings={strings}
           targetRect={targetRect}
           total={steps.length}
         />
@@ -371,19 +376,19 @@ export function GuidedTourProvider({
       {enabled && phase === "complete" ? (
         <TourPrompt
           autoFocusPrimary
-          description="Use filters, rankings and insights to discover your own patterns in the data."
+          description={strings.completeDescription}
           onDismiss={finishCompletion}
           onPrimaryAction={finishCompletion}
-          primaryLabel="Explore freely"
+          primaryLabel={strings.exploreFreely}
           secondaryLabel={null}
-          title="You're ready to explore"
+          title={strings.completeTitle}
         />
       ) : null}
 
       {enabled && phase === "idle" ? (
         <div className="fixed bottom-4 right-4 z-40">
           <Button onClick={startTour} size="sm" variant="secondary">
-            Guided tour
+            {strings.guidedTour}
           </Button>
         </div>
       ) : null}

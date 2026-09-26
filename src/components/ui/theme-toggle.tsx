@@ -1,6 +1,7 @@
 "use client";
 
 import { THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
+import type { PublicDictionary } from "@/i18n/types";
 
 import { Button } from "./button";
 
@@ -15,7 +16,7 @@ function applyTheme(theme: Theme) {
   }
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ labels }: { labels?: PublicDictionary["theme"] }) {
   function toggleTheme() {
     const currentTheme = document.documentElement.dataset.theme;
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
@@ -27,11 +28,11 @@ export function ThemeToggle() {
       className="theme-toggle"
       onClick={toggleTheme}
       size="icon"
-      title="Switch color theme"
+      title={labels?.switchTheme ?? "Switch color theme"}
       variant="secondary"
     >
-      <span className="theme-toggle__sun sr-only">Switch to light theme</span>
-      <span className="theme-toggle__moon sr-only">Switch to dark theme</span>
+      <span className="theme-toggle__sun sr-only">{labels?.switchToLight ?? "Switch to light theme"}</span>
+      <span className="theme-toggle__moon sr-only">{labels?.switchToDark ?? "Switch to dark theme"}</span>
       <svg
         aria-hidden="true"
         className="theme-toggle__sun size-4.5"

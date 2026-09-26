@@ -1,12 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { RankingVisualizationData } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface RankingVisualizationProps {
   data: RankingVisualizationData;
+  strings: PublicDictionary["project"]["insights"];
 }
 
-export function RankingVisualization({ data }: RankingVisualizationProps) {
+export function RankingVisualization({ data, strings }: RankingVisualizationProps) {
   const maximum = Math.max(...data.items.map((item) => item.value));
 
   return (
@@ -16,7 +18,7 @@ export function RankingVisualization({ data }: RankingVisualizationProps) {
           <h4 className="text-lg font-semibold text-text-primary">{data.title}</h4>
           <p className="mt-1 text-xs text-text-muted">{data.context}</p>
         </div>
-        <Badge variant="warning">Demo data</Badge>
+        <Badge variant="warning">{strings.demoData}</Badge>
       </div>
       <p className="sr-only">{data.summary}</p>
 

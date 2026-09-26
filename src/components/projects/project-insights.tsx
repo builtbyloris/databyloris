@@ -8,26 +8,28 @@ import { Card } from "@/components/ui/card";
 import { buildInsightExploreHref } from "@/lib/dashboard-navigation";
 import type { StoryVisualizationData } from "@/types/analytics";
 import type { ProjectDetail } from "@/types/project";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface ProjectInsightsProps {
   project: ProjectDetail;
   projectPath: string;
+  strings: PublicDictionary["project"]["insights"];
 }
 
-function StoryVisualization({ data }: { data: StoryVisualizationData }) {
+function StoryVisualization({ data, strings }: { data: StoryVisualizationData; strings: PublicDictionary["project"]["insights"] }) {
   switch (data.type) {
     case "ranking":
-      return <RankingVisualization data={data} />;
+      return <RankingVisualization data={data} strings={strings} />;
     case "growth":
-      return <GrowthVisualization data={data} />;
+      return <GrowthVisualization data={data} strings={strings} />;
     case "market-comparison":
-      return <MarketComparison data={data} />;
+      return <MarketComparison data={data} strings={strings} />;
     case "lifecycle":
-      return <LifecycleVisualization data={data} />;
+      return <LifecycleVisualization data={data} strings={strings} />;
   }
 }
 
-export function ProjectInsights({ project, projectPath }: ProjectInsightsProps) {
+export function ProjectInsights({ project, projectPath, strings }: ProjectInsightsProps) {
   const { insights } = project;
 
   return (
@@ -38,11 +40,11 @@ export function ProjectInsights({ project, projectPath }: ProjectInsightsProps) 
     >
       <div className="max-w-2xl">
         <div className="flex flex-wrap items-center gap-3">
-          <p className="text-overline">Insights</p>
-          <Badge variant="warning">Illustrative demo stories</Badge>
+          <p className="text-overline">{strings.eyebrow}</p>
+          <Badge variant="warning">{strings.badge}</Badge>
         </div>
         <h2 className="mt-3" id="insights-title">
-          Four questions behind the listening story
+          {strings.title}
         </h2>
         <p className="mt-5 text-lg leading-8 text-text-secondary">
           {insights.introduction}
@@ -62,17 +64,18 @@ export function ProjectInsights({ project, projectPath }: ProjectInsightsProps) 
             index={index}
             key={story.id}
             story={story}
+            strings={strings}
             total={insights.stories.length}
             tourTarget={project.slug === "spotify-listening-trends" && index === 0}
           >
-            <StoryVisualization data={story.visualization} />
+            <StoryVisualization data={story.visualization} strings={strings} />
           </StorySection>
         ))}
       </div>
 
       <Card className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:p-6" surface="secondary">
         <Badge className="self-start" variant="accent">
-          Did you know?
+          {strings.curiosity}
         </Badge>
         <div>
           <h3 className="text-lg">{insights.curiosity.title}</h3>

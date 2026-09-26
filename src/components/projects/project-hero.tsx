@@ -1,20 +1,23 @@
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import type { PublicProjectMetadata } from "@/types/project";
+import type { PublicDictionary } from "@/i18n/types";
 
 import { ProjectCoverImage } from "./project-cover-image";
 
 interface ProjectHeroProps {
   project: PublicProjectMetadata;
+  strings: PublicDictionary["project"]["hero"];
+  coverStrings?: PublicDictionary["project"]["cover"];
   ctaHref?: string | null;
 }
 
-export function ProjectHero({ project, ctaHref = "#explore" }: ProjectHeroProps) {
+export function ProjectHero({ project, strings, coverStrings, ctaHref = "#explore" }: ProjectHeroProps) {
   return (
     <header className="max-w-3xl">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="accent">{project.category}</Badge>
-        {project.demo ? <Badge>Interactive demo</Badge> : null}
+        {project.demo ? <Badge>{strings.interactiveDemo}</Badge> : null}
       </div>
 
       <h1 className="mt-5">{project.title}</h1>
@@ -26,7 +29,7 @@ export function ProjectHero({ project, ctaHref = "#explore" }: ProjectHeroProps)
 
       {project.question ? (
         <div className="mt-8 border-l-2 border-accent pl-5">
-          <p className="text-overline">Main question</p>
+          <p className="text-overline">{strings.mainQuestion}</p>
           <p className="mt-2 text-xl font-semibold leading-8 text-text-primary sm:text-2xl">
             {project.question}
           </p>
@@ -42,13 +45,14 @@ export function ProjectHero({ project, ctaHref = "#explore" }: ProjectHeroProps)
           priority
           sizes="(max-width: 1023px) 100vw, 720px"
           title={project.title}
+          strings={coverStrings}
         />
       ) : null}
 
       {ctaHref ? (
         <div className="mt-8">
           <ButtonLink href={ctaHref} size="lg">
-            Start exploring
+            {strings.startExploring}
             <span aria-hidden="true">↓</span>
           </ButtonLink>
         </div>

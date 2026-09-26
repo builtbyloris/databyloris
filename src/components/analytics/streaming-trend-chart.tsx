@@ -19,12 +19,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { formatCompactMetric } from "@/lib/dashboard-analytics";
 import { reportDashboardChartInteraction } from "@/lib/dashboard-interactions";
 import type { MonthlyStreamsPoint } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface StreamingTrendChartProps {
   data: readonly MonthlyStreamsPoint[];
+  strings: PublicDictionary["dashboard"];
 }
 
-function InteractiveTrendDot({ cx, cy, payload }: DotItemDotProps) {
+function InteractiveTrendDot({ cx, cy, payload, strings }: DotItemDotProps & { strings: PublicDictionary["dashboard"] }) {
   const point = payload as MonthlyStreamsPoint;
   if (!point.period.endsWith("-01")) {
     return <circle cx={cx} cy={cy} fill="none" r={0} />;
@@ -39,7 +41,7 @@ function InteractiveTrendDot({ cx, cy, payload }: DotItemDotProps) {
 
   return (
     <circle
-      aria-label={`${formatDashboardMonth(point.period)}: ${point.streams.toLocaleString("en-US")} streams`}
+      aria-label={`${formatDashboardMonth(point.period, strings.locale)}: ${point.streams.toLocaleString(strings.locale)} ${strings.charts.streams}`}
       className="cursor-pointer fill-surface-elevated stroke-accent"
       cx={cx}
       cy={cy}
@@ -61,25 +63,22 @@ function InteractiveTrendDot({ cx, cy, payload }: DotItemDotProps) {
   );
 }
 
-export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
+export function StreamingTrendChart({ data, strings }: StreamingTrendChartProps) {
   const first = data[0];
   const last = data.at(-1);
 
   return (
     <Card className="min-w-0" surface="elevated">
       <CardHeader>
-        <p className="text-overline">Streaming trend</p>
-        <CardTitle>How is streaming activity changing over time?</CardTitle>
-        <CardDescription>
-          Monthly illustrative streams for the current global selection.
-        </CardDescription>
+        <p className="text-overline">{strings.charts.trend.eyebrow}</p>
+        <CardTitle>{strings.charts.trend.title}</CardTitle>
+        <CardDescription>{strings.charts.trend.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {data.length >= 2 ? (
           <>
             <p className="sr-only">
-              The series runs from {formatDashboardMonth(first.period)}, with {first.streams.toLocaleString("en-US")} streams,
-              to {formatDashboardMonth(last!.period)}, with {last!.streams.toLocaleString("en-US")} streams.
+              {formatDashboardMonth(first.period, strings.locale)}: {first.streams.toLocaleString(strings.locale)} {strings.charts.streams}; {formatDashboardMonth(last!.period, strings.locale)}: {last!.streams.toLocaleString(strings.locale)} {strings.charts.streams}.
             </p>
             <div className="h-72 min-w-0 sm:h-80">
               <ResponsiveContainer height="100%" width="100%">
@@ -94,7 +93,7 @@ export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
                     dataKey="period"
                     minTickGap={32}
                     tick={{ fill: "var(--text-muted)", fontSize: 12 }}
-                    tickFormatter={formatDashboardMonth}
+                    tickFormatter={(value) => formatDashboardMonth(value, strings.locale)}
                     tickLine={false}
                   />
                   <YAxis
@@ -106,13 +105,13 @@ export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
                   />
                   <Tooltip
                     contentStyle={chartTooltipStyle}
-                    formatter={(value) => [formatCompactMetric(Number(value)), "Streams"]}
-                    labelFormatter={(label) => formatDashboardMonth(String(label))}
+                    formatter={(value) => [formatCompactMetric(Number(value)), strings.charts.streams]}
+                    labelFormatter={(label) => formatDashboardMonth(String(label), strings.locale)}
                   />
                   <Line
                     activeDot={{ fill: "var(--accent-hover)", r: 5, strokeWidth: 0 }}
                     dataKey="streams"
-                    dot={InteractiveTrendDot}
+                    dot={(props) => <InteractiveTrendDot {...props} strings={strings} />}
                     isAnimationActive={false}
                     stroke="var(--accent)"
                     strokeWidth={3}
@@ -124,7 +123,7 @@ export function StreamingTrendChart({ data }: StreamingTrendChartProps) {
           </>
         ) : (
           <div className="rounded-control border border-dashed border-border bg-surface-secondary p-5 text-sm text-text-secondary">
-            Select a period containing at least two months to show a trend.
+            {strings.charts.trend.insufficient}
           </div>
         )}
       </CardContent>

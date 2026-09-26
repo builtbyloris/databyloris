@@ -13,15 +13,6 @@ interface ProjectCardProps {
   strings: PublicDictionary["explore"]["catalog"];
 }
 
-const coverLabels: Record<ProjectCoverType, string> = {
-  listening: "Listening signals",
-  catalog: "Catalog composition",
-  market: "Market movement",
-  geography: "Travel flows",
-  economy: "Digital adoption",
-  generic: "Data signals",
-};
-
 const coverPaths: Record<ProjectCoverType, string> = {
   listening: "M0 90C35 82 52 57 84 65C116 73 130 42 165 49C198 56 224 25 280 18",
   catalog: "M0 76C39 79 58 48 94 55C129 62 152 71 185 52C219 32 237 42 280 22",
@@ -31,12 +22,12 @@ const coverPaths: Record<ProjectCoverType, string> = {
   generic: "M0 88C34 74 55 81 88 62C120 44 148 70 181 48C215 26 244 43 280 24",
 };
 
-function ProjectCover({ coverType }: { coverType: ProjectCoverType }) {
+function ProjectCover({ coverType, labels }: { coverType: ProjectCoverType; labels: Record<ProjectCoverType, string> }) {
   return (
     <div aria-hidden="true" className="border-b border-border bg-surface-secondary p-5">
       <div className="mb-6 flex items-center justify-between gap-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-accent">
-          {coverLabels[coverType]}
+          {labels[coverType]}
         </span>
         <span className="size-2 rounded-full bg-accent" />
       </div>
@@ -81,9 +72,10 @@ export function ProjectCard({ locale, project, strings }: ProjectCardProps) {
             coverUrl={project.coverUrl}
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
             title={project.title}
+            strings={{ alt: strings.coverAlt, label: strings.coverLabel, unavailable: strings.coverUnavailable }}
           />
         ) : (
-          <ProjectCover coverType={project.coverType} />
+          <ProjectCover coverType={project.coverType} labels={strings.coverLabels} />
         )}
 
         <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -112,7 +104,7 @@ export function ProjectCard({ locale, project, strings }: ProjectCardProps) {
                 </p>
               ) : null}
               {project.tags.length > 0 ? (
-                <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} tags`}>
+                <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} ${strings.tagsSuffix}`}>
                   {project.tags.map((tag) => (
                     <li
                       className="rounded-badge bg-surface-secondary px-2 py-1 text-xs text-text-secondary"

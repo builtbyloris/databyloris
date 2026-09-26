@@ -6,50 +6,6 @@ import { Card } from "@/components/ui/card";
 import { isLocale, localizePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-const philosophy = [
-  {
-    number: "01",
-    title: "Discover",
-    description:
-      "Start with a real-world question and find an analysis worth investigating.",
-  },
-  {
-    number: "02",
-    title: "Understand",
-    description:
-      "Follow the context, evidence and key findings through a clear editorial story.",
-  },
-  {
-    number: "03",
-    title: "Explore",
-    description:
-      "Use the interactive dashboard to test the story and investigate your own questions.",
-  },
-] as const;
-
-const projectContents = [
-  {
-    title: "Context",
-    description: "The question, dataset and background needed to frame the analysis.",
-  },
-  {
-    title: "KPIs",
-    description: "A concise view of the measures that define the current data context.",
-  },
-  {
-    title: "Data stories",
-    description: "Authored insights that connect patterns to supporting visual evidence.",
-  },
-  {
-    title: "Interactive exploration",
-    description: "Filters, comparisons and detailed views for investigating the data directly.",
-  },
-  {
-    title: "Methodology",
-    description: "Transparent definitions, preparation choices, techniques and limitations.",
-  },
-] as const;
-
 export default async function AboutPage({
   params,
 }: {
@@ -80,19 +36,17 @@ export default async function AboutPage({
         className="container-page section-separation border-y border-border py-12 sm:py-16"
       >
         <div className="max-w-2xl">
-          <p className="text-overline">Product philosophy</p>
+          <p className="text-overline">{dictionary.about.philosophyEyebrow}</p>
           <h2 className="mt-3" id="philosophy-title">
-            Discover <span aria-hidden="true">→</span> Understand{" "}
-            <span aria-hidden="true">→</span> Explore
+            {dictionary.about.philosophyTitle}
           </h2>
           <p className="mt-5 leading-7 text-text-secondary">
-            Each project moves from an accessible entry point to a guided explanation,
-            then opens the same analysis for independent exploration.
+            {dictionary.about.philosophyDescription}
           </p>
         </div>
 
         <ol className="mt-10 grid gap-8 md:grid-cols-3">
-          {philosophy.map((step) => (
+          {dictionary.about.philosophy.map((step) => (
             <li className="border-t border-border pt-5" key={step.number}>
               <span className="font-mono text-xs font-semibold text-accent">
                 {step.number}
@@ -112,18 +66,17 @@ export default async function AboutPage({
       >
         <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <div className="max-w-xl">
-            <p className="text-overline">Inside every project</p>
+            <p className="text-overline">{dictionary.about.contentsEyebrow}</p>
             <h2 className="mt-3" id="project-contents-title">
-              One analysis, multiple ways to understand it.
+              {dictionary.about.contentsTitle}
             </h2>
             <p className="mt-5 leading-7 text-text-secondary">
-              The structure stays consistent so visitors can move confidently from
-              orientation to evidence without learning a new interface each time.
+              {dictionary.about.contentsDescription}
             </p>
           </div>
 
           <ol className="divide-y divide-border border-y border-border">
-            {projectContents.map((item, index) => (
+            {dictionary.about.contents.map((item, index) => (
               <li
                 className="grid gap-2 py-5 sm:grid-cols-[2.5rem_10rem_1fr] sm:items-start sm:gap-5"
                 key={item.title}
@@ -147,21 +100,13 @@ export default async function AboutPage({
       >
         <Card className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14" surface="secondary">
           <div>
-            <p className="text-overline">Why databyloris exists</p>
+            <p className="text-overline">{dictionary.about.purposeEyebrow}</p>
             <h2 className="mt-3" id="purpose-title">
-              Clarity should not end at the chart.
+              {dictionary.about.purposeTitle}
             </h2>
           </div>
           <div className="space-y-4 text-lg leading-8 text-text-secondary">
-            <p>
-              Data analysis is easier to trust when the question, definitions and
-              limitations remain close to the result.
-            </p>
-            <p>
-              databyloris is designed to make analysis understandable, explorable and
-              transparent—combining guided storytelling with the freedom to inspect the
-              data from another angle.
-            </p>
+            {dictionary.about.purposeParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </div>
         </Card>
       </section>
@@ -170,14 +115,12 @@ export default async function AboutPage({
         aria-labelledby="creator-title"
         className="container-story section-separation border-t border-border pt-10"
       >
-        <p className="text-overline">About the creator</p>
+        <p className="text-overline">{dictionary.about.creatorEyebrow}</p>
         <h2 className="mt-3 text-2xl" id="creator-title">
-          Designed and built by Loris.
+          {dictionary.about.creatorTitle}
         </h2>
         <p className="mt-4 max-w-2xl leading-7 text-text-secondary">
-          The platform is part of Loris&apos;s work in Data Analysis and analytics product
-          development, exploring how analytical rigor and thoughtful product design can
-          make data more useful to more people.
+          {dictionary.about.creatorDescription}
         </p>
       </section>
 

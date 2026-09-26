@@ -7,26 +7,24 @@ import type {
   DashboardFilterOptions,
   DashboardFilterState,
 } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface FilterBarProps {
   filters: DashboardFilterState;
   onChange: (key: DashboardFilterKey, value: string | null) => void;
   onReset: () => void;
   options: DashboardFilterOptions;
+  strings: PublicDictionary["dashboard"];
 }
 
-const filterDefinitions = [
-  { key: "period", label: "Period", allLabel: "All periods" },
-  { key: "country", label: "Country", allLabel: "All countries" },
-  { key: "genre", label: "Genre", allLabel: "All genres" },
-  { key: "artist", label: "Artist", allLabel: "All artists" },
-] as const satisfies readonly {
-  key: DashboardFilterKey;
-  label: string;
-  allLabel: string;
-}[];
+const filterKeys = ["period", "country", "genre", "artist"] as const satisfies readonly DashboardFilterKey[];
 
-export function FilterBar({ filters, onChange, onReset, options }: FilterBarProps) {
+export function FilterBar({ filters, onChange, onReset, options, strings }: FilterBarProps) {
+  const filterDefinitions = filterKeys.map((key) => ({
+    key,
+    label: strings.filterLabels[key],
+    allLabel: strings.allLabels[key],
+  }));
   const activeCount = filterDefinitions.filter(({ key }) => filters[key]).length;
 
   function controls(idPrefix: string) {
@@ -62,7 +60,7 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
       <div className="hidden items-end gap-3 md:grid md:grid-cols-[repeat(4,minmax(0,1fr))_auto]">
         {controls("desktop-filter")}
         <Button disabled={activeCount === 0} onClick={onReset} variant="secondary">
-          Reset filters
+          {strings.resetFilters}
         </Button>
       </div>
 
@@ -72,10 +70,10 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
         open={activeCount > 0 || undefined}
       >
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-text-primary">
-          <span>Global filters</span>
+          <span>{strings.globalFilters}</span>
           <span className="flex items-center gap-2">
             <span className="rounded-badge bg-accent-subtle px-2 py-1 text-xs text-accent">
-              {activeCount > 0 ? `${activeCount} active` : "All data"}
+              {activeCount > 0 ? `${activeCount} ${strings.active}` : strings.allData}
             </span>
             <span
               aria-hidden="true"
@@ -88,7 +86,7 @@ export function FilterBar({ filters, onChange, onReset, options }: FilterBarProp
         <div className="mt-4 grid gap-4 border-t border-border pt-4">
           {controls("mobile-filter")}
           <Button disabled={activeCount === 0} onClick={onReset} variant="secondary">
-            Reset filters
+            {strings.resetFilters}
           </Button>
         </div>
       </details>

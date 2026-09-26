@@ -211,7 +211,7 @@ export type GenreGrowthResult =
     }
   | {
       status: "insufficient";
-      reason: string;
+      reason: "period" | "comparison";
       items: readonly [];
     };
 

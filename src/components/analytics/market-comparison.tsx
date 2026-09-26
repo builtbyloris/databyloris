@@ -1,15 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { MarketComparisonData } from "@/types/analytics";
+import type { PublicDictionary } from "@/i18n/types";
 
 interface MarketComparisonProps {
   data: MarketComparisonData;
+  strings: PublicDictionary["project"]["insights"];
 }
 
 const segmentClasses = ["bg-accent", "bg-success", "bg-warning", "bg-text-muted"];
 const dotClasses = ["bg-accent", "bg-success", "bg-warning", "bg-text-muted"];
 
-export function MarketComparison({ data }: MarketComparisonProps) {
+export function MarketComparison({ data, strings }: MarketComparisonProps) {
   return (
     <Card aria-label={data.title} className="p-5 sm:p-6" role="group" surface="elevated">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -17,11 +19,11 @@ export function MarketComparison({ data }: MarketComparisonProps) {
           <h4 className="text-lg font-semibold text-text-primary">{data.title}</h4>
           <p className="mt-1 text-xs text-text-muted">{data.context}</p>
         </div>
-        <Badge className="self-start" variant="warning">Demo data</Badge>
+        <Badge className="self-start" variant="warning">{strings.demoData}</Badge>
       </div>
       <p className="sr-only">{data.summary}</p>
 
-      <ul aria-label="Genre legend" className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+      <ul aria-label={strings.genreLegend} className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
         {data.categories.map((category, index) => (
           <li className="flex items-center gap-2 text-xs text-text-secondary" key={category}>
             <span aria-hidden="true" className={`size-2.5 rounded-sm ${dotClasses[index % dotClasses.length]}`} />

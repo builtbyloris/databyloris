@@ -14,24 +14,6 @@ import {
   listFeaturedPublishedProjects,
 } from "@/lib/projects/public-projects";
 
-const steps = [
-  {
-    number: "01",
-    title: "Discover",
-    description: "Find an analysis that interests you.",
-  },
-  {
-    number: "02",
-    title: "Understand",
-    description: "Follow the key findings and data story.",
-  },
-  {
-    number: "03",
-    title: "Explore",
-    description: "Use filters and visualizations to investigate the data yourself.",
-  },
-];
-
 export default async function HomePage({
   params,
 }: {
@@ -54,11 +36,10 @@ export default async function HomePage({
     <div>
       <section className="container-page page-frame grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <div className="max-w-2xl">
-          <p className="text-overline">Interactive Data Stories</p>
-          <h1 className="mt-4">Explore what data has to say.</h1>
+          <p className="text-overline">{dictionary.home.eyebrow}</p>
+          <h1 className="mt-4">{dictionary.home.title}</h1>
           <p className="text-lead mt-6">
-            Interactive analyses that turn real-world datasets into insights, stories
-            and explorable dashboards.
+            {dictionary.home.description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href={localizePath(lang, "/explore")} size="lg">
@@ -76,27 +57,31 @@ export default async function HomePage({
             ) : null}
           </div>
           <p className="mt-8 text-sm font-medium text-text-muted">
-            Discover <span aria-hidden="true">→</span> Understand{" "}
-            <span aria-hidden="true">→</span> Explore
+            {dictionary.home.journey.map((item, index) => (
+              <span key={item}>
+                {index > 0 ? <span aria-hidden="true"> → </span> : null}
+                {item}
+              </span>
+            ))}
           </p>
         </div>
 
-        <AnalyticsPreview />
+        <AnalyticsPreview strings={dictionary.home.preview} />
       </section>
 
       {featuredProject ? (
-        <FeaturedAnalysis locale={lang} project={featuredProject} />
+        <FeaturedAnalysis coverStrings={dictionary.project.cover} locale={lang} project={featuredProject} strings={dictionary.home.featured} />
       ) : null}
-      {spotifyProject ? <FeaturedInsights /> : null}
+      {spotifyProject ? <FeaturedInsights strings={dictionary.home.featuredInsights} /> : null}
 
       <section aria-labelledby="how-it-works-title" className="container-page section-separation">
         <div className="mb-7 max-w-2xl space-y-3">
-          <p className="text-overline">How it works</p>
-          <h2 id="how-it-works-title">From discovery to your own questions.</h2>
+          <p className="text-overline">{dictionary.home.howItWorksEyebrow}</p>
+          <h2 id="how-it-works-title">{dictionary.home.howItWorksTitle}</h2>
         </div>
 
         <ol className="grid gap-4 md:grid-cols-3">
-          {steps.map((step) => (
+          {dictionary.home.steps.map((step) => (
             <li key={step.number}>
               <Card className="h-full p-5 sm:p-6">
                 <Badge variant="accent">{step.number}</Badge>
@@ -116,8 +101,8 @@ export default async function HomePage({
           surface="secondary"
         >
           <div className="space-y-2">
-            <p className="text-overline">Continue exploring</p>
-            <h2 id="home-cta-title">Ready to explore the data?</h2>
+            <p className="text-overline">{dictionary.home.finalEyebrow}</p>
+            <h2 id="home-cta-title">{dictionary.home.finalTitle}</h2>
           </div>
           <ButtonLink
             className="shrink-0"

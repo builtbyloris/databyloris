@@ -3,6 +3,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { localizePath, type Locale } from "@/i18n/config";
 import type { ProjectSummary } from "@/types/project";
+import type { PublicDictionary } from "@/i18n/types";
 
 import { ProjectCoverImage } from "./project-cover-image";
 
@@ -11,9 +12,13 @@ const rankingPreview = [82, 67, 54, 39];
 export function FeaturedAnalysis({
   locale,
   project,
+  strings,
+  coverStrings,
 }: {
   locale: Locale;
   project: ProjectSummary;
+  strings: PublicDictionary["home"]["featured"];
+  coverStrings: PublicDictionary["project"]["cover"];
 }) {
   const href = localizePath(
     locale,
@@ -26,15 +31,15 @@ export function FeaturedAnalysis({
   return (
     <section aria-labelledby="featured-analysis-title" className="container-page section-separation">
       <div className="mb-7 space-y-3">
-        <p className="text-overline">Featured analysis</p>
-        <h2 id="featured-analysis-title">A data story built to be explored.</h2>
+        <p className="text-overline">{strings.eyebrow}</p>
+        <h2 id="featured-analysis-title">{strings.title}</h2>
       </div>
 
       <Card className="grid overflow-hidden lg:grid-cols-[1.05fr_0.95fr]" surface="elevated">
         <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
           <div className="mb-5 flex flex-wrap items-center gap-2">
             <Badge variant="accent">{project.category}</Badge>
-            <Badge>{project.demo ? "Interactive demo" : "Published project"}</Badge>
+            <Badge>{project.demo ? strings.interactiveDemo : strings.publishedProject}</Badge>
           </div>
 
           <h3 className="text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
@@ -49,7 +54,7 @@ export function FeaturedAnalysis({
             {project.description}
           </p>
 
-          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Analysis metadata">
+          <ul className="mt-6 flex flex-wrap gap-2" aria-label={strings.metadataLabel}>
             {metadata.map((item) => (
               <li
                 className="rounded-badge border border-border bg-surface-secondary px-2.5 py-1 text-xs font-medium text-text-secondary"
@@ -62,7 +67,7 @@ export function FeaturedAnalysis({
 
           <div className="mt-7">
             <ButtonLink href={href} size="lg">
-              Explore analysis
+              {strings.exploreAnalysis}
               <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
@@ -76,19 +81,20 @@ export function FeaturedAnalysis({
               priority
               sizes="(max-width: 1023px) 100vw, 46vw"
               title={project.title}
+              strings={coverStrings}
             />
           </div>
         ) : (
           <div
-            aria-label={`Illustrative ${project.title} analysis interface preview`}
+            aria-label={`${strings.previewAria}: ${project.title}`}
             className="border-t border-border bg-surface-secondary p-5 sm:p-7 lg:border-l lg:border-t-0"
             role="img"
           >
             <div className="rounded-card border border-border bg-surface-primary p-5 shadow-elevated">
               <div className="mb-6 flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-text-primary">Analysis preview</p>
-                  <p className="text-xs text-text-muted">Published project interface</p>
+                  <p className="text-sm font-semibold text-text-primary">{strings.previewTitle}</p>
+                  <p className="text-xs text-text-muted">{strings.previewContext}</p>
                 </div>
                 {project.period ? <Badge variant="accent">{project.period}</Badge> : null}
               </div>
@@ -101,7 +107,7 @@ export function FeaturedAnalysis({
               <div className="space-y-3">
                 {rankingPreview.map((width, index) => (
                   <div className="grid grid-cols-[4.5rem_1fr] items-center gap-3" key={width}>
-                    <span className="text-xs text-text-muted">Signal {index + 1}</span>
+                    <span className="text-xs text-text-muted">{strings.signal} {index + 1}</span>
                     <span className="h-2.5 rounded-badge bg-surface-secondary">
                       <span className="block h-full rounded-badge bg-accent" style={{ width: `${width}%` }} />
                     </span>

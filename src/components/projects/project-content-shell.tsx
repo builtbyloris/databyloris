@@ -12,8 +12,8 @@ import { ProjectNavigation } from "./project-navigation";
 import { ProjectOverview } from "./project-overview";
 
 interface ProjectContentShellProps {
+  dictionary: PublicDictionary;
   project: ProjectDetail;
-  projectNavigationLabels: PublicDictionary["projectNavigation"];
   projectPath: string;
   tour?: {
     sessionKey: string;
@@ -23,26 +23,26 @@ interface ProjectContentShellProps {
 }
 
 export function ProjectContentShell({
+  dictionary,
   project,
-  projectNavigationLabels,
   projectPath,
   tour,
 }: ProjectContentShellProps) {
   const content = (
     <article>
       <div className="container-page page-frame grid items-start gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,0.65fr)] lg:gap-14">
-        <ProjectHero project={project} />
-        <DatasetSnapshot dataset={project.dataset} />
+        <ProjectHero coverStrings={dictionary.project.cover} project={project} strings={dictionary.project.hero} />
+        <DatasetSnapshot dataset={project.dataset} strings={dictionary.project.dataset} />
       </div>
 
-      <ProjectNavigation labels={projectNavigationLabels} />
+      <ProjectNavigation labels={dictionary.projectNavigation} />
 
       <div className="container-story py-14 sm:py-20">
-        <ProjectOverview project={project} />
-        <ProjectInsights project={project} projectPath={projectPath} />
-        <ProjectExplore project={project} />
+        <ProjectOverview project={project} strings={dictionary.project.overview} />
+        <ProjectInsights project={project} projectPath={projectPath} strings={dictionary.project.insights} />
+        <ProjectExplore dashboardStrings={dictionary.dashboard} project={project} strings={dictionary.project.explore} />
 
-        <ProjectMethodology methodology={project.methodology} />
+        <ProjectMethodology methodology={project.methodology} strings={dictionary.project.methodology} />
       </div>
     </article>
   );
@@ -57,6 +57,7 @@ export function ProjectContentShell({
       sessionKey={tour.sessionKey}
       steps={tour.steps}
       storageKey={tour.storageKey}
+      strings={dictionary.onboarding}
     >
       {content}
     </GuidedTourProvider>

@@ -102,7 +102,7 @@ export function SiteNavbar({ dictionary, locale }: SiteNavbarProps) {
           locale={locale}
         />
 
-        <ThemeToggle />
+        <ThemeToggle labels={dictionary.theme} />
 
         <Button
           aria-controls="mobile-navigation"

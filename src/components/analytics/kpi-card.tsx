@@ -3,16 +3,17 @@ import { Card } from "@/components/ui/card";
 import type { KPIData } from "@/types/analytics";
 
 interface KPICardProps {
+  demoLabel: string;
   kpi: KPIData;
 }
 
-export function KPICard({ kpi }: KPICardProps) {
+export function KPICard({ demoLabel, kpi }: KPICardProps) {
   return (
     <Card className="flex h-full flex-col p-5" surface="primary">
       <div className="flex items-start justify-between gap-3 lg:min-h-[3.75rem]">
         <p className="text-sm font-medium text-text-secondary">{kpi.label}</p>
         <Badge className="shrink-0" variant="accent">
-          Demo
+          {demoLabel}
         </Badge>
       </div>
 
