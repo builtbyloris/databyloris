@@ -6,14 +6,22 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { localizePath, type Locale } from "@/i18n/config";
+import type { PublicDictionary } from "@/i18n/types";
 
+import { LanguageSwitcher } from "./language-switcher";
 import { PUBLIC_NAV_ITEMS } from "./navigation";
 
 function isActiveRoute(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function SiteNavbar() {
+interface SiteNavbarProps {
+  dictionary: PublicDictionary;
+  locale: Locale;
+}
+
+export function SiteNavbar({ dictionary, locale }: SiteNavbarProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -38,29 +46,35 @@ export function SiteNavbar() {
     setMenuOpen(false);
   }
 
+  const navItems = PUBLIC_NAV_ITEMS.map((item) => ({
+    href: localizePath(locale, item.href),
+    label: dictionary.navigation[item.labelKey],
+  }));
+  const homeHref = localizePath(locale, "/");
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-page-background/95 backdrop-blur-md">
       <a
         className="sr-only z-60 rounded-control bg-surface-elevated px-4 py-2 text-sm font-semibold text-text-primary focus:not-sr-only focus:absolute focus:left-4 focus:top-3"
         href="#main-content"
       >
-        Skip to main content
+        {dictionary.navigation.skipToContent}
       </a>
 
       <div className="container-page flex min-h-16 items-center gap-3">
         <Link
-          aria-current={pathname === "/" ? "page" : undefined}
+          aria-current={pathname === homeHref ? "page" : undefined}
           className="rounded-control text-base font-semibold tracking-tight text-text-primary hover:text-accent"
-          href="/"
+          href={homeHref}
           onClick={closeMenu}
         >
           data<span className="text-accent">byloris</span>
         </Link>
 
         <div className="ml-auto hidden items-center gap-1 md:flex">
-          <nav aria-label="Primary navigation">
+          <nav aria-label={dictionary.navigation.primaryLabel}>
             <ul className="flex items-center gap-1">
-              {PUBLIC_NAV_ITEMS.map((item) => {
+              {navItems.map((item) => {
                 const active = isActiveRoute(pathname, item.href);
 
                 return (
@@ -83,12 +97,21 @@ export function SiteNavbar() {
           </nav>
         </div>
 
+        <LanguageSwitcher
+          labels={dictionary.languageSwitcher}
+          locale={locale}
+        />
+
         <ThemeToggle />
 
         <Button
           aria-controls="mobile-navigation"
           aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            menuOpen
+              ? dictionary.navigation.closeMenu
+              : dictionary.navigation.openMenu
+          }
           className="md:hidden"
           onClick={() => setMenuOpen((open) => !open)}
           ref={menuButtonRef}
@@ -119,9 +142,12 @@ export function SiteNavbar() {
 
       {menuOpen ? (
         <div className="border-t border-border bg-surface-primary md:hidden" id="mobile-navigation">
-          <nav aria-label="Mobile navigation" className="container-page py-3">
+          <nav
+            aria-label={dictionary.navigation.mobileLabel}
+            className="container-page py-3"
+          >
             <ul className="space-y-1">
-              {PUBLIC_NAV_ITEMS.map((item) => {
+              {navItems.map((item) => {
                 const active = isActiveRoute(pathname, item.href);
 
                 return (

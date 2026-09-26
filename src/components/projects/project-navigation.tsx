@@ -2,21 +2,28 @@
 
 import { useEffect, useState } from "react";
 
-const sections = [
-  { id: "overview", label: "Overview" },
-  { id: "insights", label: "Insights" },
-  { id: "explore", label: "Explore" },
-  { id: "methodology", label: "Methodology" },
-] as const;
+import type { PublicDictionary } from "@/i18n/types";
 
-type SectionId = (typeof sections)[number]["id"];
+const sectionIds = ["overview", "insights", "explore", "methodology"] as const;
 
-export function ProjectNavigation() {
+type SectionId = (typeof sectionIds)[number];
+
+export function ProjectNavigation({
+  labels,
+}: {
+  labels: PublicDictionary["projectNavigation"];
+}) {
   const [activeSection, setActiveSection] = useState<SectionId>("overview");
+  const sections = [
+    { id: "overview", label: labels.overview },
+    { id: "insights", label: labels.insights },
+    { id: "explore", label: labels.explore },
+    { id: "methodology", label: labels.methodology },
+  ] as const;
 
   useEffect(() => {
-    const elements = sections
-      .map((section) => document.getElementById(section.id))
+    const elements = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
       .filter((element): element is HTMLElement => Boolean(element));
 
     const observer = new IntersectionObserver(
@@ -39,7 +46,7 @@ export function ProjectNavigation() {
   return (
     <div className="sticky top-16 z-40 border-y border-border bg-page-background/95 backdrop-blur-md">
       <nav
-        aria-label="Project sections"
+        aria-label={labels.label}
         className="container-story overflow-x-auto overscroll-x-contain py-2"
       >
         <ul className="mx-auto flex w-max min-w-max items-center gap-2">

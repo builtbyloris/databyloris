@@ -11,6 +11,7 @@ import type { ProjectDetail } from "@/types/project";
 
 interface ProjectInsightsProps {
   project: ProjectDetail;
+  projectPath: string;
 }
 
 function StoryVisualization({ data }: { data: StoryVisualizationData }) {
@@ -26,7 +27,7 @@ function StoryVisualization({ data }: { data: StoryVisualizationData }) {
   }
 }
 
-export function ProjectInsights({ project }: ProjectInsightsProps) {
+export function ProjectInsights({ project, projectPath }: ProjectInsightsProps) {
   const { insights } = project;
 
   return (
@@ -55,7 +56,7 @@ export function ProjectInsights({ project }: ProjectInsightsProps) {
         {insights.stories.map((story, index) => (
           <StorySection
             exploreHref={buildInsightExploreHref(
-              `/projects/${project.slug}`,
+              projectPath,
               story.exploreState,
             )}
             index={index}

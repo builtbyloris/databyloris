@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { locales, localizePath } from "@/i18n/config";
 import {
   ProjectCoverError,
   removeProjectCover,
@@ -10,10 +11,12 @@ import {
 import type { ProjectCoverActionState } from "@/types/project-database";
 
 function revalidateCoverSurfaces(projectId: string, slug?: string) {
-  revalidatePath("/");
-  revalidatePath("/explore");
   revalidatePath(`/admin/projects/${projectId}/edit`);
-  if (slug) revalidatePath(`/projects/${slug}`);
+  locales.forEach((locale) => {
+    revalidatePath(localizePath(locale, "/"));
+    revalidatePath(localizePath(locale, "/explore"));
+    if (slug) revalidatePath(localizePath(locale, `/projects/${slug}`));
+  });
 }
 
 function coverActionError(error: unknown): ProjectCoverActionState {

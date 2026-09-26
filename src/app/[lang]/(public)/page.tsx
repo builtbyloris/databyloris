@@ -1,9 +1,13 @@
+import { notFound } from "next/navigation";
+
 import { AnalyticsPreview } from "@/components/analytics/analytics-preview";
 import { FeaturedInsights } from "@/components/analytics/featured-insights";
 import { FeaturedAnalysis } from "@/components/projects/featured-analysis";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { isLocale, localizePath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { SPOTIFY_PROJECT_PATH, SPOTIFY_PROJECT_SLUG } from "@/lib/projects/project-identifiers";
 import {
   getPublishedProjectBySlug,
@@ -28,7 +32,18 @@ const steps = [
   },
 ];
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
+  if (!isLocale(lang)) {
+    notFound();
+  }
+
+  const dictionary = await getDictionary(lang);
   const [featuredProjects, spotifyProject] = await Promise.all([
     listFeaturedPublishedProjects(),
     getPublishedProjectBySlug(SPOTIFY_PROJECT_SLUG),
@@ -46,13 +61,17 @@ export default async function HomePage() {
             and explorable dashboards.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/explore" size="lg">
-              Explore projects
+            <ButtonLink href={localizePath(lang, "/explore")} size="lg">
+              {dictionary.home.exploreProjects}
               <span aria-hidden="true">→</span>
             </ButtonLink>
             {spotifyProject ? (
-              <ButtonLink href={SPOTIFY_PROJECT_PATH} size="lg" variant="secondary">
-                Try interactive demo
+              <ButtonLink
+                href={localizePath(lang, SPOTIFY_PROJECT_PATH)}
+                size="lg"
+                variant="secondary"
+              >
+                {dictionary.home.tryDemo}
               </ButtonLink>
             ) : null}
           </div>
@@ -65,7 +84,9 @@ export default async function HomePage() {
         <AnalyticsPreview />
       </section>
 
-      {featuredProject ? <FeaturedAnalysis project={featuredProject} /> : null}
+      {featuredProject ? (
+        <FeaturedAnalysis locale={lang} project={featuredProject} />
+      ) : null}
       {spotifyProject ? <FeaturedInsights /> : null}
 
       <section aria-labelledby="how-it-works-title" className="container-page section-separation">
@@ -98,8 +119,12 @@ export default async function HomePage() {
             <p className="text-overline">Continue exploring</p>
             <h2 id="home-cta-title">Ready to explore the data?</h2>
           </div>
-          <ButtonLink className="shrink-0" href="/explore" size="lg">
-            Explore projects
+          <ButtonLink
+            className="shrink-0"
+            href={localizePath(lang, "/explore")}
+            size="lg"
+          >
+            {dictionary.home.exploreProjects}
             <span aria-hidden="true">→</span>
           </ButtonLink>
         </Card>

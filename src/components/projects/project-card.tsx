@@ -1,12 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { localizePath, type Locale } from "@/i18n/config";
+import type { PublicDictionary } from "@/i18n/types";
 import type { ProjectCoverType, ProjectSummary } from "@/types/project";
 
 import { ProjectCoverImage } from "./project-cover-image";
 
 interface ProjectCardProps {
+  locale: Locale;
   project: ProjectSummary;
+  strings: PublicDictionary["explore"]["catalog"];
 }
 
 const coverLabels: Record<ProjectCoverType, string> = {
@@ -62,8 +66,11 @@ function ProjectCover({ coverType }: { coverType: ProjectCoverType }) {
   );
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
-  const href = project.href ?? `/projects/${project.slug}`;
+export function ProjectCard({ locale, project, strings }: ProjectCardProps) {
+  const href = localizePath(
+    locale,
+    project.href ?? `/projects/${project.slug}`,
+  );
 
   return (
     <article className="h-full">
@@ -82,7 +89,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <div className="flex flex-1 flex-col p-5 sm:p-6">
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <Badge variant="accent">{project.category}</Badge>
-            {project.demo ? <Badge>Interactive demo</Badge> : null}
+            {project.demo ? <Badge>{strings.interactiveDemo}</Badge> : null}
           </div>
 
           <h2 className="text-xl font-semibold tracking-tight text-text-primary">
@@ -121,11 +128,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
           <div className="mt-auto pt-6">
             <ButtonLink
-              aria-label={`Explore ${project.title}`}
+              aria-label={`${strings.exploreProjectAriaPrefix} ${project.title}`}
               className="w-full"
               href={href}
             >
-              Explore project
+              {strings.exploreProject}
               <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>

@@ -1,14 +1,24 @@
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { localizePath, type Locale } from "@/i18n/config";
 import type { ProjectSummary } from "@/types/project";
 
 import { ProjectCoverImage } from "./project-cover-image";
 
 const rankingPreview = [82, 67, 54, 39];
 
-export function FeaturedAnalysis({ project }: { project: ProjectSummary }) {
-  const href = project.href ?? `/projects/${project.slug}`;
+export function FeaturedAnalysis({
+  locale,
+  project,
+}: {
+  locale: Locale;
+  project: ProjectSummary;
+}) {
+  const href = localizePath(
+    locale,
+    project.href ?? `/projects/${project.slug}`,
+  );
   const metadata = [project.period, ...project.tags].filter(
     (item): item is string => Boolean(item),
   );

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { locales, localizePath } from "@/i18n/config";
 import {
   AdminProjectError,
   createAdminProject,
@@ -16,9 +17,11 @@ import type {
 } from "@/types/project-database";
 
 function revalidateProjectSurfaces() {
-  revalidatePath("/");
-  revalidatePath("/explore");
-  revalidatePath("/projects/[slug]", "page");
+  locales.forEach((locale) => {
+    revalidatePath(localizePath(locale, "/"));
+    revalidatePath(localizePath(locale, "/explore"));
+    revalidatePath(localizePath(locale, "/projects/[slug]"), "page");
+  });
 }
 
 function actionError(error: unknown): ProjectFormState {

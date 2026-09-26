@@ -1,6 +1,10 @@
+import { notFound } from "next/navigation";
+
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { isLocale, localizePath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 const philosophy = [
   {
@@ -46,17 +50,27 @@ const projectContents = [
   },
 ] as const;
 
-export default function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
+  if (!isLocale(lang)) {
+    notFound();
+  }
+
+  const dictionary = await getDictionary(lang);
+
   return (
     <div>
       <section className="container-page page-frame">
         <div className="max-w-4xl">
-          <Badge variant="accent">About databyloris</Badge>
-          <h1 className="mt-5">Data analysis should be explored, not just presented.</h1>
+          <Badge variant="accent">{dictionary.about.badge}</Badge>
+          <h1 className="mt-5">{dictionary.about.title}</h1>
           <p className="text-lead mt-6 max-w-3xl">
-            databyloris transforms datasets into interactive stories, clear insights and
-            explorable dashboards—so the path from a question to the underlying evidence
-            remains visible.
+            {dictionary.about.description}
           </p>
         </div>
       </section>
@@ -170,13 +184,17 @@ export default function AboutPage() {
       <section aria-labelledby="about-cta-title" className="container-page pb-16 sm:pb-24">
         <div className="flex flex-col items-start justify-between gap-6 border-t border-border pt-10 sm:flex-row sm:items-center">
           <div>
-            <p className="text-overline">Continue</p>
+            <p className="text-overline">{dictionary.about.ctaEyebrow}</p>
             <h2 className="mt-2" id="about-cta-title">
-              Explore the stories behind the data.
+              {dictionary.about.ctaTitle}
             </h2>
           </div>
-          <ButtonLink className="shrink-0" href="/explore" size="lg">
-            Explore data stories
+          <ButtonLink
+            className="shrink-0"
+            href={localizePath(lang, "/explore")}
+            size="lg"
+          >
+            {dictionary.about.ctaLabel}
             <span aria-hidden="true">→</span>
           </ButtonLink>
         </div>

@@ -1,6 +1,14 @@
+"use client";
+
+import { useParams } from "next/navigation";
+
 import { ButtonLink } from "@/components/ui/button";
+import { defaultLocale, isLocale, localizePath } from "@/i18n/config";
 
 export default function ProjectNotFound() {
+  const params = useParams<{ lang?: string }>();
+  const locale = params.lang && isLocale(params.lang) ? params.lang : defaultLocale;
+
   return (
     <div className="container-story page-frame">
       <p className="text-overline">Project unavailable</p>
@@ -10,7 +18,7 @@ export default function ProjectNotFound() {
         to find an available data story.
       </p>
       <div className="mt-8">
-        <ButtonLink href="/explore" size="lg">
+        <ButtonLink href={localizePath(locale, "/explore")} size="lg">
           Explore projects
           <span aria-hidden="true">→</span>
         </ButtonLink>
