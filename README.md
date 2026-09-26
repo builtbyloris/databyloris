@@ -133,6 +133,47 @@ docs/                    # Product, UI, data-model, roadmap, and release documen
 
    Open [http://localhost:3000](http://localhost:3000).
 
+## Vercel Preview deployment
+
+Vercel can deploy this repository as a standard Next.js project. No custom
+build command or `vercel.json` file is required. Configure these variables for
+the **Preview** environment before creating a deployment:
+
+| Variable | Exposure | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public, build and runtime | Supabase API endpoint and the allowlisted project-cover image host |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public, build and runtime | Browser/server access governed by Supabase Auth and Row Level Security |
+| `ADMIN_EMAIL` | Server only | Application-level allowlist for the single administrator |
+
+Do not add a Supabase service-role key or a direct PostgreSQL connection
+string. The application does not use either. Environment changes only affect
+new Vercel deployments, so redeploy after adding or updating a value.
+
+Before testing Admin in Preview:
+
+1. Apply the migrations to the Supabase project selected for Preview.
+2. Create the administrator in Supabase Auth.
+3. Add that Auth user UUID to `public.admin_users`.
+4. Set `ADMIN_EMAIL` to the same account email.
+
+Using the production Supabase values in Preview means Admin mutations affect
+the production database and Storage bucket. Use a separate Supabase project and
+matching Preview variables when deployment isolation is required.
+
+The implemented Admin flow uses `signInWithPassword` and same-origin Next.js
+redirects. It does not implement OAuth, passwordless login, password recovery,
+or an Auth callback route, so the current sign-in flow does not require a
+Preview callback URL. If a redirect-based Auth flow is added later, configure
+the production Site URL and explicit local/Preview redirect patterns in the
+Supabase Auth URL settings before enabling it.
+
+Project covers currently upload through a Server Action. Vercel Functions cap
+the complete request payload at 4.5 MB, including multipart overhead, while the
+application-level cover limit remains 5 MB. For Preview testing, keep cover
+files at or below 4 MB. Supporting the full 5 MB application limit on Vercel
+requires a future direct-to-Supabase upload flow; the limit is not silently
+changed for this deployment audit.
+
 ## Database setup
 
 Apply migrations in this order:
