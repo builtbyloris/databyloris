@@ -1,20 +1,23 @@
 import {getTranslations} from "next-intl/server";
 import {LanguageSwitcher} from "@/components/language-switcher";
+import {MobileMenu} from "@/components/layout/mobile-menu";
 import {ThemeToggle} from "@/components/theme-toggle";
-import {Container} from "@/components/ui";
+import {Container, buttonStyles} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 
 export async function Navbar() {
   const t = await getTranslations("Navigation");
   const links = [
-    {href: "/projects" as const, label: t("projects")},
+    {href: "/" as const, label: t("home")},
+    {href: "/projects" as const, label: t("portfolio")},
     {href: "/playground" as const, label: t("playground")},
+    {href: "/#how-it-works" as const, label: t("about")},
   ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/78 backdrop-blur-xl">
-      <Container className="flex h-16 items-center justify-between gap-5">
-        <Link href="/" className="group inline-flex items-center gap-2.5" aria-label="databyloris home">
+      <Container className="flex h-[4.5rem] items-center justify-between gap-5">
+        <Link href="/" className="group inline-flex items-center gap-2.5" aria-label={t("logoLabel")}>
           <span className="brand-gradient grid size-8 place-items-center rounded-[0.65rem] shadow-soft">
             <span className="size-2 rounded-full bg-white" />
           </span>
@@ -23,7 +26,7 @@ export async function Navbar() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label={t("menu")}>
+        <nav className="hidden items-center gap-6 lg:flex" aria-label={t("menu")}>
           {links.map((link) => (
             <Link
               key={link.href}
@@ -35,10 +38,14 @@ export async function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1.5">
+        <div className="hidden items-center gap-1.5 lg:flex">
           <LanguageSwitcher />
           <ThemeToggle />
+          <Link href="/projects" className={buttonStyles({size: "sm", className: "ml-1"})}>
+            {t("cta")}
+          </Link>
         </div>
+        <MobileMenu />
       </Container>
     </header>
   );

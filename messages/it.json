@@ -6,10 +6,16 @@
   "Navigation": {
     "home": "Home",
     "projects": "Progetti",
-    "playground": "Playground",
+    "portfolio": "Portfolio",
+    "playground": "Data Playground",
+    "about": "About",
     "admin": "Admin",
     "openProjects": "Esplora i progetti",
-    "menu": "Navigazione principale"
+    "cta": "Esplora",
+    "menu": "Navigazione principale",
+    "openMenu": "Apri menu",
+    "closeMenu": "Chiudi menu",
+    "logoLabel": "databyloris, torna alla Home"
   },
   "Theme": {
     "toggle": "Cambia tema",
@@ -22,21 +28,90 @@
     "en": "EN"
   },
   "Home": {
-    "eyebrow": "Data analytics, raccontata bene",
-    "title": "Dai dati grezzi a decisioni più chiare.",
-    "description": "Progetti, dashboard ed esperimenti che trasformano dataset complessi in insight leggibili e utili.",
-    "primaryCta": "Vedi i progetti",
-    "secondaryCta": "Apri il playground",
-    "signalLabel": "Dataset esplorati",
-    "signalValue": "06",
-    "panelLabel": "Focus attuale",
-    "panelTitle": "Analisi progettate per essere comprese.",
-    "panelDescription": "Una base modulare per dashboard configurabili, filtri e visualizzazioni interattive.",
-    "featuredEyebrow": "Selezione",
-    "featuredTitle": "Progetti in evidenza",
-    "featuredDescription": "Prime esplorazioni su mobilità, intrattenimento e comportamenti digitali.",
-    "viewAll": "Tutti i progetti",
-    "viewProject": "Apri progetto"
+    "Hero": {
+      "eyebrow": "Data Analysis • Insights • Real Projects",
+      "titleLead": "Dati reali,",
+      "titleAccent": "insight concreti.",
+      "description": "Analisi, dashboard e progetti di Data Analysis costruiti su dataset reali. Esplora i dati, scopri gli insight e osserva il processo dietro ogni analisi.",
+      "primaryCta": "Esplora i progetti",
+      "secondaryCta": "Scopri come funziona",
+      "proofOne": "Dataset reali",
+      "proofTwo": "Processo trasparente"
+    },
+    "Preview": {
+      "eyebrow": "Preview analytics",
+      "title": "Performance del dataset",
+      "live": "Aggiornato",
+      "records": "Record analizzati",
+      "quality": "Qualità dati",
+      "trend": "Andamento degli insight",
+      "period": "Ultimi 6 periodi",
+      "actual": "Attuale",
+      "baseline": "Baseline",
+      "chartLabel": "Grafico dimostrativo dell'andamento dei dati"
+    },
+    "Stats": {
+      "datasets": "Dataset analizzati",
+      "dashboards": "Dashboard interattive",
+      "technologies": "Tecnologie utilizzate",
+      "published": "Progetti pubblicati"
+    },
+    "Featured": {
+      "eyebrow": "Analisi selezionate",
+      "title": "Progetti in evidenza",
+      "description": "Dataset reali trasformati in analisi leggibili, visualizzazioni utili e insight verificabili.",
+      "viewAll": "Vedi tutto il portfolio",
+      "viewProject": "Apri progetto"
+    },
+    "HowItWorks": {
+      "eyebrow": "Dentro ogni analisi",
+      "title": "Dai dati alla comprensione",
+      "description": "Ogni progetto rende visibili sia il risultato sia il percorso usato per raggiungerlo.",
+      "explore": {
+        "title": "Esplora il progetto",
+        "description": "Parti dal contesto, dalle domande e dalle caratteristiche del dataset reale."
+      },
+      "analyze": {
+        "title": "Analizza la dashboard",
+        "description": "Leggi KPI e visualizzazioni progettati per far emergere pattern e confronti."
+      },
+      "discover": {
+        "title": "Scopri gli insight",
+        "description": "Arriva alle evidenze principali e comprendi le decisioni dietro l'analisi."
+      }
+    },
+    "Cta": {
+      "eyebrow": "Inizia dai dati",
+      "title": "Ogni dataset contiene una storia da leggere.",
+      "description": "Esplora i progetti pubblicati e scopri come domande, metodo e visualizzazione trasformano i dati in insight.",
+      "button": "Esplora tutti i progetti"
+    }
+  },
+  "ProjectContent": {
+    "video-game-sales": {
+      "category": "Intrattenimento",
+      "description": "Tendenze di vendita globali tra piattaforme, generi ed epoche editoriali."
+    },
+    "flight-analysis": {
+      "category": "Mobilità",
+      "description": "Performance del traffico aereo, rotte e principali cause dei ritardi."
+    },
+    "listening-insights": {
+      "category": "Media",
+      "description": "Abitudini di ascolto trasformate in segnali utili per comprendere il pubblico."
+    },
+    "stock-market-analysis": {
+      "category": "Finanza",
+      "description": "Movimenti di mercato, volatilità e confronti tra settori."
+    },
+    "city-data-analysis": {
+      "category": "Dati pubblici",
+      "description": "Indicatori urbani su mobilità, servizi e qualità della vita."
+    },
+    "sports-performance": {
+      "category": "Sport",
+      "description": "Performance di atleti e squadre attraverso metriche confrontabili."
+    }
   },
   "Projects": {
     "eyebrow": "Case study",

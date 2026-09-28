@@ -6,10 +6,16 @@
   "Navigation": {
     "home": "Home",
     "projects": "Projects",
-    "playground": "Playground",
+    "portfolio": "Portfolio",
+    "playground": "Data Playground",
+    "about": "About",
     "admin": "Admin",
     "openProjects": "Explore projects",
-    "menu": "Main navigation"
+    "cta": "Explore",
+    "menu": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "logoLabel": "databyloris, back to Home"
   },
   "Theme": {
     "toggle": "Change theme",
@@ -22,21 +28,90 @@
     "en": "EN"
   },
   "Home": {
-    "eyebrow": "Data analytics, clearly told",
-    "title": "From raw data to clearer decisions.",
-    "description": "Projects, dashboards and experiments that turn complex datasets into readable, useful insights.",
-    "primaryCta": "View projects",
-    "secondaryCta": "Open playground",
-    "signalLabel": "Datasets explored",
-    "signalValue": "06",
-    "panelLabel": "Current focus",
-    "panelTitle": "Analytics designed to be understood.",
-    "panelDescription": "A modular foundation for configurable dashboards, filters and interactive visualizations.",
-    "featuredEyebrow": "Selected work",
-    "featuredTitle": "Featured projects",
-    "featuredDescription": "Early explorations across mobility, entertainment and digital behavior.",
-    "viewAll": "All projects",
-    "viewProject": "Open project"
+    "Hero": {
+      "eyebrow": "Data Analysis • Insights • Real Projects",
+      "titleLead": "Real data,",
+      "titleAccent": "actionable insights.",
+      "description": "Data Analysis projects and dashboards built from real-world datasets. Explore the data, uncover the insights and see the thinking behind every analysis.",
+      "primaryCta": "Explore projects",
+      "secondaryCta": "See how it works",
+      "proofOne": "Real-world datasets",
+      "proofTwo": "Transparent process"
+    },
+    "Preview": {
+      "eyebrow": "Analytics preview",
+      "title": "Dataset performance",
+      "live": "Updated",
+      "records": "Records analyzed",
+      "quality": "Data quality",
+      "trend": "Insight trend",
+      "period": "Last 6 periods",
+      "actual": "Actual",
+      "baseline": "Baseline",
+      "chartLabel": "Illustrative chart showing the data trend"
+    },
+    "Stats": {
+      "datasets": "Datasets analyzed",
+      "dashboards": "Interactive dashboards",
+      "technologies": "Technologies used",
+      "published": "Published projects"
+    },
+    "Featured": {
+      "eyebrow": "Selected analysis",
+      "title": "Featured projects",
+      "description": "Real-world datasets turned into clear analysis, useful visualizations and verifiable insights.",
+      "viewAll": "View the full portfolio",
+      "viewProject": "Open project"
+    },
+    "HowItWorks": {
+      "eyebrow": "Inside every analysis",
+      "title": "From data to understanding",
+      "description": "Every project makes both the outcome and the process behind it easy to explore.",
+      "explore": {
+        "title": "Explore the project",
+        "description": "Start with the context, the key questions and the characteristics of the real-world dataset."
+      },
+      "analyze": {
+        "title": "Analyze the dashboard",
+        "description": "Use focused KPIs and visualizations to surface patterns and meaningful comparisons."
+      },
+      "discover": {
+        "title": "Discover the insights",
+        "description": "Reach the main findings and understand the analytical decisions behind them."
+      }
+    },
+    "Cta": {
+      "eyebrow": "Start with the data",
+      "title": "Every dataset has a story worth uncovering.",
+      "description": "Explore the published projects and see how questions, method and visualization turn data into insight.",
+      "button": "Explore all projects"
+    }
+  },
+  "ProjectContent": {
+    "video-game-sales": {
+      "category": "Entertainment",
+      "description": "Global sales patterns across platforms, genres and publishing eras."
+    },
+    "flight-analysis": {
+      "category": "Mobility",
+      "description": "Air traffic performance, routes and the leading drivers of flight delays."
+    },
+    "listening-insights": {
+      "category": "Media",
+      "description": "Listening habits translated into meaningful audience signals."
+    },
+    "stock-market-analysis": {
+      "category": "Finance",
+      "description": "Market movements, volatility and sector-level comparisons."
+    },
+    "city-data-analysis": {
+      "category": "Public data",
+      "description": "Urban indicators for mobility, services and quality of life."
+    },
+    "sports-performance": {
+      "category": "Sports",
+      "description": "Player and team performance through comparable metrics."
+    }
   },
   "Projects": {
     "eyebrow": "Case studies",
