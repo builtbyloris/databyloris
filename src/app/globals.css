@@ -121,3 +121,16 @@ body {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
+
+[data-dashboard-section] {
+  transition: outline-color 180ms ease, box-shadow 180ms ease;
+}
+
+[data-playground-highlight="filters"] [data-dashboard-section="filters"],
+[data-playground-highlight="kpis"] [data-dashboard-section="kpis"],
+[data-playground-highlight="charts"] [data-dashboard-section="charts"],
+[data-playground-highlight="ranking"] [data-dashboard-section="ranking"] {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-card-value), 0 0 0 7px color-mix(in srgb, var(--primary) 10%, transparent);
+}

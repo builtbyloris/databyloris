@@ -197,6 +197,10 @@
       "title": "Listening Insights Dashboard",
       "description": "Explore listening habits, artists, genres and devices through aggregated sessions."
     },
+    "playground": {
+      "title": "Retail Pulse",
+      "description": "A demo dashboard for exploring revenue, orders and customers through a simple retail dataset."
+    },
     "breadcrumb": {
       "projects": "Projects",
       "dashboard": "Dashboard"
@@ -216,6 +220,9 @@
       "month": "Month",
       "artist": "Artist",
       "device": "Device",
+      "city": "City",
+      "category": "Category",
+      "channel": "Channel",
       "all": "All",
       "reset": "Reset filters"
     },
@@ -226,7 +233,11 @@
       "genres": "Genres",
       "minutes": "Minutes listened",
       "streams": "Streams",
-      "artists": "Artists listened to"
+      "artists": "Artists listened to",
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "customers": "Customers",
+      "units": "Units sold"
     },
     "charts": {
       "salesOverTime": "Sales over time",
@@ -235,6 +246,9 @@
       "listeningOverTime": "Listening over time",
       "topArtists": "Top artists",
       "listeningByGenre": "Listening by genre",
+      "revenueOverTime": "Revenue over time",
+      "revenueByCity": "Revenue by city",
+      "revenueByCategory": "Distribution by category",
       "accessibleLabel": "Chart: {title}"
     },
     "ranking": {
@@ -251,6 +265,11 @@
         "artist": "Artist",
         "genre": "Genre",
         "minutes": "Minutes"
+      },
+      "playground": {
+        "title": "Top cities",
+        "city": "City",
+        "revenue": "Revenue"
       }
     },
     "empty": {
@@ -259,10 +278,41 @@
     }
   },
   "Playground": {
-    "eyebrow": "Lab",
-    "title": "Playground",
-    "description": "A space for visual experiments, prototypes and new ways to explore data.",
-    "note": "Interactive experiences will be added in a later step."
+    "eyebrow": "Learn by exploring",
+    "title": "Data Playground",
+    "description": "Learn how to read and use an interactive dashboard through a demo dataset.",
+    "demoBadge": "Demo Dataset",
+    "demoNotice": "Retail Pulse uses demonstration data only and is not part of the Portfolio.",
+    "intro": {
+      "eyebrow": "The journey",
+      "title": "Four steps to read the data",
+      "description": "Follow the guide or interact freely: every selection updates the entire dashboard.",
+      "kpis": {"title": "Observe the KPIs", "description": "Start with the main metrics to quickly understand the scale of the dataset."},
+      "filters": {"title": "Apply a filter", "description": "Narrow the analysis by month, city, category or channel."},
+      "charts": {"title": "Explore the charts", "description": "Read trends, comparisons and distributions from different perspectives."},
+      "ranking": {"title": "Compare the ranking", "description": "Quickly identify the cities with the most relevant results."}
+    },
+    "tutorial": {
+      "counter": "Step {current} of {total}",
+      "progressLabel": "Guide progress",
+      "stepLabel": "Step {step}",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "exit": "Explore freely",
+      "restart": "Restart guide",
+      "steps": {
+        "kpis": {"area": "Highlighted area: KPIs", "title": "Start with the KPIs", "description": "KPIs quickly summarize the dataset's main metrics: revenue, orders, customers and units sold."},
+        "filters": {"area": "Highlighted area: filters", "title": "Filter the data", "description": "Change the month, city, category or channel. KPIs, charts and ranking will update together."},
+        "charts": {"area": "Highlighted area: charts", "title": "Look for patterns", "description": "Use the line for trends, bars for comparisons and the donut to read the distribution."},
+        "ranking": {"area": "Highlighted area: ranking", "title": "Compare the results", "description": "The Top N orders the most relevant items and makes city comparisons immediate."}
+      },
+      "explore": {
+        "badge": "Free exploration",
+        "title": "Now explore on your own",
+        "description": "The dashboard remains fully interactive. Try different combinations or restart the guide whenever you want."
+      }
+    }
   },
   "Admin": {
     "eyebrow": "Workspace",

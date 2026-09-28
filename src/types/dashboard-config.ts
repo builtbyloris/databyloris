@@ -1,6 +1,6 @@
 import type {ChartConfig} from "./chart-config";
 import type {FilterConfig} from "./filter-config";
-import type {AggregationType, KPIConfig} from "./kpi";
+import type {AggregationType, KPIConfig, KPIFormat} from "./kpi";
 
 export interface RankingConfig {
   id: string;
@@ -16,7 +16,7 @@ export interface RankingConfig {
   aggregation: AggregationType;
   limit: number;
   sortDirection: "asc" | "desc";
-  valueFormat?: "number" | "sales";
+  valueFormat?: KPIFormat;
 }
 
 export interface DashboardLayoutConfig {

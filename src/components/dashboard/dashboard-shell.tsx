@@ -16,16 +16,40 @@ function createInitialState(config: DashboardConfig): DashboardFilterState {
   return Object.fromEntries(config.filters.map((filter) => [filter.id, filter.defaultValue ?? ALL_FILTER_VALUE]));
 }
 
-export function DashboardShell({project, config, records}: {
-  project: {slug: string; title: string};
+export function DashboardShell({project, config, records, embedded = false}: {
+  project?: {slug: string; title: string};
   config: DashboardConfig;
   records: DashboardRecord[];
+  embedded?: boolean;
 }) {
   const t = useTranslations("Dashboard");
   const [filters, setFilters] = useState<DashboardFilterState>(() => createInitialState(config));
   const filteredRecords = useMemo(() => applyDashboardFilters(records, config.filters, filters), [config.filters, filters, records]);
   const kpis = useMemo(() => calculateKpis(filteredRecords, config.kpis), [config.kpis, filteredRecords]);
   const resetFilters = () => setFilters(createInitialState(config));
+
+  const dashboardContent = (
+    <div className="min-w-0 space-y-5">
+      <DashboardFilters filters={config.filters} records={records} state={filters} onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))} onReset={resetFilters} />
+      <DashboardKpiGrid items={kpis} />
+
+      {filteredRecords.length === 0 ? (
+        <div className="rounded-card border border-border bg-card px-6 py-16 text-center shadow-card">
+          <h2 className="text-xl font-bold">{t("empty.title")}</h2>
+          <p className="mt-2 text-sm text-muted">{t("empty.description")}</p>
+          <button type="button" onClick={resetFilters} className={buttonStyles({variant: "secondary", className: "mt-6"})}>{t("filters.reset")}</button>
+        </div>
+      ) : (
+        <div className="grid min-w-0 gap-5 xl:grid-cols-3">
+          {config.charts.map((chart) => <DashboardChart key={chart.id} config={chart} records={filteredRecords} featured={chart.id === config.layout.featuredChartId} />)}
+          {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} className="xl:col-span-2" />)}
+        </div>
+      )}
+    </div>
+  );
+
+  if (embedded) return dashboardContent;
+  if (!project) return null;
 
   return (
     <section className="relative min-h-[75vh] overflow-hidden py-8 sm:py-10 lg:py-12">
@@ -46,25 +70,7 @@ export function DashboardShell({project, config, records}: {
 
         <div className="mt-8 grid gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
           <DashboardSidebar slug={project.slug} />
-          <div className="min-w-0 space-y-5">
-            <DashboardFilters filters={config.filters} records={records} state={filters} onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))} onReset={resetFilters} />
-            <DashboardKpiGrid items={kpis} />
-
-            {filteredRecords.length === 0 ? (
-              <div className="rounded-card border border-border bg-card px-6 py-16 text-center shadow-card">
-                <h2 className="text-xl font-bold">{t("empty.title")}</h2>
-                <p className="mt-2 text-sm text-muted">{t("empty.description")}</p>
-                <button type="button" onClick={resetFilters} className={buttonStyles({variant: "secondary", className: "mt-6"})}>{t("filters.reset")}</button>
-              </div>
-            ) : (
-              <>
-                <div className="grid min-w-0 gap-5 xl:grid-cols-3">
-                  {config.charts.map((chart) => <DashboardChart key={chart.id} config={chart} records={filteredRecords} featured={chart.id === config.layout.featuredChartId} />)}
-                  {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} className="xl:col-span-2" />)}
-                </div>
-              </>
-            )}
-          </div>
+          {dashboardContent}
         </div>
       </Container>
     </section>

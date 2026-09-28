@@ -1,4 +1,4 @@
-import type {AggregationType} from "./kpi";
+import type {AggregationType, KPIFormat} from "./kpi";
 
 export type ChartType = "bar" | "line" | "pie" | "donut";
 export type ChartSort = "category-asc" | "category-desc" | "value-asc" | "value-desc";
@@ -14,6 +14,6 @@ export interface ChartConfig {
   aggregation: AggregationType;
   limit?: number;
   sort?: ChartSort;
-  valueFormat?: "number" | "sales";
+  valueFormat?: KPIFormat;
   xField?: string;
 }

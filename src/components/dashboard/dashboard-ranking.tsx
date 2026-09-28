@@ -13,7 +13,7 @@ export function DashboardRanking({config, records, className}: {config: RankingC
   const rows = useMemo(() => calculateRanking(records, config), [config, records]);
 
   return (
-    <Card className={cn("min-w-0 overflow-hidden", className)}>
+    <Card data-dashboard-section="ranking" className={cn("min-w-0 overflow-hidden", className)}>
       <div className="border-b border-border px-5 py-5 sm:px-6">
         <h2 className="text-base font-bold tracking-tight sm:text-lg">{t(config.title)}</h2>
       </div>

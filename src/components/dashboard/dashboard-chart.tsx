@@ -46,7 +46,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
   }, [config.type, config.valueFormat, locale, points]);
 
   return (
-    <Card className={`min-w-0 p-5 sm:p-6 ${featured ? "lg:col-span-2 xl:col-span-2" : ""}`}>
+    <Card data-dashboard-section="charts" className={`min-w-0 p-5 sm:p-6 ${featured ? "lg:col-span-2 xl:col-span-2" : ""}`}>
       <h2 className="text-base font-bold tracking-tight sm:text-lg">{t(config.title)}</h2>
       <EChartsChart option={option} label={t("charts.accessibleLabel", {title: t(config.title)})} className={featured ? "h-80 sm:h-96" : "h-80"} />
     </Card>
