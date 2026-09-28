@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1629"/>
+      <stop offset="1" stop-color="#101D34"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="274" y1="504" x2="864" y2="170" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B8CFF"/>
+      <stop offset="0.55" stop-color="#9B7CFF"/>
+      <stop offset="1" stop-color="#3DD8F3"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#94ACD3" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="720" rx="40" fill="url(#background)"/>
+  <rect width="1200" height="720" rx="40" fill="url(#grid)"/>
+  <path d="M160 510C254 448 326 474 412 390C500 304 576 354 664 264C756 170 852 238 1040 126" stroke="url(#accent)" stroke-width="18" stroke-linecap="round"/>
+  <g fill="url(#accent)">
+    <circle cx="160" cy="510" r="24"/>
+    <circle cx="412" cy="390" r="24"/>
+    <circle cx="664" cy="264" r="24"/>
+    <circle cx="1040" cy="126" r="24"/>
+  </g>
+</svg>

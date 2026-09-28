@@ -1,0 +1,78 @@
+{
+  "Metadata": {
+    "title": "databyloris — Data analytics, made clear",
+    "description": "A data analytics portfolio and lab: from raw data to useful insights."
+  },
+  "Navigation": {
+    "home": "Home",
+    "projects": "Projects",
+    "playground": "Playground",
+    "admin": "Admin",
+    "openProjects": "Explore projects",
+    "menu": "Main navigation"
+  },
+  "Theme": {
+    "toggle": "Change theme",
+    "light": "Switch to light theme",
+    "dark": "Switch to dark theme"
+  },
+  "Language": {
+    "label": "Change language",
+    "it": "IT",
+    "en": "EN"
+  },
+  "Home": {
+    "eyebrow": "Data analytics, clearly told",
+    "title": "From raw data to clearer decisions.",
+    "description": "Projects, dashboards and experiments that turn complex datasets into readable, useful insights.",
+    "primaryCta": "View projects",
+    "secondaryCta": "Open playground",
+    "signalLabel": "Datasets explored",
+    "signalValue": "06",
+    "panelLabel": "Current focus",
+    "panelTitle": "Analytics designed to be understood.",
+    "panelDescription": "A modular foundation for configurable dashboards, filters and interactive visualizations.",
+    "featuredEyebrow": "Selected work",
+    "featuredTitle": "Featured projects",
+    "featuredDescription": "Early explorations across mobility, entertainment and digital behavior.",
+    "viewAll": "All projects",
+    "viewProject": "Open project"
+  },
+  "Projects": {
+    "eyebrow": "Case studies",
+    "title": "Projects",
+    "description": "A collection of analyses built to make data explorable and understandable.",
+    "statusDraft": "In progress",
+    "statusPublished": "Published",
+    "openDashboard": "Open dashboard",
+    "back": "Back to projects"
+  },
+  "Dashboard": {
+    "eyebrow": "Configurable dashboard",
+    "title": "Dashboard view",
+    "description": "The foundation is ready for configuration-driven KPIs, filters and charts.",
+    "kpi": "KPI area",
+    "filters": "Filter area",
+    "chart": "Visualization area"
+  },
+  "Playground": {
+    "eyebrow": "Lab",
+    "title": "Playground",
+    "description": "A space for visual experiments, prototypes and new ways to explore data.",
+    "note": "Interactive experiences will be added in a later step."
+  },
+  "Admin": {
+    "eyebrow": "Workspace",
+    "title": "Admin",
+    "description": "A prepared area for future project, dataset and dashboard configuration management.",
+    "note": "Authentication and backend operations are not included in this phase."
+  },
+  "Footer": {
+    "description": "Complex data, clear stories.",
+    "copyright": "© {year} databyloris. All rights reserved."
+  },
+  "Common": {
+    "comingSoon": "Foundation ready",
+    "skipToContent": "Skip to content"
+  }
+}

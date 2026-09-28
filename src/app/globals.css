@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f4f7fb;
+  --surface: #ffffff;
+  --surface-raised: #f9fbff;
+  --card: rgb(255 255 255 / 0.82);
+  --foreground: #101b33;
+  --muted: #5f6c84;
+  --border: rgb(25 50 91 / 0.12);
+  --primary: #2563eb;
+  --primary-strong: #1d4ed8;
+  --violet: #7c3aed;
+  --cyan: #0891b2;
+  --primary-contrast: #ffffff;
+  --grid-line: rgb(24 57 106 / 0.06);
+  --aurora-blue: rgb(37 99 235 / 0.15);
+  --aurora-violet: rgb(124 58 237 / 0.12);
+  --aurora-cyan: rgb(6 182 212 / 0.10);
+  --shadow-soft-value: 0 16px 40px -24px rgb(30 64 175 / 0.28);
+  --shadow-card-value: 0 24px 70px -42px rgb(15 23 42 / 0.34);
+  --radius-control-value: 0.75rem;
+  --radius-card-value: 1.25rem;
+  --radius-panel-value: 1.75rem;
+  --section-space-value: clamp(4.5rem, 9vw, 8rem);
+  --container-gutter-value: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.dark {
+  --background: #07101f;
+  --surface: #0b1629;
+  --surface-raised: #101d34;
+  --card: rgb(15 29 52 / 0.78);
+  --foreground: #f2f7ff;
+  --muted: #9aa9c3;
+  --border: rgb(148 172 211 / 0.14);
+  --primary: #5b8cff;
+  --primary-strong: #82a6ff;
+  --violet: #9b7cff;
+  --cyan: #3dd8f3;
+  --primary-contrast: #07101f;
+  --grid-line: rgb(138 169 220 / 0.06);
+  --aurora-blue: rgb(37 99 235 / 0.20);
+  --aurora-violet: rgb(124 58 237 / 0.16);
+  --aurora-cyan: rgb(6 182 212 / 0.10);
+  --shadow-soft-value: 0 18px 45px -28px rgb(0 0 0 / 0.72);
+  --shadow-card-value: 0 28px 80px -46px rgb(0 0 0 / 0.82);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-violet: var(--violet);
+  --color-cyan: var(--cyan);
+  --color-primary-contrast: var(--primary-contrast);
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius-control: var(--radius-control-value);
+  --radius-card: var(--radius-card-value);
+  --radius-panel: var(--radius-panel-value);
+  --shadow-soft: var(--shadow-soft-value);
+  --shadow-card: var(--shadow-card-value);
+  --spacing-section: var(--section-space-value);
+  --spacing-gutter: var(--container-gutter-value);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+.page-aurora {
+  background-image:
+    radial-gradient(circle at 15% 0%, var(--aurora-blue), transparent 32rem),
+    radial-gradient(circle at 88% 12%, var(--aurora-violet), transparent 28rem),
+    radial-gradient(circle at 65% 70%, var(--aurora-cyan), transparent 32rem);
+}
+
+.data-grid {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.brand-gradient {
+  background-image: linear-gradient(115deg, var(--primary), var(--violet) 55%, var(--cyan));
+}
+
+.text-gradient {
+  background-image: linear-gradient(110deg, var(--primary-strong), var(--violet) 55%, var(--cyan));
+  background-clip: text;
+  color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
