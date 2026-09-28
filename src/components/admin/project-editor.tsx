@@ -4,20 +4,25 @@ import {useLocale, useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
 import {slugifyProjectTitle, validateProjectDraft} from "@/lib/admin";
 import type {Project, ProjectDetail, ProjectDraft} from "@/types";
+import type {AppLocale} from "@/i18n/routing";
+import type {AdminDatasetDraft} from "@/types";
+import {DatasetManager} from "./dataset-manager";
 import {ProjectDetailEditor} from "./project-detail-editor";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 const textareaClass = "mt-1.5 min-h-28 w-full rounded-control border border-border bg-surface px-3 py-2.5 text-sm outline-none focus:border-primary";
 
-export function ProjectEditor({draft, allDrafts, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onSave, onDetailSave, onBuilder, onBack}: {
+export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onDatasetChange, onSave, onDetailSave, onBuilder, onBack}: {
   draft: ProjectDraft;
   allDrafts: ProjectDraft[];
+  locale: AppLocale;
   dirty: boolean;
   detailDirty: boolean;
   saving: boolean;
   detailSaving: boolean;
   onChange: (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => void;
   onDetailChange: (detail: ProjectDetail) => void;
+  onDatasetChange: (dataset: AdminDatasetDraft) => void;
   onSave: () => void;
   onDetailSave: () => void;
   onBuilder: () => void;
@@ -121,25 +126,15 @@ export function ProjectEditor({draft, allDrafts, dirty, detailDirty, saving, det
         onSave={onDetailSave}
       />
 
-      <Card className="p-5 sm:p-6">
-        <h2 className="text-lg font-bold">{t("dataset.title")}</h2>
-        {draft.dataset ? (
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <DatasetFact label={t("dataset.associated")} value={draft.dataset.id} />
-            <DatasetFact label={t("dataset.records")} value={String(draft.dataset.records.length)} />
-            <DatasetFact label={t("dataset.fields")} value={String(draft.dataset.fields.length)} />
-            <div className="sm:col-span-3"><p className="text-xs font-semibold text-muted">{t("dataset.availableFields")}</p><p className="mt-2 text-sm leading-6">{draft.dataset.fields.join(", ")}</p></div>
-          </div>
-        ) : (
-          <div className="mt-4 rounded-control border border-dashed border-border bg-surface-raised p-5">
-            <p className="font-semibold">{t("dataset.none")}</p><p className="mt-2 text-sm text-muted">{t("dataset.storageNote")}</p>
-          </div>
-        )}
-      </Card>
+      <DatasetManager
+        key={draft.project.id}
+        projectId={draft.project.id}
+        projectTitle={draft.project.title}
+        locale={appLocale}
+        dataset={draft.dataset}
+        dashboardConfig={draft.dashboardConfig}
+        onDatasetChange={onDatasetChange}
+      />
     </div>
   );
-}
-
-function DatasetFact({label, value}: {label: string; value: string}) {
-  return <div className="rounded-control bg-surface-raised p-4"><p className="text-xs font-semibold text-muted">{label}</p><p className="mt-1 break-words font-bold">{value}</p></div>;
 }

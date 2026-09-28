@@ -6,6 +6,7 @@ import type {AppLocale} from "@/i18n/routing";
 import {createProjectDraft} from "@/lib/admin";
 import {requireAdmin} from "@/lib/auth/require-admin";
 import {getDashboardConfig} from "@/lib/repositories/dashboard-configs-repository";
+import {getAdminProjectDataset} from "@/lib/repositories/datasets-repository";
 import {getAdminProjectDetail, listAdminProjects} from "@/lib/repositories/projects-repository";
 import type {ProjectDraft} from "@/types";
 
@@ -23,12 +24,14 @@ export default async function AdminPage({params}: {params: Promise<{locale: AppL
   try {
     const projects = await listAdminProjects(locale);
     initialDrafts = await Promise.all(projects.map(async (record) => {
-      const [config, projectDetail] = await Promise.all([
+      const [config, projectDetail, dataset] = await Promise.all([
         getDashboardConfig(record.project.id),
         getAdminProjectDetail(record.project.id),
+        getAdminProjectDataset(record.project.id),
       ]);
       return createProjectDraft(record.project, {
         config,
+        dataset,
         projectDetail,
         data: dashboardRegistry[record.project.slug]?.data,
         localizedTitle: record.localizedTitle,

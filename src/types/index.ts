@@ -2,12 +2,15 @@ export type {
   AdminActionError,
   AdminActionResult,
   AdminDatasetDraft,
+  DatasetColumn,
+  DatasetColumnType,
   AdminProjectInput,
   AdminProjectRecord,
   AdminValidationCode,
   AdminValidationIssue,
   AdminView,
   ProjectDraft,
+  RegisterDatasetInput,
 } from "./admin";
 export type {ChartConfig, ChartSort, ChartType} from "./chart-config";
 export type {DashboardConfig, DashboardLayoutConfig, RankingConfig} from "./dashboard-config";

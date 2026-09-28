@@ -4,8 +4,34 @@ import type {LocalizedText, Project, ProjectDetail} from "./project";
 
 export interface AdminDatasetDraft {
   id: string;
+  projectId: string;
+  name: string;
+  originalFilename: string | null;
+  storagePath: string | null;
+  grain: string;
+  recordCount: number;
+  columns: DatasetColumn[];
   records: DashboardRecord[];
   fields: string[];
+  source: "database" | "registry";
+  updatedAt: string | null;
+}
+
+export type DatasetColumnType = "string" | "number" | "boolean" | "date";
+
+export interface DatasetColumn {
+  name: string;
+  type: DatasetColumnType;
+  nullable: boolean;
+}
+
+export interface RegisterDatasetInput {
+  projectId: string;
+  storagePath: string;
+  originalFilename: string;
+  name: string;
+  grain: string;
+  replaceExisting: boolean;
 }
 
 export interface ProjectDraft {
@@ -41,6 +67,12 @@ export type AdminActionError =
   | "duplicateSlug"
   | "invalidConfig"
   | "invalidDetail"
+  | "invalidDataset"
+  | "datasetExists"
+  | "datasetTooLarge"
+  | "tooManyRows"
+  | "datasetUploadFailed"
+  | "datasetProcessingFailed"
   | "invalidProject"
   | "projectNotFound"
   | "unknown";

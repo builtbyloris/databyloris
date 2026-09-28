@@ -309,8 +309,8 @@
     "eyebrow": "Workspace",
     "title": "Admin",
     "description": "Manage projects and dashboard configurations stored in Supabase.",
-    "note": "Projects, case studies and DashboardConfig are persistent. Datasets and media remain local.",
-    "prototypeNotice": "Projects, ProjectDetail and DashboardConfig are stored in Supabase. Real datasets and media remain temporarily local.",
+    "note": "Projects, case studies, datasets and DashboardConfig are persistent. Media remains local.",
+    "prototypeNotice": "Projects, ProjectDetail, CSV datasets and DashboardConfig are stored in Supabase.",
     "sessionBadge": "Session only",
     "auth": {
       "signedInAs": "Signed in as",
@@ -325,7 +325,7 @@
       "editor": "Editor",
       "builder": "Dashboard Builder",
       "media": "Media",
-      "sessionNote": "Project metadata, case studies and DashboardConfig are saved in Supabase. Datasets and media are not persistent yet."
+      "sessionNote": "Project metadata, case studies, CSV datasets and DashboardConfig are saved in Supabase."
     },
     "overview": {
       "eyebrow": "Overview",
@@ -380,7 +380,36 @@
     "fields": {
       "title": "Title", "titleIt": "Title (IT)", "titleEn": "Title (EN)", "slug": "Slug", "description": "Description", "descriptionIt": "Description (IT)", "descriptionEn": "Description (EN)", "category": "Category", "technologies": "Technologies (comma separated)", "status": "Status", "repositoryUrl": "Repository URL", "featured": "Featured project", "dashboardAvailable": "Dashboard available", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Dashboard title", "featuredChart": "Featured chart", "label": "Label", "field": "Field", "type": "Type", "aggregation": "Aggregation", "format": "Format", "chartTitle": "Chart title", "dimension": "Dimension / category", "metric": "Metric", "sort": "Sort", "valueFormat": "Value format", "limit": "Limit", "rankingTitle": "Ranking title", "dimensionLabel": "Dimension label", "metricLabel": "Metric label", "order": "Direction"
     },
-    "dataset": {"title": "Dataset", "associated": "Associated dataset", "records": "Records", "fields": "Fields", "availableFields": "Available fields", "none": "No dataset connected", "storageNote": "Dataset upload will become available with the Storage integration."},
+    "dataset": {
+      "title": "Dataset",
+      "description": "Upload and inspect the primary CSV dataset used by the Dashboard Builder.",
+      "name": "Name",
+      "originalFile": "Original file",
+      "updatedAt": "Last updated",
+      "records": "Records",
+      "fields": "Fields",
+      "grain": "Grain",
+      "grainPlaceholder": "E.g. one row per sale",
+      "schema": "Detected schema",
+      "preview": "Preview of the first {count} rows",
+      "none": "No dataset connected",
+      "emptyDescription": "Upload a CSV to configure the dashboard with persistent data.",
+      "source": {"database": "Supabase", "registry": "Local fallback"},
+      "uploadTitle": "Upload CSV",
+      "replaceTitle": "Replace dataset",
+      "registryNotice": "The displayed data comes from the local registry. The new CSV will become the primary Admin source.",
+      "file": "CSV file",
+      "limits": "CSV only · maximum {megabytes} MiB · maximum {rows} rows",
+      "confirmReplacement": "I confirm that I want to replace the current dataset and its rows.",
+      "upload": "Upload and process",
+      "replace": "Replace and process",
+      "processing": "Uploading and parsing…",
+      "saveGrain": "Save grain",
+      "savingGrain": "Saving…",
+      "configWarning": "The dashboard configuration contains {count} references that do not match this dataset's fields.",
+      "feedback": {"uploaded": "Dataset uploaded and saved to Supabase.", "replaced": "Dataset replaced successfully.", "grainSaved": "Grain updated."},
+      "errors": {"csvRequired": "Select a file with a .csv extension.", "confirmReplacement": "Explicitly confirm the replacement.", "invalidDataset": "Invalid CSV: check headers, rows and values.", "datasetExists": "A dataset already exists: confirm replacement and try again.", "datasetTooLarge": "The file exceeds the allowed size.", "tooManyRows": "The CSV exceeds the 10,000-row limit.", "datasetUploadFailed": "Storage upload failed.", "datasetProcessingFailed": "The dataset was not saved. The newly uploaded file was removed when possible.", "projectNotFound": "The project no longer exists or is not accessible.", "databaseUnavailable": "The database is unavailable.", "unknown": "The operation failed. Please try again."}
+    },
     "builder": {"title": "Dashboard Builder", "configure": "Configure", "preview": "Preview", "settings": "Dashboard settings", "filters": "Filters", "kpis": "KPIs", "charts": "Charts", "rankings": "Rankings", "addFilter": "Add filter", "addKpi": "Add KPI", "addChart": "Add chart", "addRanking": "Add ranking", "detailColumns": "Additional columns", "addColumn": "Add column"},
     "preview": {"noDatasetTitle": "Preview unavailable", "noDatasetDescription": "Connect a dataset in a later phase to render this configuration with the Dashboard Engine.", "invalidTitle": "Incomplete configuration", "invalidDescription": "Fix these fields before opening the preview."},
     "json": {"title": "Resulting configuration", "description": "This is the same DashboardConfig stored directly in Supabase.", "show": "View configuration", "hide": "Hide JSON", "copy": "Copy JSON", "copied": "Copied"},

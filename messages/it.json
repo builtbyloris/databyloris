@@ -309,8 +309,8 @@
     "eyebrow": "Workspace",
     "title": "Admin",
     "description": "Gestisci progetti e configurazioni dashboard salvati in Supabase.",
-    "note": "Progetti, case study e DashboardConfig sono persistenti. Dataset e media restano locali.",
-    "prototypeNotice": "Progetti, ProjectDetail e DashboardConfig sono salvati in Supabase. Dataset reali e media restano temporaneamente locali.",
+    "note": "Progetti, case study, dataset e DashboardConfig sono persistenti. I media restano locali.",
+    "prototypeNotice": "Progetti, ProjectDetail, dataset CSV e DashboardConfig sono salvati in Supabase.",
     "sessionBadge": "Solo sessione",
     "auth": {
       "signedInAs": "Accesso effettuato come",
@@ -325,7 +325,7 @@
       "editor": "Editor",
       "builder": "Dashboard Builder",
       "media": "Media",
-      "sessionNote": "Metadata progetto, case study e DashboardConfig vengono salvati in Supabase. Dataset e media non sono ancora persistenti."
+      "sessionNote": "Metadata progetto, case study, dataset CSV e DashboardConfig vengono salvati in Supabase."
     },
     "overview": {
       "eyebrow": "Panoramica",
@@ -380,7 +380,36 @@
     "fields": {
       "title": "Titolo", "titleIt": "Titolo (IT)", "titleEn": "Titolo (EN)", "slug": "Slug", "description": "Descrizione", "descriptionIt": "Descrizione (IT)", "descriptionEn": "Descrizione (EN)", "category": "Categoria", "technologies": "Tecnologie (separate da virgola)", "status": "Stato", "repositoryUrl": "URL repository", "featured": "Progetto in evidenza", "dashboardAvailable": "Dashboard disponibile", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Titolo dashboard", "featuredChart": "Grafico principale", "label": "Label", "field": "Campo", "type": "Tipo", "aggregation": "Aggregazione", "format": "Formato", "chartTitle": "Titolo grafico", "dimension": "Dimensione / categoria", "metric": "Metrica", "sort": "Ordinamento", "valueFormat": "Formato valore", "limit": "Limite", "rankingTitle": "Titolo classifica", "dimensionLabel": "Label dimensione", "metricLabel": "Label metrica", "order": "Direzione"
     },
-    "dataset": {"title": "Dataset", "associated": "Dataset associato", "records": "Record", "fields": "Campi", "availableFields": "Campi disponibili", "none": "Nessun dataset collegato", "storageNote": "Il caricamento dei dataset sarà disponibile con l’integrazione Storage."},
+    "dataset": {
+      "title": "Dataset",
+      "description": "Carica e verifica il dataset CSV primario usato dal Dashboard Builder.",
+      "name": "Nome",
+      "originalFile": "File originale",
+      "updatedAt": "Ultimo aggiornamento",
+      "records": "Record",
+      "fields": "Campi",
+      "grain": "Granularità",
+      "grainPlaceholder": "Es. una riga per vendita",
+      "schema": "Schema rilevato",
+      "preview": "Anteprima delle prime {count} righe",
+      "none": "Nessun dataset collegato",
+      "emptyDescription": "Carica un CSV per iniziare a configurare la dashboard con dati persistenti.",
+      "source": {"database": "Supabase", "registry": "Fallback locale"},
+      "uploadTitle": "Carica CSV",
+      "replaceTitle": "Sostituisci dataset",
+      "registryNotice": "I dati mostrati provengono dal registry locale. Il nuovo CSV diventerà la fonte primaria nell’Admin.",
+      "file": "File CSV",
+      "limits": "Solo CSV · massimo {megabytes} MiB · massimo {rows} righe",
+      "confirmReplacement": "Confermo di voler sostituire il dataset corrente e le relative righe.",
+      "upload": "Carica e processa",
+      "replace": "Sostituisci e processa",
+      "processing": "Caricamento e analisi…",
+      "saveGrain": "Salva granularità",
+      "savingGrain": "Salvataggio…",
+      "configWarning": "La configurazione dashboard contiene {count} riferimenti non compatibili con i campi di questo dataset.",
+      "feedback": {"uploaded": "Dataset caricato e salvato su Supabase.", "replaced": "Dataset sostituito correttamente.", "grainSaved": "Granularità aggiornata."},
+      "errors": {"csvRequired": "Seleziona un file con estensione .csv.", "confirmReplacement": "Conferma esplicitamente la sostituzione.", "invalidDataset": "CSV non valido: controlla intestazioni, righe e valori.", "datasetExists": "Esiste già un dataset: conferma la sostituzione e riprova.", "datasetTooLarge": "Il file supera il limite consentito.", "tooManyRows": "Il CSV supera il limite di 10.000 righe.", "datasetUploadFailed": "Upload su Storage non riuscito.", "datasetProcessingFailed": "Il dataset non è stato salvato. Il file appena caricato è stato rimosso quando possibile.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "databaseUnavailable": "Database non disponibile.", "unknown": "Operazione non riuscita. Riprova."}
+    },
     "builder": {"title": "Dashboard Builder", "configure": "Configura", "preview": "Anteprima", "settings": "Impostazioni dashboard", "filters": "Filtri", "kpis": "KPI", "charts": "Grafici", "rankings": "Ranking", "addFilter": "Aggiungi filtro", "addKpi": "Aggiungi KPI", "addChart": "Aggiungi grafico", "addRanking": "Aggiungi ranking", "detailColumns": "Colonne aggiuntive", "addColumn": "Aggiungi colonna"},
     "preview": {"noDatasetTitle": "Anteprima non disponibile", "noDatasetDescription": "Collega un dataset in una fase successiva per visualizzare questa configurazione con il Dashboard Engine.", "invalidTitle": "Configurazione incompleta", "invalidDescription": "Correggi questi campi prima di aprire l’anteprima."},
     "json": {"title": "Configurazione risultante", "description": "È lo stesso DashboardConfig salvato direttamente in Supabase.", "show": "Visualizza configurazione", "hide": "Nascondi JSON", "copy": "Copia JSON", "copied": "Copiato"},

@@ -12,7 +12,7 @@ import {logoutAction} from "@/app/[locale]/admin/login/actions";
 import {Button, Card, Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {createProjectDraft} from "@/lib/admin";
-import type {AdminProjectInput, AdminView, DashboardConfig, ProjectDetail, ProjectDraft} from "@/types";
+import type {AdminDatasetDraft, AdminProjectInput, AdminView, DashboardConfig, ProjectDetail, ProjectDraft} from "@/types";
 import {AdminOverview} from "./admin-overview";
 import {AdminSidebar} from "./admin-sidebar";
 import {DashboardBuilder} from "./dashboard-builder";
@@ -64,6 +64,12 @@ export function AdminShell({
     if (!selectedId) return;
     setDrafts((current) => current.map((draft) => draft.project.id === selectedId ? {...draft, projectDetail} : draft));
     setFeedback(null);
+  };
+  const updateSelectedDataset = (dataset: AdminDatasetDraft) => {
+    if (!selectedId) return;
+    setDrafts((current) => current.map((draft) => draft.project.id === selectedId
+      ? {...draft, dataset}
+      : draft));
   };
   const edit = (id: string) => { setSelectedId(id); setView("editor"); };
   const create = async () => {
@@ -186,7 +192,7 @@ export function AdminShell({
             {feedback ? <Feedback kind={feedback.kind} message={t(`${feedback.kind === "error" ? "errors" : "feedback"}.${feedback.code}`)} /> : null}
             {view === "overview" ? <AdminOverview drafts={drafts} creating={pending === "create"} onNew={create} onProjects={() => setView("projects")} onEdit={edit} /> : null}
             {view === "projects" ? <ProjectsTable drafts={drafts} creating={pending === "create"} onNew={create} onEdit={edit} /> : null}
-            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} dirty={projectDirtyIds.has(selected.project.id)} detailDirty={selectedDetailDirty} saving={pending === "project"} detailSaving={pending === "detail"} onChange={updateSelected} onDetailChange={updateSelectedDetail} onSave={saveProject} onDetailSave={saveDetail} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
+            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} locale={locale} dirty={projectDirtyIds.has(selected.project.id)} detailDirty={selectedDetailDirty} saving={pending === "project"} detailSaving={pending === "detail"} onChange={updateSelected} onDetailChange={updateSelectedDetail} onDatasetChange={updateSelectedDataset} onSave={saveProject} onDetailSave={saveDetail} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
             {view === "builder" && selected ? <DashboardBuilder draft={selected} dirty={configDirtyIds.has(selected.project.id)} saving={pending === "config"} onChange={updateSelectedConfig} onSave={saveConfig} onBack={() => setView("editor")} /> : null}
             {view === "media" ? <Card className="p-8 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("media.eyebrow")}</p><h1 className="mt-3 text-3xl font-black tracking-tight">{t("media.title")}</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-muted">{t("media.description")}</p><div className="mt-6 rounded-control border border-dashed border-border bg-surface-raised p-5 text-sm text-muted">{t("media.storageNote")}</div></Card> : null}
           </div>
