@@ -122,7 +122,7 @@ export function calculateRanking(records: DashboardRecord[], config: RankingConf
   return Array.from(groups, ([dimension, group]) => ({
     dimension,
     details: Object.fromEntries(
-      config.detailFields.map((field) => [field, String(group[0]?.[field] ?? "—")]),
+      config.detailColumns.map(({field}) => [field, String(group[0]?.[field] ?? "—")]),
     ),
     value: aggregateRecords(group, config.aggregation, config.metric),
   }))

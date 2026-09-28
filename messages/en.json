@@ -188,8 +188,15 @@
   },
   "Dashboard": {
     "eyebrow": "Interactive dashboard",
-    "title": "Video Game Sales Dashboard",
-    "description": "Explore global video game sales by period, platform, genre and region.",
+    "metadataDescription": "Interactive data analysis dashboard.",
+    "videoGameSales": {
+      "title": "Video Game Sales Dashboard",
+      "description": "Explore global video game sales by period, platform, genre and region."
+    },
+    "listeningInsights": {
+      "title": "Listening Insights Dashboard",
+      "description": "Explore listening habits, artists, genres and devices through aggregated sessions."
+    },
     "breadcrumb": {
       "projects": "Projects",
       "dashboard": "Dashboard"
@@ -206,6 +213,9 @@
       "platform": "Platform",
       "genre": "Genre",
       "region": "Region",
+      "month": "Month",
+      "artist": "Artist",
+      "device": "Device",
       "all": "All",
       "reset": "Reset filters"
     },
@@ -213,20 +223,35 @@
       "sales": "Sales",
       "games": "Games analyzed",
       "platforms": "Platforms",
-      "genres": "Genres"
+      "genres": "Genres",
+      "minutes": "Minutes listened",
+      "streams": "Streams",
+      "artists": "Artists listened to"
     },
     "charts": {
       "salesOverTime": "Sales over time",
       "salesByPlatform": "Sales by platform",
       "salesByGenre": "Sales by genre",
+      "listeningOverTime": "Listening over time",
+      "topArtists": "Top artists",
+      "listeningByGenre": "Listening by genre",
       "accessibleLabel": "Chart: {title}"
     },
     "ranking": {
-      "title": "Top 10 games",
-      "game": "Game",
-      "platform": "Platform",
-      "genre": "Genre",
-      "sales": "Sales"
+      "videoGames": {
+        "title": "Top 10 games",
+        "game": "Game",
+        "platform": "Platform",
+        "genre": "Genre",
+        "sales": "Sales"
+      },
+      "listening": {
+        "title": "Top 10 tracks",
+        "track": "Track",
+        "artist": "Artist",
+        "genre": "Genre",
+        "minutes": "Minutes"
+      }
     },
     "empty": {
       "title": "No data available",

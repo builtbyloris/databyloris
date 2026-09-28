@@ -12,7 +12,7 @@ interface DashboardPageProps {
 export async function generateMetadata({params}: DashboardPageProps): Promise<Metadata> {
   const project = getProjectBySlug((await params).slug);
   const t = await getTranslations("Dashboard");
-  return project ? {title: `${t("breadcrumb.dashboard")} · ${project.title}`, description: t("description")} : {};
+  return project ? {title: `${t("breadcrumb.dashboard")} · ${project.title}`, description: t("metadataDescription")} : {};
 }
 
 export default async function DashboardPage({params}: DashboardPageProps) {

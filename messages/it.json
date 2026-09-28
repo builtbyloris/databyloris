@@ -188,8 +188,15 @@
   },
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
-    "title": "Video Game Sales Dashboard",
-    "description": "Esplora le vendite globali di videogiochi per periodo, piattaforma, genere e regione.",
+    "metadataDescription": "Dashboard interattiva di analisi dati.",
+    "videoGameSales": {
+      "title": "Video Game Sales Dashboard",
+      "description": "Esplora le vendite globali di videogiochi per periodo, piattaforma, genere e regione."
+    },
+    "listeningInsights": {
+      "title": "Listening Insights Dashboard",
+      "description": "Esplora abitudini di ascolto, artisti, generi e dispositivi attraverso sessioni aggregate."
+    },
     "breadcrumb": {
       "projects": "Progetti",
       "dashboard": "Dashboard"
@@ -206,6 +213,9 @@
       "platform": "Piattaforma",
       "genre": "Genere",
       "region": "Regione",
+      "month": "Mese",
+      "artist": "Artista",
+      "device": "Dispositivo",
       "all": "Tutti",
       "reset": "Reimposta filtri"
     },
@@ -213,20 +223,35 @@
       "sales": "Vendite",
       "games": "Giochi analizzati",
       "platforms": "Piattaforme",
-      "genres": "Generi"
+      "genres": "Generi",
+      "minutes": "Minuti ascoltati",
+      "streams": "Stream",
+      "artists": "Artisti ascoltati"
     },
     "charts": {
       "salesOverTime": "Vendite nel tempo",
       "salesByPlatform": "Vendite per piattaforma",
       "salesByGenre": "Vendite per genere",
+      "listeningOverTime": "Ascolto nel tempo",
+      "topArtists": "Top artisti",
+      "listeningByGenre": "Ascolto per genere",
       "accessibleLabel": "Grafico: {title}"
     },
     "ranking": {
-      "title": "Top 10 giochi",
-      "game": "Gioco",
-      "platform": "Piattaforma",
-      "genre": "Genere",
-      "sales": "Vendite"
+      "videoGames": {
+        "title": "Top 10 giochi",
+        "game": "Gioco",
+        "platform": "Piattaforma",
+        "genre": "Genere",
+        "sales": "Vendite"
+      },
+      "listening": {
+        "title": "Top 10 brani",
+        "track": "Brano",
+        "artist": "Artista",
+        "genre": "Genere",
+        "minutes": "Minuti"
+      }
     },
     "empty": {
       "title": "Nessun dato disponibile",

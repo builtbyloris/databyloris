@@ -20,15 +20,19 @@ export function DashboardRanking({config, records, className}: {config: RankingC
       <div className="overflow-x-auto">
         <table className="w-full min-w-[38rem] border-collapse text-left text-sm">
           <thead className="bg-surface-raised text-xs uppercase tracking-wider text-muted">
-            <tr><th className="px-5 py-3 font-semibold">#</th><th className="px-3 py-3 font-semibold">{t("ranking.game")}</th><th className="px-3 py-3 font-semibold">{t("ranking.platform")}</th><th className="px-3 py-3 font-semibold">{t("ranking.genre")}</th><th className="px-5 py-3 text-right font-semibold">{t("ranking.sales")}</th></tr>
+            <tr>
+              <th className="px-5 py-3 font-semibold">#</th>
+              <th className="px-3 py-3 font-semibold">{t(config.dimensionLabel)}</th>
+              {config.detailColumns.map((column) => <th key={column.field} className="px-3 py-3 font-semibold">{t(column.label)}</th>)}
+              <th className="px-5 py-3 text-right font-semibold">{t(config.metricLabel)}</th>
+            </tr>
           </thead>
           <tbody>
             {rows.map((row, index) => (
               <tr key={row.dimension} className="border-t border-border first:border-0">
                 <td className="px-5 py-3 font-bold text-primary-strong">{String(index + 1).padStart(2, "0")}</td>
                 <th scope="row" className="px-3 py-3 font-semibold">{row.dimension}</th>
-                <td className="px-3 py-3 text-muted">{row.details.platform}</td>
-                <td className="px-3 py-3 text-muted">{row.details.genre}</td>
+                {config.detailColumns.map((column) => <td key={column.field} className="px-3 py-3 text-muted">{row.details[column.field]}</td>)}
                 <td className="px-5 py-3 text-right font-bold">{formatDashboardValue(row.value, config.valueFormat ?? "number", locale)}</td>
               </tr>
             ))}

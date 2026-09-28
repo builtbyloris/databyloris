@@ -41,7 +41,7 @@ export const projects = [
     featured: true,
     status: "published",
     publishedAt: "2026-06-05",
-    dashboardAvailable: false,
+    dashboardAvailable: true,
     detail: projectDetails["listening-insights"],
   },
   {

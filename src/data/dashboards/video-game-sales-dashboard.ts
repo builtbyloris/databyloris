@@ -2,8 +2,8 @@ import type {DashboardConfig} from "@/types";
 
 export const videoGameSalesDashboard: DashboardConfig = {
   id: "video-game-sales-dashboard",
-  title: "title",
-  description: "description",
+  title: "videoGameSales.title",
+  description: "videoGameSales.description",
   datasetId: "video-game-sales",
   filters: [
     {id: "year", label: "filters.year", field: "year", type: "select"},
@@ -23,7 +23,22 @@ export const videoGameSalesDashboard: DashboardConfig = {
     {id: "sales-by-genre", title: "charts.salesByGenre", type: "donut", categoryField: "genre", valueField: "sales", aggregation: "sum", sort: "value-desc", valueFormat: "sales"},
   ],
   rankings: [
-    {id: "top-games", title: "ranking.title", dimension: "name", detailFields: ["platform", "genre"], metric: "sales", aggregation: "sum", limit: 10, sortDirection: "desc", valueFormat: "sales"},
+    {
+      id: "top-games",
+      title: "ranking.videoGames.title",
+      dimension: "name",
+      dimensionLabel: "ranking.videoGames.game",
+      detailColumns: [
+        {field: "platform", label: "ranking.videoGames.platform"},
+        {field: "genre", label: "ranking.videoGames.genre"},
+      ],
+      metric: "sales",
+      metricLabel: "ranking.videoGames.sales",
+      aggregation: "sum",
+      limit: 10,
+      sortDirection: "desc",
+      valueFormat: "sales",
+    },
   ],
   layout: {featuredChartId: "sales-over-time"},
 };

@@ -6,8 +6,13 @@ export interface RankingConfig {
   id: string;
   title: string;
   dimension: string;
-  detailFields: string[];
+  dimensionLabel: string;
+  detailColumns: {
+    field: string;
+    label: string;
+  }[];
   metric: string;
+  metricLabel: string;
   aggregation: AggregationType;
   limit: number;
   sortDirection: "asc" | "desc";
