@@ -11,6 +11,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: true,
     status: "published",
+    publishedAt: "2026-08-20",
   },
   {
     id: "project-002",
@@ -22,6 +23,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: true,
     status: "published",
+    publishedAt: "2026-07-12",
   },
   {
     id: "project-003",
@@ -33,6 +35,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: true,
     status: "published",
+    publishedAt: "2026-06-05",
   },
   {
     id: "project-004",
@@ -44,6 +47,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: false,
     status: "published",
+    publishedAt: "2026-04-18",
   },
   {
     id: "project-005",
@@ -55,6 +59,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: false,
     status: "draft",
+    publishedAt: null,
   },
   {
     id: "project-006",
@@ -66,6 +71,7 @@ export const projects = [
     image: "/images/projects/project-cover.svg",
     featured: false,
     status: "draft",
+    publishedAt: null,
   },
 ] satisfies Project[];
 

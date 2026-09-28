@@ -10,4 +10,5 @@ export interface Project {
   image: string;
   featured: boolean;
   status: ProjectStatus;
+  publishedAt: string | null;
 }

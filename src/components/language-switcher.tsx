@@ -17,7 +17,8 @@ export function LanguageSwitcher() {
 
   function changeLocale(nextLocale: AppLocale) {
     if (nextLocale === locale) return;
-    startTransition(() => router.replace(pathname, {locale: nextLocale}));
+    const href = `${pathname}${window.location.search}`;
+    startTransition(() => router.replace(href, {locale: nextLocale}));
   }
 
   return (
