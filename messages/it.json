@@ -137,6 +137,55 @@
     "openDashboard": "Apri dashboard",
     "back": "Torna ai progetti"
   },
+  "ProjectDetail": {
+    "back": "Torna ai progetti",
+    "openDashboard": "Apri dashboard",
+    "viewRepository": "Vedi repository",
+    "updated": "Aggiornato",
+    "coverAlt": "Copertina del progetto {title}",
+    "status": {
+      "draft": "In preparazione",
+      "published": "Pubblicato",
+      "archived": "Archiviato"
+    },
+    "navigation": {
+      "label": "Navigazione del progetto",
+      "overview": "Panoramica",
+      "dataset": "Dataset",
+      "objective": "Obiettivo",
+      "methodology": "Metodologia",
+      "insights": "Insight"
+    },
+    "sections": {
+      "overview": {"title": "Il contesto"},
+      "dataset": {"title": "Il dataset"},
+      "objective": {"title": "L'obiettivo"},
+      "methodology": {"title": "La metodologia"},
+      "insights": {"title": "Insight principali"}
+    },
+    "dataset": {
+      "label": "Dataset analizzato",
+      "source": "Fonte",
+      "records": "Record",
+      "period": "Periodo",
+      "viewSource": "Apri la fonte"
+    },
+    "dashboard": {
+      "eyebrow": "Esplora i dati",
+      "title": "Dall'analisi alla dashboard",
+      "description": "Approfondisci KPI, confronti e visualizzazioni nella vista interattiva dedicata al progetto.",
+      "action": "Apri la dashboard",
+      "previewLabel": "Anteprima illustrativa della dashboard del progetto"
+    },
+    "finalCta": {
+      "titleDashboard": "Vuoi esplorare i dati più da vicino?",
+      "descriptionDashboard": "Passa alla dashboard per approfondire le metriche e osservare i pattern da prospettive diverse.",
+      "openDashboard": "Esplora la dashboard",
+      "titleProjects": "Continua a esplorare le analisi",
+      "descriptionProjects": "Scopri gli altri progetti e i diversi approcci usati per trasformare i dati in insight.",
+      "backToProjects": "Vedi tutti i progetti"
+    }
+  },
   "Dashboard": {
     "eyebrow": "Dashboard configurabile",
     "title": "Vista dashboard",

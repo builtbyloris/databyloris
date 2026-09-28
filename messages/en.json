@@ -137,6 +137,55 @@
     "openDashboard": "Open dashboard",
     "back": "Back to projects"
   },
+  "ProjectDetail": {
+    "back": "Back to projects",
+    "openDashboard": "Open dashboard",
+    "viewRepository": "View repository",
+    "updated": "Updated",
+    "coverAlt": "Cover image for the {title} project",
+    "status": {
+      "draft": "In progress",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "navigation": {
+      "label": "Project navigation",
+      "overview": "Overview",
+      "dataset": "Dataset",
+      "objective": "Objective",
+      "methodology": "Methodology",
+      "insights": "Insights"
+    },
+    "sections": {
+      "overview": {"title": "The context"},
+      "dataset": {"title": "The dataset"},
+      "objective": {"title": "The objective"},
+      "methodology": {"title": "The methodology"},
+      "insights": {"title": "Key insights"}
+    },
+    "dataset": {
+      "label": "Analyzed dataset",
+      "source": "Source",
+      "records": "Records",
+      "period": "Period",
+      "viewSource": "Open source"
+    },
+    "dashboard": {
+      "eyebrow": "Explore the data",
+      "title": "From analysis to dashboard",
+      "description": "Dive deeper into KPIs, comparisons and visualizations in the project's interactive view.",
+      "action": "Open the dashboard",
+      "previewLabel": "Illustrative preview of the project dashboard"
+    },
+    "finalCta": {
+      "titleDashboard": "Want to explore the data more closely?",
+      "descriptionDashboard": "Open the dashboard to examine the metrics and view patterns from different perspectives.",
+      "openDashboard": "Explore the dashboard",
+      "titleProjects": "Keep exploring the analyses",
+      "descriptionProjects": "Discover more projects and the different approaches used to turn data into insight.",
+      "backToProjects": "View all projects"
+    }
+  },
   "Dashboard": {
     "eyebrow": "Configurable dashboard",
     "title": "Dashboard view",
