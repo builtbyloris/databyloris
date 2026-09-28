@@ -13,6 +13,7 @@ export function DashboardFilters({filters, records, state, onChange, onReset}: {
   onReset: () => void;
 }) {
   const t = useTranslations("Dashboard");
+  const label = (value: string) => t.has(value) ? t(value) : value;
 
   return (
     <div data-dashboard-section="filters" className="rounded-card border border-border bg-card p-4 shadow-soft sm:p-5">
@@ -20,7 +21,7 @@ export function DashboardFilters({filters, records, state, onChange, onReset}: {
         <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {filters.map((filter) => (
             <label key={filter.id} className="block min-w-0">
-              <span className="mb-1.5 block text-xs font-semibold text-muted">{t(filter.label)}</span>
+              <span className="mb-1.5 block text-xs font-semibold text-muted">{label(filter.label)}</span>
               <select
                 value={String(state[filter.id] ?? ALL_FILTER_VALUE)}
                 onChange={(event) => onChange(filter.id, event.target.value)}

@@ -317,8 +317,59 @@
   "Admin": {
     "eyebrow": "Workspace",
     "title": "Admin",
-    "description": "Area predisposta per la futura gestione di progetti, dataset e configurazioni dashboard.",
-    "note": "Autenticazione e operazioni backend non sono incluse in questa fase."
+    "description": "Gestisci progetti e configurazioni dashboard in una sessione di anteprima.",
+    "note": "Autenticazione e operazioni backend non sono incluse in questa fase.",
+    "prototypeNotice": "Prototipo operativo senza persistenza: le modifiche restano disponibili soltanto durante questa sessione.",
+    "sessionBadge": "Solo sessione",
+    "nav": {
+      "label": "Navigazione Admin",
+      "workspace": "Content workspace",
+      "overview": "Overview",
+      "projects": "Progetti",
+      "editor": "Editor",
+      "builder": "Dashboard Builder",
+      "media": "Media",
+      "sessionNote": "I dati non vengono salvati su database. Il collegamento a Supabase arriverà in una fase successiva."
+    },
+    "overview": {
+      "eyebrow": "Panoramica",
+      "title": "Content operations",
+      "description": "Controlla lo stato del catalogo e continua rapidamente il lavoro sui progetti.",
+      "recent": "Progetti recenti"
+    },
+    "metrics": {"total": "Progetti totali", "published": "Pubblicati", "draft": "Bozze", "dashboards": "Dashboard disponibili"},
+    "actions": {
+      "newProject": "Nuovo progetto",
+      "manageProjects": "Gestisci progetti",
+      "edit": "Modifica",
+      "applySession": "Applica alla sessione",
+      "openBuilder": "Configura dashboard",
+      "backToProjects": "Torna ai progetti",
+      "backToEditor": "Torna al progetto",
+      "removeBlock": "Rimuovi blocco",
+      "removeColumn": "Rimuovi colonna"
+    },
+    "common": {"yes": "Sì", "no": "No", "unsaved": "Modifiche non salvate", "sessionApplied": "Bozza applicata alla sessione"},
+    "status": {"draft": "Draft", "published": "Published", "archived": "Archiviato"},
+    "projects": {
+      "eyebrow": "Catalogo",
+      "title": "Gestione progetti",
+      "untitled": "Progetto senza titolo",
+      "filterLabel": "Filtra progetti per stato",
+      "filters": {"all": "Tutti", "published": "Published", "draft": "Draft"},
+      "columns": {"project": "Progetto", "category": "Categoria", "status": "Stato", "dashboard": "Dashboard", "publishedAt": "Pubblicazione", "actions": "Azioni"}
+    },
+    "editor": {"newTitle": "Nuova bozza", "metadata": "Metadata progetto", "options": "Opzioni progetto"},
+    "fields": {
+      "title": "Titolo", "slug": "Slug", "description": "Descrizione", "category": "Categoria", "technologies": "Tecnologie (separate da virgola)", "status": "Stato", "repositoryUrl": "URL repository", "featured": "Progetto in evidenza", "dashboardAvailable": "Dashboard disponibile", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Titolo dashboard", "featuredChart": "Grafico principale", "label": "Label", "field": "Campo", "type": "Tipo", "aggregation": "Aggregazione", "format": "Formato", "chartTitle": "Titolo grafico", "dimension": "Dimensione / categoria", "metric": "Metrica", "sort": "Ordinamento", "valueFormat": "Formato valore", "limit": "Limite", "rankingTitle": "Titolo classifica", "dimensionLabel": "Label dimensione", "metricLabel": "Label metrica", "order": "Direzione"
+    },
+    "dataset": {"title": "Dataset", "associated": "Dataset associato", "records": "Record", "fields": "Campi", "availableFields": "Campi disponibili", "none": "Nessun dataset collegato", "storageNote": "Il caricamento dei dataset sarà disponibile con l’integrazione Storage."},
+    "builder": {"title": "Dashboard Builder", "configure": "Configura", "preview": "Anteprima", "settings": "Impostazioni dashboard", "filters": "Filtri", "kpis": "KPI", "charts": "Grafici", "rankings": "Ranking", "addFilter": "Aggiungi filtro", "addKpi": "Aggiungi KPI", "addChart": "Aggiungi grafico", "addRanking": "Aggiungi ranking", "detailColumns": "Colonne aggiuntive", "addColumn": "Aggiungi colonna"},
+    "preview": {"noDatasetTitle": "Anteprima non disponibile", "noDatasetDescription": "Collega un dataset in una fase successiva per visualizzare questa configurazione con il Dashboard Engine.", "invalidTitle": "Configurazione incompleta", "invalidDescription": "Correggi questi campi prima di aprire l’anteprima."},
+    "json": {"title": "Configurazione risultante", "description": "Rappresenta il modello che potrà essere salvato in Supabase.", "show": "Visualizza configurazione", "hide": "Nascondi JSON", "copy": "Copia JSON", "copied": "Copiato"},
+    "media": {"eyebrow": "Asset", "title": "Media", "description": "Questa sezione ospiterà immagini di copertina e file collegati ai progetti.", "storageNote": "Nessun upload è disponibile in questa V1. La gestione persistente arriverà con Supabase Storage."},
+    "validation": {"required": "Campo obbligatorio", "invalidSlug": "Usa lettere minuscole, numeri e trattini", "duplicateSlug": "Questo slug è già utilizzato", "unsupportedValue": "Valore non supportato", "unknownField": "Il campo non esiste nel dataset", "fieldRequired": "Seleziona un campo", "duplicateId": "ID duplicato", "positiveLimit": "Inserisci un numero maggiore di zero"},
+    "options": {"select": "Selezione singola", "multi-select": "Selezione multipla", "sum": "Somma", "count": "Conteggio", "distinctCount": "Conteggio distinti", "average": "Media", "number": "Numero", "sales": "Vendite", "currency": "Valuta", "percentage": "Percentuale", "duration": "Durata", "line": "Linea", "bar": "Barre", "pie": "Torta", "donut": "Donut", "category-asc": "Categoria crescente", "category-desc": "Categoria decrescente", "value-asc": "Valore crescente", "value-desc": "Valore decrescente", "asc": "Crescente", "desc": "Decrescente"}
   },
   "Footer": {
     "description": "Dati complessi, storie chiare.",

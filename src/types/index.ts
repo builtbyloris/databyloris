@@ -1,3 +1,4 @@
+export type {AdminDatasetDraft, AdminValidationCode, AdminValidationIssue, AdminView, ProjectDraft} from "./admin";
 export type {ChartConfig, ChartSort, ChartType} from "./chart-config";
 export type {DashboardConfig, DashboardLayoutConfig, RankingConfig} from "./dashboard-config";
 export type {DashboardRecord, DashboardValue, Dataset, DatasetField, DatasetFieldType} from "./dataset";
