@@ -309,8 +309,8 @@
     "eyebrow": "Workspace",
     "title": "Admin",
     "description": "Gestisci progetti e configurazioni dashboard salvati in Supabase.",
-    "note": "Project Detail e dataset restano locali in questa fase.",
-    "prototypeNotice": "Progetti e DashboardConfig sono persistenti. Dataset, media e contenuti pubblici restano temporaneamente locali.",
+    "note": "Progetti, case study e DashboardConfig sono persistenti. Dataset e media restano locali.",
+    "prototypeNotice": "Progetti, ProjectDetail e DashboardConfig sono salvati in Supabase. Dataset reali e media restano temporaneamente locali.",
     "sessionBadge": "Solo sessione",
     "auth": {
       "signedInAs": "Accesso effettuato come",
@@ -325,7 +325,7 @@
       "editor": "Editor",
       "builder": "Dashboard Builder",
       "media": "Media",
-      "sessionNote": "Metadata progetto e DashboardConfig vengono salvati in Supabase. Dataset e media non sono ancora persistenti."
+      "sessionNote": "Metadata progetto, case study e DashboardConfig vengono salvati in Supabase. Dataset e media non sono ancora persistenti."
     },
     "overview": {
       "eyebrow": "Panoramica",
@@ -358,6 +358,25 @@
       "columns": {"project": "Progetto", "category": "Categoria", "status": "Stato", "dashboard": "Dashboard", "publishedAt": "Pubblicazione", "actions": "Azioni"}
     },
     "editor": {"newTitle": "Nuova bozza", "metadata": "Metadata progetto", "options": "Opzioni progetto"},
+    "caseStudy": {
+      "eyebrow": "Contenuto editoriale",
+      "title": "Case Study",
+      "description": "Modifica i contenuti localizzati mostrati nella pagina pubblica del progetto.",
+      "context": "Contesto",
+      "objective": "Obiettivo",
+      "unsaved": "Modifiche non salvate",
+      "saved": "Case study sincronizzato",
+      "saving": "Salvataggio…",
+      "save": "Salva case study",
+      "invalid": "Correggi gli ID, il numero di record o l’URL della fonte prima di salvare.",
+      "languages": {"it": "Italiano", "en": "Inglese"},
+      "fields": {"id": "ID", "title": "Titolo", "optionalTitle": "Titolo opzionale", "description": "Descrizione"},
+      "actions": {"addStep": "Aggiungi step", "addInsight": "Aggiungi insight", "remove": "Rimuovi", "moveUp": "Sposta su", "moveDown": "Sposta giù"},
+      "dataset": {"title": "Dataset del case study", "name": "Nome", "source": "Fonte", "sourceUrl": "URL fonte opzionale", "records": "Numero di record opzionale", "period": "Periodo", "description": "Descrizione"},
+      "methodology": {"title": "Metodologia", "description": "Lista ordinata degli step analitici.", "empty": "Nessuno step metodologico configurato."},
+      "insights": {"title": "Insight", "description": "Evidenze principali mostrate nel case study.", "empty": "Nessun insight configurato."},
+      "preview": {"eyebrow": "Anteprima locale", "title": "Riepilogo case study", "empty": "Contenuto non ancora inserito", "blocks": "Struttura", "counts": "{methodology} step · {insights} insight"}
+    },
     "fields": {
       "title": "Titolo", "titleIt": "Titolo (IT)", "titleEn": "Titolo (EN)", "slug": "Slug", "description": "Descrizione", "descriptionIt": "Descrizione (IT)", "descriptionEn": "Descrizione (EN)", "category": "Categoria", "technologies": "Tecnologie (separate da virgola)", "status": "Stato", "repositoryUrl": "URL repository", "featured": "Progetto in evidenza", "dashboardAvailable": "Dashboard disponibile", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Titolo dashboard", "featuredChart": "Grafico principale", "label": "Label", "field": "Campo", "type": "Tipo", "aggregation": "Aggregazione", "format": "Formato", "chartTitle": "Titolo grafico", "dimension": "Dimensione / categoria", "metric": "Metrica", "sort": "Ordinamento", "valueFormat": "Formato valore", "limit": "Limite", "rankingTitle": "Titolo classifica", "dimensionLabel": "Label dimensione", "metricLabel": "Label metrica", "order": "Direzione"
     },
@@ -367,9 +386,9 @@
     "json": {"title": "Configurazione risultante", "description": "È lo stesso DashboardConfig salvato direttamente in Supabase.", "show": "Visualizza configurazione", "hide": "Nascondi JSON", "copy": "Copia JSON", "copied": "Copiato"},
     "media": {"eyebrow": "Asset", "title": "Media", "description": "Questa sezione ospiterà immagini di copertina e file collegati ai progetti.", "storageNote": "Nessun upload è disponibile in questa V1. La gestione persistente arriverà con Supabase Storage."},
     "validation": {"required": "Campo obbligatorio", "invalidSlug": "Usa lettere minuscole, numeri e trattini", "duplicateSlug": "Questo slug è già utilizzato", "unsupportedValue": "Valore non supportato", "unknownField": "Il campo non esiste nel dataset", "fieldRequired": "Seleziona un campo", "duplicateId": "ID duplicato", "positiveLimit": "Inserisci un numero maggiore di zero"},
-    "feedback": {"projectCreated": "Nuova bozza creata e salvata.", "projectSaved": "Modifiche del progetto salvate.", "configSaved": "Configurazione dashboard salvata."},
-    "errors": {"databaseUnavailable": "Database non disponibile. Riprova tra poco.", "duplicateSlug": "Questo slug è già utilizzato da un altro progetto.", "invalidConfig": "La configurazione non è valida. Correggi i campi evidenziati.", "invalidProject": "I dati del progetto non sono validi.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "unknown": "Salvataggio non riuscito. Riprova."},
-    "publishNotice": "La pubblicazione sul sito pubblico verrà collegata nel prossimo step. Per ora questo stato è persistito soltanto nell’Admin.",
+    "feedback": {"projectCreated": "Nuova bozza creata e salvata.", "projectSaved": "Modifiche del progetto salvate.", "detailSaved": "Case study salvato con successo.", "configSaved": "Configurazione dashboard salvata."},
+    "errors": {"databaseUnavailable": "Database non disponibile. Riprova tra poco.", "duplicateSlug": "Questo slug è già utilizzato da un altro progetto.", "invalidConfig": "La configurazione non è valida. Correggi i campi evidenziati.", "invalidDetail": "Il case study non è valido. Controlla i campi evidenziati.", "invalidProject": "I dati del progetto non sono validi.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "unknown": "Salvataggio non riuscito. Riprova."},
+    "publishNotice": "Un case study incompleto non blocca la pubblicazione del progetto.",
     "options": {"select": "Selezione singola", "multi-select": "Selezione multipla", "sum": "Somma", "count": "Conteggio", "distinctCount": "Conteggio distinti", "average": "Media", "number": "Numero", "sales": "Vendite", "currency": "Valuta", "percentage": "Percentuale", "duration": "Durata", "line": "Linea", "bar": "Barre", "pie": "Torta", "donut": "Donut", "category-asc": "Categoria crescente", "category-desc": "Categoria decrescente", "value-asc": "Valore crescente", "value-desc": "Valore decrescente", "asc": "Crescente", "desc": "Decrescente"}
   },
   "AdminAuth": {

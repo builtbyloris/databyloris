@@ -6,7 +6,7 @@ import {
   projectRowToDomain,
   projectRowToProject,
 } from "@/lib/mappers/project-mapper";
-import {projectDetailRowToDomain} from "@/lib/mappers/project-detail-mapper";
+import {projectDetailRowToDomain, projectDetailToUpsert} from "@/lib/mappers/project-detail-mapper";
 import {createClient} from "@/lib/supabase/server";
 import type {AdminProjectInput, AdminProjectRecord, Project, ProjectDetail} from "@/types";
 import {RepositoryError} from "./repository-error";
@@ -85,6 +85,33 @@ export async function getPublishedProjectWithDetailBySlug(
     project: mapPublicProject(projectRow, locale),
     detail: detailRow ? mapProjectDetail(detailRow) : null,
   };
+}
+
+export async function getAdminProjectDetail(projectId: string): Promise<ProjectDetail | null> {
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from("project_details")
+    .select("*")
+    .eq("project_id", projectId)
+    .maybeSingle();
+
+  if (error) throw mapDatabaseError(error);
+  return data ? mapProjectDetail(data) : null;
+}
+
+export async function upsertProjectDetail(
+  projectId: string,
+  detail: ProjectDetail,
+): Promise<ProjectDetail> {
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from("project_details")
+    .upsert(projectDetailToUpsert(projectId, detail), {onConflict: "project_id"})
+    .select("*")
+    .single();
+
+  if (error) throw mapDatabaseError(error);
+  return mapProjectDetail(data);
 }
 
 export async function listAdminProjects(locale: SupportedLocale): Promise<AdminProjectRecord[]> {

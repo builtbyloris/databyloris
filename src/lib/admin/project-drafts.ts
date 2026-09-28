@@ -1,4 +1,4 @@
-import type {DashboardConfig, DashboardRecord, LocalizedText, Project, ProjectDraft} from "@/types";
+import type {DashboardConfig, DashboardRecord, LocalizedText, Project, ProjectDetail, ProjectDraft} from "@/types";
 
 export function slugifyProjectTitle(value: string) {
   return value
@@ -24,17 +24,33 @@ export function createEmptyDashboardConfig(slug: string): DashboardConfig {
   };
 }
 
+export function createEmptyProjectDetail(): ProjectDetail {
+  return {
+    context: {it: "", en: ""},
+    objective: {it: "", en: ""},
+    methodology: [],
+    dataset: {
+      name: "",
+      source: {it: "", en: ""},
+      description: {it: "", en: ""},
+    },
+    insights: [],
+  };
+}
+
 export function createProjectDraft(project: Project, options?: {
   config?: DashboardConfig | null;
   data?: DashboardRecord[];
   localizedTitle?: LocalizedText;
   localizedDescription?: LocalizedText;
+  projectDetail?: ProjectDetail | null;
 }): ProjectDraft {
   const records = options?.data ?? [];
   return {
     project: structuredClone(project),
     localizedTitle: structuredClone(options?.localizedTitle ?? {it: project.title, en: project.title}),
     localizedDescription: structuredClone(options?.localizedDescription ?? {it: project.description, en: project.description}),
+    projectDetail: structuredClone(options?.projectDetail ?? createEmptyProjectDetail()),
     dashboardConfig: options?.config ? structuredClone(options.config) : createEmptyDashboardConfig(project.slug),
     dataset: options?.data ? {
       id: options.config?.datasetId ?? project.slug,

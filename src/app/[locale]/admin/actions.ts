@@ -3,7 +3,7 @@
 import {revalidatePath} from "next/cache";
 import {dashboardRegistry} from "@/data/dashboards/registry";
 import type {AppLocale} from "@/i18n/routing";
-import {isValidAdminProjectInput, validateDashboardConfig} from "@/lib/admin";
+import {isValidAdminProjectInput, isValidProjectDetail, isValidProjectId, validateDashboardConfig} from "@/lib/admin";
 import {requireAdmin} from "@/lib/auth/require-admin";
 import {
   dashboardConfigFromJson,
@@ -13,6 +13,7 @@ import {upsertDashboardConfig} from "@/lib/repositories/dashboard-configs-reposi
 import {
   createProject,
   getAdminProjectById,
+  upsertProjectDetail,
   updateProject,
   updateProjectStatus,
 } from "@/lib/repositories/projects-repository";
@@ -23,6 +24,7 @@ import type {
   AdminProjectInput,
   AdminProjectRecord,
   DashboardConfig,
+  ProjectDetail,
 } from "@/types";
 
 function adminRoute(locale: AppLocale) {
@@ -135,6 +137,33 @@ export async function saveDashboardConfigAction(
   } catch (error) {
     if (error instanceof RepositoryError && error.code === "invalid_data") {
       return {ok: false, error: "invalidConfig"};
+    }
+    return {ok: false, error: actionError(error)};
+  }
+}
+
+export async function saveProjectDetailAction(
+  locale: AppLocale,
+  projectId: string,
+  detail: ProjectDetail,
+): Promise<AdminActionResult<ProjectDetail>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isValidProjectDetail(detail)) {
+    return {ok: false, error: "invalidDetail"};
+  }
+
+  try {
+    const project = await getAdminProjectById(projectId, locale);
+    if (!project) return {ok: false, error: "projectNotFound"};
+
+    const saved = await upsertProjectDetail(projectId, detail);
+    revalidatePath(adminRoute(locale));
+    revalidatePath(`/projects/${project.project.slug}`);
+    revalidatePath(`/en/projects/${project.project.slug}`);
+    return {ok: true, data: saved};
+  } catch (error) {
+    if (error instanceof RepositoryError && error.code === "invalid_data") {
+      return {ok: false, error: "invalidDetail"};
     }
     return {ok: false, error: actionError(error)};
   }

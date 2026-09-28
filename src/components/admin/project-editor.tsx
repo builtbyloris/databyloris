@@ -3,18 +3,23 @@
 import {useLocale, useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
 import {slugifyProjectTitle, validateProjectDraft} from "@/lib/admin";
-import type {Project, ProjectDraft} from "@/types";
+import type {Project, ProjectDetail, ProjectDraft} from "@/types";
+import {ProjectDetailEditor} from "./project-detail-editor";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 const textareaClass = "mt-1.5 min-h-28 w-full rounded-control border border-border bg-surface px-3 py-2.5 text-sm outline-none focus:border-primary";
 
-export function ProjectEditor({draft, allDrafts, dirty, saving, onChange, onSave, onBuilder, onBack}: {
+export function ProjectEditor({draft, allDrafts, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onSave, onDetailSave, onBuilder, onBack}: {
   draft: ProjectDraft;
   allDrafts: ProjectDraft[];
   dirty: boolean;
+  detailDirty: boolean;
   saving: boolean;
+  detailSaving: boolean;
   onChange: (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => void;
+  onDetailChange: (detail: ProjectDetail) => void;
   onSave: () => void;
+  onDetailSave: () => void;
   onBuilder: () => void;
   onBack: () => void;
 }) {
@@ -107,6 +112,14 @@ export function ProjectEditor({draft, allDrafts, dirty, saving, onChange, onSave
         </fieldset>
         <p className="mt-5 rounded-control border border-violet/20 bg-violet/10 px-4 py-3 text-xs font-medium text-muted">{t("publishNotice")}</p>
       </Card>
+
+      <ProjectDetailEditor
+        detail={draft.projectDetail}
+        dirty={detailDirty}
+        saving={detailSaving}
+        onChange={onDetailChange}
+        onSave={onDetailSave}
+      />
 
       <Card className="p-5 sm:p-6">
         <h2 className="text-lg font-bold">{t("dataset.title")}</h2>

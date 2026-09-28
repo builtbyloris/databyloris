@@ -1,6 +1,6 @@
 import type {DashboardConfig} from "./dashboard-config";
 import type {DashboardRecord} from "./dataset";
-import type {LocalizedText, Project} from "./project";
+import type {LocalizedText, Project, ProjectDetail} from "./project";
 
 export interface AdminDatasetDraft {
   id: string;
@@ -12,6 +12,7 @@ export interface ProjectDraft {
   project: Project;
   localizedTitle: LocalizedText;
   localizedDescription: LocalizedText;
+  projectDetail: ProjectDetail;
   dashboardConfig: DashboardConfig;
   dataset: AdminDatasetDraft | null;
 }
@@ -39,6 +40,7 @@ export type AdminActionError =
   | "databaseUnavailable"
   | "duplicateSlug"
   | "invalidConfig"
+  | "invalidDetail"
   | "invalidProject"
   | "projectNotFound"
   | "unknown";

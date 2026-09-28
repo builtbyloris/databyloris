@@ -5,7 +5,7 @@ import type {
   ProjectDetail,
   ProjectInsight,
 } from "@/types";
-import type {Json, Tables} from "@/types/database";
+import type {Json, Tables, TablesInsert} from "@/types/database";
 
 type ProjectDetailRow = Tables<"project_details">;
 
@@ -96,5 +96,38 @@ export function projectDetailRowToDomain(row: ProjectDetailRow): ProjectDetail {
     dataset,
     insights,
     updatedAt: row.updated_at,
+  };
+}
+
+function localizedTextToJson(value: LocalizedText): Json {
+  return {it: value.it, en: value.en};
+}
+
+export function projectDetailToUpsert(
+  projectId: string,
+  detail: ProjectDetail,
+): TablesInsert<"project_details"> {
+  return {
+    project_id: projectId,
+    context: localizedTextToJson(detail.context),
+    objective: localizedTextToJson(detail.objective),
+    methodology: detail.methodology.map((step) => ({
+      id: step.id,
+      title: localizedTextToJson(step.title),
+      description: localizedTextToJson(step.description),
+    })),
+    dataset_summary: {
+      name: detail.dataset.name,
+      source: localizedTextToJson(detail.dataset.source),
+      description: localizedTextToJson(detail.dataset.description),
+      ...(detail.dataset.sourceUrl ? {sourceUrl: detail.dataset.sourceUrl} : {}),
+      ...(detail.dataset.records !== undefined ? {records: detail.dataset.records} : {}),
+      ...(detail.dataset.period ? {period: localizedTextToJson(detail.dataset.period)} : {}),
+    },
+    insights: detail.insights.map((insight) => ({
+      id: insight.id,
+      description: localizedTextToJson(insight.description),
+      ...(insight.title ? {title: localizedTextToJson(insight.title)} : {}),
+    })),
   };
 }

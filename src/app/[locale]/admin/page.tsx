@@ -6,7 +6,7 @@ import type {AppLocale} from "@/i18n/routing";
 import {createProjectDraft} from "@/lib/admin";
 import {requireAdmin} from "@/lib/auth/require-admin";
 import {getDashboardConfig} from "@/lib/repositories/dashboard-configs-repository";
-import {listAdminProjects} from "@/lib/repositories/projects-repository";
+import {getAdminProjectDetail, listAdminProjects} from "@/lib/repositories/projects-repository";
 import type {ProjectDraft} from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,9 +23,13 @@ export default async function AdminPage({params}: {params: Promise<{locale: AppL
   try {
     const projects = await listAdminProjects(locale);
     initialDrafts = await Promise.all(projects.map(async (record) => {
-      const config = await getDashboardConfig(record.project.id);
+      const [config, projectDetail] = await Promise.all([
+        getDashboardConfig(record.project.id),
+        getAdminProjectDetail(record.project.id),
+      ]);
       return createProjectDraft(record.project, {
         config,
+        projectDetail,
         data: dashboardRegistry[record.project.slug]?.data,
         localizedTitle: record.localizedTitle,
         localizedDescription: record.localizedDescription,
