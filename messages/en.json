@@ -321,6 +321,11 @@
     "note": "Authentication and backend operations are not included in this phase.",
     "prototypeNotice": "Operational prototype without persistence: changes remain available during this session only.",
     "sessionBadge": "Session only",
+    "auth": {
+      "signedInAs": "Signed in as",
+      "unknownEmail": "Admin account",
+      "logout": "Sign out"
+    },
     "nav": {
       "label": "Admin navigation",
       "workspace": "Content workspace",
@@ -370,6 +375,22 @@
     "media": {"eyebrow": "Assets", "title": "Media", "description": "This section will host cover images and files linked to projects.", "storageNote": "No upload is available in this V1. Persistent media management will arrive with Supabase Storage."},
     "validation": {"required": "Required field", "invalidSlug": "Use lowercase letters, numbers and hyphens", "duplicateSlug": "This slug is already in use", "unsupportedValue": "Unsupported value", "unknownField": "This field does not exist in the dataset", "fieldRequired": "Select a field", "duplicateId": "Duplicate ID", "positiveLimit": "Enter a number greater than zero"},
     "options": {"select": "Single select", "multi-select": "Multi select", "sum": "Sum", "count": "Count", "distinctCount": "Distinct count", "average": "Average", "number": "Number", "sales": "Sales", "currency": "Currency", "percentage": "Percentage", "duration": "Duration", "line": "Line", "bar": "Bar", "pie": "Pie", "donut": "Donut", "category-asc": "Category ascending", "category-desc": "Category descending", "value-asc": "Value ascending", "value-desc": "Value descending", "asc": "Ascending", "desc": "Descending"}
+  },
+  "AdminAuth": {
+    "eyebrow": "Restricted area",
+    "title": "Sign in to Admin",
+    "description": "Enter the authorized account credentials to open the workspace.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "backHome": "Back to Home",
+    "errors": {
+      "required": "Enter your email and password.",
+      "invalid-credentials": "Invalid email or password.",
+      "access-denied": "This account is not authorized to access Admin.",
+      "unexpected": "We could not complete the sign-in. Please try again."
+    }
   },
   "Footer": {
     "description": "Complex data, clear stories.",

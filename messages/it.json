@@ -321,6 +321,11 @@
     "note": "Autenticazione e operazioni backend non sono incluse in questa fase.",
     "prototypeNotice": "Prototipo operativo senza persistenza: le modifiche restano disponibili soltanto durante questa sessione.",
     "sessionBadge": "Solo sessione",
+    "auth": {
+      "signedInAs": "Accesso effettuato come",
+      "unknownEmail": "Account Admin",
+      "logout": "Esci"
+    },
     "nav": {
       "label": "Navigazione Admin",
       "workspace": "Content workspace",
@@ -370,6 +375,22 @@
     "media": {"eyebrow": "Asset", "title": "Media", "description": "Questa sezione ospiterà immagini di copertina e file collegati ai progetti.", "storageNote": "Nessun upload è disponibile in questa V1. La gestione persistente arriverà con Supabase Storage."},
     "validation": {"required": "Campo obbligatorio", "invalidSlug": "Usa lettere minuscole, numeri e trattini", "duplicateSlug": "Questo slug è già utilizzato", "unsupportedValue": "Valore non supportato", "unknownField": "Il campo non esiste nel dataset", "fieldRequired": "Seleziona un campo", "duplicateId": "ID duplicato", "positiveLimit": "Inserisci un numero maggiore di zero"},
     "options": {"select": "Selezione singola", "multi-select": "Selezione multipla", "sum": "Somma", "count": "Conteggio", "distinctCount": "Conteggio distinti", "average": "Media", "number": "Numero", "sales": "Vendite", "currency": "Valuta", "percentage": "Percentuale", "duration": "Durata", "line": "Linea", "bar": "Barre", "pie": "Torta", "donut": "Donut", "category-asc": "Categoria crescente", "category-desc": "Categoria decrescente", "value-asc": "Valore crescente", "value-desc": "Valore decrescente", "asc": "Crescente", "desc": "Decrescente"}
+  },
+  "AdminAuth": {
+    "eyebrow": "Area riservata",
+    "title": "Accedi all’Admin",
+    "description": "Inserisci le credenziali dell’account autorizzato per aprire il workspace.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Accedi",
+    "submitting": "Accesso in corso…",
+    "backHome": "Torna alla Home",
+    "errors": {
+      "required": "Inserisci email e password.",
+      "invalid-credentials": "Email o password non validi.",
+      "access-denied": "Questo account non è autorizzato ad accedere all’Admin.",
+      "unexpected": "Non è stato possibile completare l’accesso. Riprova."
+    }
   },
   "Footer": {
     "description": "Dati complessi, storie chiare.",

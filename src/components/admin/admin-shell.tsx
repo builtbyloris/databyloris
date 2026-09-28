@@ -2,7 +2,9 @@
 
 import {useRef, useState} from "react";
 import {useTranslations} from "next-intl";
-import {Card, Container} from "@/components/ui";
+import {logoutAction} from "@/app/[locale]/admin/login/actions";
+import {Button, Card, Container} from "@/components/ui";
+import type {AppLocale} from "@/i18n/routing";
 import {createNewProjectDraft} from "@/lib/admin";
 import type {AdminView, DashboardConfig, Project, ProjectDraft} from "@/types";
 import {AdminOverview} from "./admin-overview";
@@ -11,7 +13,15 @@ import {DashboardBuilder} from "./dashboard-builder";
 import {ProjectEditor} from "./project-editor";
 import {ProjectsTable} from "./projects-table";
 
-export function AdminShell({initialDrafts}: {initialDrafts: ProjectDraft[]}) {
+export function AdminShell({
+  initialDrafts,
+  adminEmail,
+  locale,
+}: {
+  initialDrafts: ProjectDraft[];
+  adminEmail: string | null;
+  locale: AppLocale;
+}) {
   const t = useTranslations("Admin");
   const [drafts, setDrafts] = useState(initialDrafts);
   const [dirtyIds, setDirtyIds] = useState<Set<string>>(() => new Set());
@@ -53,7 +63,16 @@ export function AdminShell({initialDrafts}: {initialDrafts: ProjectDraft[]}) {
       <Container className="relative">
         <div className="mb-6 flex flex-col gap-2 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p><p className="mt-2 max-w-2xl text-sm text-muted">{t("prototypeNotice")}</p></div>
-          <span className="w-fit rounded-full border border-violet/25 bg-violet/10 px-3 py-1.5 text-xs font-bold text-violet">{t("sessionBadge")}</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="text-left sm:text-right">
+              <p className="text-xs text-muted">{t("auth.signedInAs")}</p>
+              <p className="max-w-64 truncate text-sm font-semibold">{adminEmail ?? t("auth.unknownEmail")}</p>
+            </div>
+            <form action={logoutAction}>
+              <input type="hidden" name="locale" value={locale} />
+              <Button type="submit" variant="secondary" size="sm">{t("auth.logout")}</Button>
+            </form>
+          </div>
         </div>
         <div className="grid min-w-0 gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
           <AdminSidebar view={view} onChange={navigate} />
