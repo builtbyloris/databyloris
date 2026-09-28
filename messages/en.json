@@ -187,12 +187,51 @@
     }
   },
   "Dashboard": {
-    "eyebrow": "Configurable dashboard",
-    "title": "Dashboard view",
-    "description": "The foundation is ready for configuration-driven KPIs, filters and charts.",
-    "kpi": "KPI area",
-    "filters": "Filter area",
-    "chart": "Visualization area"
+    "eyebrow": "Interactive dashboard",
+    "title": "Video Game Sales Dashboard",
+    "description": "Explore global video game sales by period, platform, genre and region.",
+    "breadcrumb": {
+      "projects": "Projects",
+      "dashboard": "Dashboard"
+    },
+    "navigation": {
+      "label": "Project navigation",
+      "overview": "Overview",
+      "dashboard": "Dashboard",
+      "dataset": "Dataset",
+      "insights": "Insights"
+    },
+    "filters": {
+      "year": "Year",
+      "platform": "Platform",
+      "genre": "Genre",
+      "region": "Region",
+      "all": "All",
+      "reset": "Reset filters"
+    },
+    "kpis": {
+      "sales": "Sales",
+      "games": "Games analyzed",
+      "platforms": "Platforms",
+      "genres": "Genres"
+    },
+    "charts": {
+      "salesOverTime": "Sales over time",
+      "salesByPlatform": "Sales by platform",
+      "salesByGenre": "Sales by genre",
+      "accessibleLabel": "Chart: {title}"
+    },
+    "ranking": {
+      "title": "Top 10 games",
+      "game": "Game",
+      "platform": "Platform",
+      "genre": "Genre",
+      "sales": "Sales"
+    },
+    "empty": {
+      "title": "No data available",
+      "description": "No data is available for the selected filters."
+    }
   },
   "Playground": {
     "eyebrow": "Lab",

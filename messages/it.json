@@ -187,12 +187,51 @@
     }
   },
   "Dashboard": {
-    "eyebrow": "Dashboard configurabile",
-    "title": "Vista dashboard",
-    "description": "Lo scheletro è pronto per KPI, filtri e grafici generati da configurazione.",
-    "kpi": "Area KPI",
-    "filters": "Area filtri",
-    "chart": "Area visualizzazione"
+    "eyebrow": "Dashboard interattiva",
+    "title": "Video Game Sales Dashboard",
+    "description": "Esplora le vendite globali di videogiochi per periodo, piattaforma, genere e regione.",
+    "breadcrumb": {
+      "projects": "Progetti",
+      "dashboard": "Dashboard"
+    },
+    "navigation": {
+      "label": "Navigazione del progetto",
+      "overview": "Panoramica",
+      "dashboard": "Dashboard",
+      "dataset": "Dataset",
+      "insights": "Insight"
+    },
+    "filters": {
+      "year": "Anno",
+      "platform": "Piattaforma",
+      "genre": "Genere",
+      "region": "Regione",
+      "all": "Tutti",
+      "reset": "Reimposta filtri"
+    },
+    "kpis": {
+      "sales": "Vendite",
+      "games": "Giochi analizzati",
+      "platforms": "Piattaforme",
+      "genres": "Generi"
+    },
+    "charts": {
+      "salesOverTime": "Vendite nel tempo",
+      "salesByPlatform": "Vendite per piattaforma",
+      "salesByGenre": "Vendite per genere",
+      "accessibleLabel": "Grafico: {title}"
+    },
+    "ranking": {
+      "title": "Top 10 giochi",
+      "game": "Gioco",
+      "platform": "Piattaforma",
+      "genre": "Genere",
+      "sales": "Vendite"
+    },
+    "empty": {
+      "title": "Nessun dato disponibile",
+      "description": "Nessun dato disponibile per i filtri selezionati."
+    }
   },
   "Playground": {
     "eyebrow": "Laboratorio",

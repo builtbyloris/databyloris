@@ -20,3 +20,6 @@ export interface Dataset {
   fields: DatasetField[];
   updatedAt: string;
 }
+
+export type DashboardValue = string | number | boolean | null;
+export type DashboardRecord = Record<string, DashboardValue>;

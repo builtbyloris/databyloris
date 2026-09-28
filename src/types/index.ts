@@ -1,8 +1,8 @@
-export type {ChartConfig, ChartType} from "./chart-config";
-export type {DashboardConfig} from "./dashboard-config";
-export type {Dataset, DatasetField, DatasetFieldType} from "./dataset";
+export type {ChartConfig, ChartSort, ChartType} from "./chart-config";
+export type {DashboardConfig, DashboardLayoutConfig, RankingConfig} from "./dashboard-config";
+export type {DashboardRecord, DashboardValue, Dataset, DatasetField, DatasetFieldType} from "./dataset";
 export type {FilterConfig, FilterOption, FilterType} from "./filter-config";
-export type {KPI, KPIFormat} from "./kpi";
+export type {AggregationType, KPI, KPIConfig, KPIFormat} from "./kpi";
 export type {
   DatasetSummary,
   LocalizedText,

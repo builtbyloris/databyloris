@@ -1,10 +1,13 @@
-export type KPIFormat = "number" | "currency" | "percentage" | "duration";
+export type AggregationType = "sum" | "count" | "distinctCount" | "average";
+export type KPIFormat = "number" | "sales" | "currency" | "percentage" | "duration";
 
-export interface KPI {
+export interface KPIConfig {
   id: string;
   label: string;
-  valueField: string;
+  aggregation: AggregationType;
+  field?: string;
   format: KPIFormat;
-  trendField?: string;
   description?: string;
 }
+
+export type KPI = KPIConfig;

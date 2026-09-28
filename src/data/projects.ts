@@ -27,7 +27,7 @@ export const projects = [
     featured: true,
     status: "published",
     publishedAt: "2026-07-12",
-    dashboardAvailable: true,
+    dashboardAvailable: false,
     detail: projectDetails["flight-analysis"],
   },
   {
@@ -41,7 +41,7 @@ export const projects = [
     featured: true,
     status: "published",
     publishedAt: "2026-06-05",
-    dashboardAvailable: true,
+    dashboardAvailable: false,
     detail: projectDetails["listening-insights"],
   },
   {

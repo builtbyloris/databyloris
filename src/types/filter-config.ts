@@ -1,4 +1,4 @@
-export type FilterType = "select" | "multi-select" | "date-range" | "search";
+export type FilterType = "select" | "multi-select";
 
 export interface FilterOption {
   label: string;
