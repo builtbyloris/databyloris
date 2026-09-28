@@ -51,17 +51,19 @@
       "chartLabel": "Grafico dimostrativo dell'andamento dei dati"
     },
     "Stats": {
-      "datasets": "Dataset analizzati",
+      "projects": "Progetti pubblicati",
       "dashboards": "Dashboard interattive",
       "technologies": "Tecnologie utilizzate",
-      "published": "Progetti pubblicati"
+      "featured": "Progetti in evidenza"
     },
     "Featured": {
       "eyebrow": "Analisi selezionate",
       "title": "Progetti in evidenza",
       "description": "Dataset reali trasformati in analisi leggibili, visualizzazioni utili e insight verificabili.",
       "viewAll": "Vedi tutto il portfolio",
-      "viewProject": "Apri progetto"
+      "viewProject": "Apri progetto",
+      "emptyTitle": "Nessun progetto in evidenza",
+      "emptyDescription": "I prossimi progetti selezionati compariranno qui."
     },
     "HowItWorks": {
       "eyebrow": "Dentro ogni analisi",
@@ -132,6 +134,9 @@
     "emptyTitle": "Nessun progetto trovato",
     "emptyDescription": "Prova a modificare la ricerca o a selezionare un'altra categoria.",
     "resetFilters": "Reimposta filtri",
+    "dataErrorTitle": "Progetti temporaneamente non disponibili",
+    "dataErrorDescription": "Non è stato possibile caricare i progetti da Supabase. Riprova tra poco.",
+    "dataErrorRetry": "Riprova",
     "statusDraft": "In preparazione",
     "statusPublished": "Pubblicato",
     "openDashboard": "Apri dashboard",

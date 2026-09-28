@@ -1,10 +1,10 @@
 import {getTranslations} from "next-intl/server";
 import {ProjectCard} from "@/components/project-card";
-import {Container, Section} from "@/components/ui";
-import {projects} from "@/data/projects";
+import {Card, Container, Section} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
+import type {Project} from "@/types";
 
-export async function FeaturedProjects() {
+export async function FeaturedProjects({projects}: {projects: Project[]}) {
   const t = await getTranslations("Home.Featured");
   const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
 
@@ -21,9 +21,16 @@ export async function FeaturedProjects() {
             {t("viewAll")} <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
-        </div>
+        {featuredProjects.length > 0 ? (
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {featuredProjects.map((project, index) => <ProjectCard key={project.id} project={project} ordinal={index + 1} />)}
+          </div>
+        ) : (
+          <Card className="mt-10 p-8 text-center sm:p-10">
+            <h3 className="text-xl font-bold">{t("emptyTitle")}</h3>
+            <p className="mt-2 text-sm text-muted">{t("emptyDescription")}</p>
+          </Card>
+        )}
       </Container>
     </Section>
   );

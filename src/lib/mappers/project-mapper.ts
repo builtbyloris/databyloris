@@ -2,6 +2,7 @@ import type {
   AdminProjectInput,
   AdminProjectRecord,
   LocalizedText,
+  Project,
 } from "@/types";
 import type {Json, Tables, TablesInsert, TablesUpdate} from "@/types/database";
 
@@ -61,6 +62,10 @@ export function projectRowToDomain(
     localizedTitle: title,
     localizedDescription: description,
   };
+}
+
+export function projectRowToProject(row: ProjectRow, locale: "it" | "en"): Project {
+  return projectRowToDomain(row, locale).project;
 }
 
 export function projectInputToInsert(

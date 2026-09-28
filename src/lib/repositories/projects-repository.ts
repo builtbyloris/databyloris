@@ -4,9 +4,10 @@ import {
   projectInputToInsert,
   projectInputToUpdate,
   projectRowToDomain,
+  projectRowToProject,
 } from "@/lib/mappers/project-mapper";
 import {createClient} from "@/lib/supabase/server";
-import type {AdminProjectInput, AdminProjectRecord} from "@/types";
+import type {AdminProjectInput, AdminProjectRecord, Project} from "@/types";
 import {RepositoryError} from "./repository-error";
 
 type SupportedLocale = "it" | "en";
@@ -21,6 +22,26 @@ function mapProject(row: Parameters<typeof projectRowToDomain>[0], locale: Suppo
   } catch {
     throw new RepositoryError("invalid_data");
   }
+}
+
+function mapPublicProject(row: Parameters<typeof projectRowToProject>[0], locale: SupportedLocale) {
+  try {
+    return projectRowToProject(row, locale);
+  } catch {
+    throw new RepositoryError("invalid_data");
+  }
+}
+
+export async function listPublishedProjects(locale: SupportedLocale): Promise<Project[]> {
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from("projects")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", {ascending: false, nullsFirst: false});
+
+  if (error) throw mapDatabaseError(error);
+  return data.map((row) => mapPublicProject(row, locale));
 }
 
 export async function listAdminProjects(locale: SupportedLocale): Promise<AdminProjectRecord[]> {

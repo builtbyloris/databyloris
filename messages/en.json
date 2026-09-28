@@ -51,17 +51,19 @@
       "chartLabel": "Illustrative chart showing the data trend"
     },
     "Stats": {
-      "datasets": "Datasets analyzed",
+      "projects": "Published projects",
       "dashboards": "Interactive dashboards",
       "technologies": "Technologies used",
-      "published": "Published projects"
+      "featured": "Featured projects"
     },
     "Featured": {
       "eyebrow": "Selected analysis",
       "title": "Featured projects",
       "description": "Real-world datasets turned into clear analysis, useful visualizations and verifiable insights.",
       "viewAll": "View the full portfolio",
-      "viewProject": "Open project"
+      "viewProject": "Open project",
+      "emptyTitle": "No featured projects",
+      "emptyDescription": "The next selected projects will appear here."
     },
     "HowItWorks": {
       "eyebrow": "Inside every analysis",
@@ -132,6 +134,9 @@
     "emptyTitle": "No projects found",
     "emptyDescription": "Try changing your search or selecting a different category.",
     "resetFilters": "Reset filters",
+    "dataErrorTitle": "Projects temporarily unavailable",
+    "dataErrorDescription": "We could not load projects from Supabase. Please try again shortly.",
+    "dataErrorRetry": "Try again",
     "statusDraft": "In progress",
     "statusPublished": "Published",
     "openDashboard": "Open dashboard",

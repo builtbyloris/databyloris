@@ -14,7 +14,7 @@ export async function ProjectsGrid({projects}: {projects: Project[]}) {
       {projects.length > 0 ? (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} imagePriority={index === 0} />
+            <ProjectCard key={project.id} project={project} imagePriority={index === 0} ordinal={index + 1} />
           ))}
         </div>
       ) : (

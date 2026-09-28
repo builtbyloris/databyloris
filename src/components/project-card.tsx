@@ -4,10 +4,9 @@ import {Badge, Card} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 import type {Project} from "@/types";
 
-export async function ProjectCard({project, imagePriority = false}: {project: Project; imagePriority?: boolean}) {
+export async function ProjectCard({project, imagePriority = false, ordinal}: {project: Project; imagePriority?: boolean; ordinal?: number}) {
   const t = await getTranslations("Home.Featured");
   const projectsT = await getTranslations("Projects");
-  const contentT = await getTranslations("ProjectContent");
 
   return (
     <Link
@@ -27,8 +26,8 @@ export async function ProjectCard({project, imagePriority = false}: {project: Pr
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-transparent to-transparent" />
           <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">
-            <span className="text-4xl font-black tracking-[-0.08em] text-white/35">0{project.id.at(-1)}</span>
-            <Badge className="border-white/15 bg-background/80 text-white backdrop-blur">{contentT(`${project.slug}.category`)}</Badge>
+            <span className="text-4xl font-black tracking-[-0.08em] text-white/35">{ordinal ? String(ordinal).padStart(2, "0") : ""}</span>
+            <Badge className="border-white/15 bg-background/80 text-white backdrop-blur">{project.category}</Badge>
           </div>
         </div>
         <div className="flex flex-1 flex-col p-6">
@@ -37,7 +36,7 @@ export async function ProjectCard({project, imagePriority = false}: {project: Pr
             {project.status === "published" ? projectsT("statusPublished") : projectsT("statusDraft")}
           </div>
           <h3 className="text-xl font-bold tracking-tight">{project.title}</h3>
-          <p className="mt-2 flex-1 text-sm leading-6 text-muted">{contentT(`${project.slug}.description`)}</p>
+          <p className="mt-2 flex-1 text-sm leading-6 text-muted">{project.description}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             {project.technologies.map((technology) => (
               <span key={technology} className="rounded-full bg-surface-raised px-2.5 py-1 text-xs text-muted">

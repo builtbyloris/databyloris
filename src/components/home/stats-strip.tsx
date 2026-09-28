@@ -1,16 +1,15 @@
 import {getTranslations} from "next-intl/server";
 import {Card, Container} from "@/components/ui";
-import {projects} from "@/data/projects";
+import type {Project} from "@/types";
 
-export async function StatsStrip() {
+export async function StatsStrip({projects}: {projects: Project[]}) {
   const t = await getTranslations("Home.Stats");
-  const publishedProjects = projects.filter((project) => project.status === "published");
   const technologyCount = new Set(projects.flatMap((project) => project.technologies)).size;
   const stats = [
-    {value: projects.length, label: t("datasets")},
-    {value: publishedProjects.length, label: t("dashboards")},
+    {value: projects.length, label: t("projects")},
+    {value: projects.filter((project) => project.dashboardAvailable).length, label: t("dashboards")},
     {value: technologyCount, label: t("technologies")},
-    {value: publishedProjects.length, label: t("published")},
+    {value: projects.filter((project) => project.featured).length, label: t("featured")},
   ];
 
   return (
