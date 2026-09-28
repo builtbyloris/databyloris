@@ -7,7 +7,7 @@ import type {ProjectDraft, ProjectStatus} from "@/types";
 
 type StatusFilter = "all" | Extract<ProjectStatus, "draft" | "published">;
 
-export function ProjectsTable({drafts, onNew, onEdit}: {drafts: ProjectDraft[]; onNew: () => void; onEdit: (id: string) => void}) {
+export function ProjectsTable({drafts, creating, onNew, onEdit}: {drafts: ProjectDraft[]; creating: boolean; onNew: () => void; onEdit: (id: string) => void}) {
   const t = useTranslations("Admin");
   const locale = useLocale();
   const [filter, setFilter] = useState<StatusFilter>("all");
@@ -20,7 +20,7 @@ export function ProjectsTable({drafts, onNew, onEdit}: {drafts: ProjectDraft[]; 
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("projects.eyebrow")}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight">{t("projects.title")}</h1>
         </div>
-        <Button onClick={onNew}>{t("actions.newProject")}</Button>
+        <Button onClick={onNew} disabled={creating}>{creating ? t("common.creating") : t("actions.newProject")}</Button>
       </div>
       <div role="group" aria-label={t("projects.filterLabel")} className="flex flex-wrap gap-2">
         {(["all", "published", "draft"] as const).map((value) => (

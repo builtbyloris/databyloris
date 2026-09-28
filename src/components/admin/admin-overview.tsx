@@ -4,8 +4,9 @@ import {useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
 import type {ProjectDraft} from "@/types";
 
-export function AdminOverview({drafts, onNew, onProjects, onEdit}: {
+export function AdminOverview({drafts, creating, onNew, onProjects, onEdit}: {
   drafts: ProjectDraft[];
+  creating: boolean;
   onNew: () => void;
   onProjects: () => void;
   onEdit: (id: string) => void;
@@ -29,7 +30,7 @@ export function AdminOverview({drafts, onNew, onProjects, onEdit}: {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" onClick={onProjects}>{t("actions.manageProjects")}</Button>
-          <Button onClick={onNew}>{t("actions.newProject")}</Button>
+          <Button onClick={onNew} disabled={creating}>{creating ? t("common.creating") : t("actions.newProject")}</Button>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">

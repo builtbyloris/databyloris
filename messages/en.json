@@ -317,9 +317,9 @@
   "Admin": {
     "eyebrow": "Workspace",
     "title": "Admin",
-    "description": "Manage projects and dashboard configurations in a preview session.",
-    "note": "Authentication and backend operations are not included in this phase.",
-    "prototypeNotice": "Operational prototype without persistence: changes remain available during this session only.",
+    "description": "Manage projects and dashboard configurations stored in Supabase.",
+    "note": "Project Detail and datasets remain local in this phase.",
+    "prototypeNotice": "Projects and DashboardConfig are persistent. Datasets, media and public content remain temporarily local.",
     "sessionBadge": "Session only",
     "auth": {
       "signedInAs": "Signed in as",
@@ -334,7 +334,7 @@
       "editor": "Editor",
       "builder": "Dashboard Builder",
       "media": "Media",
-      "sessionNote": "Data is not saved to a database. Supabase will be connected in a later phase."
+      "sessionNote": "Project metadata and DashboardConfig are saved in Supabase. Datasets and media are not persistent yet."
     },
     "overview": {
       "eyebrow": "Overview",
@@ -352,9 +352,11 @@
       "backToProjects": "Back to projects",
       "backToEditor": "Back to project",
       "removeBlock": "Remove block",
-      "removeColumn": "Remove column"
+      "removeColumn": "Remove column",
+      "saveChanges": "Save changes",
+      "saveConfiguration": "Save configuration"
     },
-    "common": {"yes": "Yes", "no": "No", "unsaved": "Unsaved changes", "sessionApplied": "Draft applied to session"},
+    "common": {"yes": "Yes", "no": "No", "unsaved": "Unsaved changes", "sessionApplied": "Draft applied to session", "saved": "Saved to Supabase", "saving": "Saving…", "creating": "Creating…"},
     "status": {"draft": "Draft", "published": "Published", "archived": "Archived"},
     "projects": {
       "eyebrow": "Catalog",
@@ -366,14 +368,17 @@
     },
     "editor": {"newTitle": "New draft", "metadata": "Project metadata", "options": "Project options"},
     "fields": {
-      "title": "Title", "slug": "Slug", "description": "Description", "category": "Category", "technologies": "Technologies (comma separated)", "status": "Status", "repositoryUrl": "Repository URL", "featured": "Featured project", "dashboardAvailable": "Dashboard available", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Dashboard title", "featuredChart": "Featured chart", "label": "Label", "field": "Field", "type": "Type", "aggregation": "Aggregation", "format": "Format", "chartTitle": "Chart title", "dimension": "Dimension / category", "metric": "Metric", "sort": "Sort", "valueFormat": "Value format", "limit": "Limit", "rankingTitle": "Ranking title", "dimensionLabel": "Dimension label", "metricLabel": "Metric label", "order": "Direction"
+      "title": "Title", "titleIt": "Title (IT)", "titleEn": "Title (EN)", "slug": "Slug", "description": "Description", "descriptionIt": "Description (IT)", "descriptionEn": "Description (EN)", "category": "Category", "technologies": "Technologies (comma separated)", "status": "Status", "repositoryUrl": "Repository URL", "featured": "Featured project", "dashboardAvailable": "Dashboard available", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Dashboard title", "featuredChart": "Featured chart", "label": "Label", "field": "Field", "type": "Type", "aggregation": "Aggregation", "format": "Format", "chartTitle": "Chart title", "dimension": "Dimension / category", "metric": "Metric", "sort": "Sort", "valueFormat": "Value format", "limit": "Limit", "rankingTitle": "Ranking title", "dimensionLabel": "Dimension label", "metricLabel": "Metric label", "order": "Direction"
     },
     "dataset": {"title": "Dataset", "associated": "Associated dataset", "records": "Records", "fields": "Fields", "availableFields": "Available fields", "none": "No dataset connected", "storageNote": "Dataset upload will become available with the Storage integration."},
     "builder": {"title": "Dashboard Builder", "configure": "Configure", "preview": "Preview", "settings": "Dashboard settings", "filters": "Filters", "kpis": "KPIs", "charts": "Charts", "rankings": "Rankings", "addFilter": "Add filter", "addKpi": "Add KPI", "addChart": "Add chart", "addRanking": "Add ranking", "detailColumns": "Additional columns", "addColumn": "Add column"},
     "preview": {"noDatasetTitle": "Preview unavailable", "noDatasetDescription": "Connect a dataset in a later phase to render this configuration with the Dashboard Engine.", "invalidTitle": "Incomplete configuration", "invalidDescription": "Fix these fields before opening the preview."},
-    "json": {"title": "Resulting configuration", "description": "This represents the model that can later be stored in Supabase.", "show": "View configuration", "hide": "Hide JSON", "copy": "Copy JSON", "copied": "Copied"},
+    "json": {"title": "Resulting configuration", "description": "This is the same DashboardConfig stored directly in Supabase.", "show": "View configuration", "hide": "Hide JSON", "copy": "Copy JSON", "copied": "Copied"},
     "media": {"eyebrow": "Assets", "title": "Media", "description": "This section will host cover images and files linked to projects.", "storageNote": "No upload is available in this V1. Persistent media management will arrive with Supabase Storage."},
     "validation": {"required": "Required field", "invalidSlug": "Use lowercase letters, numbers and hyphens", "duplicateSlug": "This slug is already in use", "unsupportedValue": "Unsupported value", "unknownField": "This field does not exist in the dataset", "fieldRequired": "Select a field", "duplicateId": "Duplicate ID", "positiveLimit": "Enter a number greater than zero"},
+    "feedback": {"projectCreated": "New draft created and saved.", "projectSaved": "Project changes saved.", "configSaved": "Dashboard configuration saved."},
+    "errors": {"databaseUnavailable": "The database is unavailable. Please try again shortly.", "duplicateSlug": "This slug is already used by another project.", "invalidConfig": "The configuration is invalid. Correct the highlighted fields.", "invalidProject": "The project data is invalid.", "projectNotFound": "The project no longer exists or is not accessible.", "unknown": "Save failed. Please try again."},
+    "publishNotice": "Public-site publishing will be connected in the next step. For now this status is persisted only in Admin.",
     "options": {"select": "Single select", "multi-select": "Multi select", "sum": "Sum", "count": "Count", "distinctCount": "Distinct count", "average": "Average", "number": "Number", "sales": "Sales", "currency": "Currency", "percentage": "Percentage", "duration": "Duration", "line": "Line", "bar": "Bar", "pie": "Pie", "donut": "Donut", "category-asc": "Category ascending", "category-desc": "Category descending", "value-asc": "Value ascending", "value-desc": "Value descending", "asc": "Ascending", "desc": "Descending"}
   },
   "AdminAuth": {

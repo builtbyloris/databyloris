@@ -3,6 +3,7 @@
 import {useState} from "react";
 import {useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
+import {validateDashboardConfig} from "@/lib/admin";
 import type {AggregationType, ChartConfig, ChartSort, ChartType, DashboardConfig, FilterConfig, FilterType, KPIConfig, KPIFormat, ProjectDraft, RankingConfig} from "@/types";
 import {AdminPreview} from "./admin-preview";
 import {JsonPreview} from "./json-preview";
@@ -13,17 +14,19 @@ const formats: KPIFormat[] = ["number", "sales", "currency", "percentage", "dura
 const chartTypes: ChartType[] = ["line", "bar", "pie", "donut"];
 const chartSorts: ChartSort[] = ["category-asc", "category-desc", "value-asc", "value-desc"];
 
-export function DashboardBuilder({draft, dirty, onChange, onApply, onBack}: {
+export function DashboardBuilder({draft, dirty, saving, onChange, onSave, onBack}: {
   draft: ProjectDraft;
   dirty: boolean;
+  saving: boolean;
   onChange: (config: DashboardConfig) => void;
-  onApply: () => void;
+  onSave: () => void;
   onBack: () => void;
 }) {
   const t = useTranslations("Admin");
   const [mode, setMode] = useState<"configure" | "preview">("configure");
   const config = draft.dashboardConfig;
   const fields = draft.dataset?.fields ?? [];
+  const issues = validateDashboardConfig(config, fields);
   const set = <K extends keyof DashboardConfig>(key: K, value: DashboardConfig[K]) => onChange({...config, [key]: value});
 
   return (
@@ -32,14 +35,14 @@ export function DashboardBuilder({draft, dirty, onChange, onApply, onBack}: {
         <div>
           <button type="button" onClick={onBack} className="text-sm font-semibold text-muted hover:text-foreground">← {t("actions.backToEditor")}</button>
           <h1 className="mt-3 text-3xl font-black tracking-tight">{t("builder.title")}</h1>
-          <p className="mt-2 text-sm text-muted">{draft.project.title || t("projects.untitled")} · {dirty ? t("common.unsaved") : t("common.sessionApplied")}</p>
+          <p className="mt-2 text-sm text-muted">{draft.project.title || t("projects.untitled")} · {dirty ? t("common.unsaved") : t("common.saved")}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <div className="flex rounded-control border border-border bg-surface p-1">
             <button type="button" onClick={() => setMode("configure")} aria-pressed={mode === "configure"} className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "configure" ? "bg-surface-raised text-foreground" : "text-muted"}`}>{t("builder.configure")}</button>
             <button type="button" onClick={() => setMode("preview")} aria-pressed={mode === "preview"} className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "preview" ? "bg-surface-raised text-foreground" : "text-muted"}`}>{t("builder.preview")}</button>
           </div>
-          <Button onClick={onApply} disabled={!dirty}>{t("actions.applySession")}</Button>
+          <Button onClick={onSave} disabled={!dirty || saving || issues.length > 0}>{saving ? t("common.saving") : t("actions.saveConfiguration")}</Button>
         </div>
       </div>
 

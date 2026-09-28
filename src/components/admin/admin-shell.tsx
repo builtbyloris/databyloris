@@ -1,12 +1,17 @@
 "use client";
 
-import {useRef, useState} from "react";
+import {useState} from "react";
 import {useTranslations} from "next-intl";
+import {
+  createProjectAction,
+  saveDashboardConfigAction,
+  updateProjectAction,
+} from "@/app/[locale]/admin/actions";
 import {logoutAction} from "@/app/[locale]/admin/login/actions";
 import {Button, Card, Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
-import {createNewProjectDraft} from "@/lib/admin";
-import type {AdminView, DashboardConfig, Project, ProjectDraft} from "@/types";
+import {createProjectDraft} from "@/lib/admin";
+import type {AdminProjectInput, AdminView, DashboardConfig, ProjectDraft} from "@/types";
 import {AdminOverview} from "./admin-overview";
 import {AdminSidebar} from "./admin-sidebar";
 import {DashboardBuilder} from "./dashboard-builder";
@@ -17,40 +22,110 @@ export function AdminShell({
   initialDrafts,
   adminEmail,
   locale,
+  initialLoadError = false,
 }: {
   initialDrafts: ProjectDraft[];
   adminEmail: string | null;
   locale: AppLocale;
+  initialLoadError?: boolean;
 }) {
   const t = useTranslations("Admin");
   const [drafts, setDrafts] = useState(initialDrafts);
-  const [dirtyIds, setDirtyIds] = useState<Set<string>>(() => new Set());
+  const [projectDirtyIds, setProjectDirtyIds] = useState<Set<string>>(() => new Set());
+  const [configDirtyIds, setConfigDirtyIds] = useState<Set<string>>(() => new Set());
   const [view, setView] = useState<AdminView>("overview");
   const [selectedId, setSelectedId] = useState(initialDrafts[0]?.project.id ?? null);
-  const sequence = useRef(1);
+  const [pending, setPending] = useState<"create" | "project" | "config" | null>(null);
+  const [feedback, setFeedback] = useState<{kind: "success" | "error"; code: string} | null>(
+    initialLoadError ? {kind: "error", code: "databaseUnavailable"} : null,
+  );
   const selected = drafts.find(({project}) => project.id === selectedId) ?? null;
 
-  const markDirty = (id: string) => setDirtyIds((current) => new Set(current).add(id));
-  const updateSelected = (change: Partial<Pick<ProjectDraft, "project" | "dashboardConfig">>) => {
+  const updateSelected = (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => {
     if (!selectedId) return;
     setDrafts((current) => current.map((draft) => draft.project.id === selectedId ? {...draft, ...change} : draft));
-    markDirty(selectedId);
+    setProjectDirtyIds((current) => new Set(current).add(selectedId));
+    setFeedback(null);
   };
-  const applySession = () => {
+  const updateSelectedConfig = (dashboardConfig: DashboardConfig) => {
     if (!selectedId) return;
-    setDirtyIds((current) => {
-      const next = new Set(current);
-      next.delete(selectedId);
-      return next;
-    });
+    setDrafts((current) => current.map((draft) => draft.project.id === selectedId ? {...draft, dashboardConfig} : draft));
+    setConfigDirtyIds((current) => new Set(current).add(selectedId));
+    setFeedback(null);
   };
   const edit = (id: string) => { setSelectedId(id); setView("editor"); };
-  const create = () => {
-    const draft = createNewProjectDraft(sequence.current++);
+  const create = async () => {
+    setPending("create");
+    setFeedback(null);
+    const result = await createProjectAction(locale);
+    setPending(null);
+
+    if (!result.ok) {
+      setFeedback({kind: "error", code: result.error});
+      return;
+    }
+
+    const draft = createProjectDraft(result.data.project, {
+      localizedTitle: result.data.localizedTitle,
+      localizedDescription: result.data.localizedDescription,
+    });
     setDrafts((current) => [draft, ...current]);
-    setDirtyIds((current) => new Set(current).add(draft.project.id));
     setSelectedId(draft.project.id);
     setView("editor");
+    setFeedback({kind: "success", code: "projectCreated"});
+  };
+  const saveProject = async () => {
+    if (!selected || selected.project.status === "archived") return;
+    setPending("project");
+    setFeedback(null);
+    const input: AdminProjectInput = {
+      id: selected.project.id,
+      slug: selected.project.slug,
+      title: selected.localizedTitle,
+      description: selected.localizedDescription,
+      category: selected.project.category,
+      technologies: selected.project.technologies,
+      featured: selected.project.featured,
+      status: selected.project.status,
+      dashboardAvailable: Boolean(selected.project.dashboardAvailable),
+      repositoryUrl: selected.project.repositoryUrl,
+    };
+    const result = await updateProjectAction(locale, input);
+    setPending(null);
+
+    if (!result.ok) {
+      setFeedback({kind: "error", code: result.error});
+      return;
+    }
+
+    setDrafts((current) => current.map((draft) => draft.project.id === result.data.project.id
+      ? {
+          ...draft,
+          project: result.data.project,
+          localizedTitle: result.data.localizedTitle,
+          localizedDescription: result.data.localizedDescription,
+        }
+      : draft));
+    setProjectDirtyIds((current) => without(current, result.data.project.id));
+    setFeedback({kind: "success", code: "projectSaved"});
+  };
+  const saveConfig = async () => {
+    if (!selected) return;
+    setPending("config");
+    setFeedback(null);
+    const result = await saveDashboardConfigAction(locale, selected.project.id, selected.dashboardConfig);
+    setPending(null);
+
+    if (!result.ok) {
+      setFeedback({kind: "error", code: result.error});
+      return;
+    }
+
+    setDrafts((current) => current.map((draft) => draft.project.id === selected.project.id
+      ? {...draft, dashboardConfig: result.data}
+      : draft));
+    setConfigDirtyIds((current) => without(current, selected.project.id));
+    setFeedback({kind: "success", code: "configSaved"});
   };
   const navigate = (next: AdminView) => {
     if ((next === "builder" || next === "editor") && !selectedId && drafts[0]) setSelectedId(drafts[0].project.id);
@@ -77,14 +152,32 @@ export function AdminShell({
         <div className="grid min-w-0 gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
           <AdminSidebar view={view} onChange={navigate} />
           <div className="min-w-0">
-            {view === "overview" ? <AdminOverview drafts={drafts} onNew={create} onProjects={() => setView("projects")} onEdit={edit} /> : null}
-            {view === "projects" ? <ProjectsTable drafts={drafts} onNew={create} onEdit={edit} /> : null}
-            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} dirty={dirtyIds.has(selected.project.id)} onChange={(project: Project) => updateSelected({project})} onApply={applySession} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
-            {view === "builder" && selected ? <DashboardBuilder draft={selected} dirty={dirtyIds.has(selected.project.id)} onChange={(dashboardConfig: DashboardConfig) => updateSelected({dashboardConfig})} onApply={applySession} onBack={() => setView("editor")} /> : null}
+            {feedback ? <Feedback kind={feedback.kind} message={t(`${feedback.kind === "error" ? "errors" : "feedback"}.${feedback.code}`)} /> : null}
+            {view === "overview" ? <AdminOverview drafts={drafts} creating={pending === "create"} onNew={create} onProjects={() => setView("projects")} onEdit={edit} /> : null}
+            {view === "projects" ? <ProjectsTable drafts={drafts} creating={pending === "create"} onNew={create} onEdit={edit} /> : null}
+            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} dirty={projectDirtyIds.has(selected.project.id)} saving={pending === "project"} onChange={updateSelected} onSave={saveProject} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
+            {view === "builder" && selected ? <DashboardBuilder draft={selected} dirty={configDirtyIds.has(selected.project.id)} saving={pending === "config"} onChange={updateSelectedConfig} onSave={saveConfig} onBack={() => setView("editor")} /> : null}
             {view === "media" ? <Card className="p-8 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("media.eyebrow")}</p><h1 className="mt-3 text-3xl font-black tracking-tight">{t("media.title")}</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-muted">{t("media.description")}</p><div className="mt-6 rounded-control border border-dashed border-border bg-surface-raised p-5 text-sm text-muted">{t("media.storageNote")}</div></Card> : null}
           </div>
         </div>
       </Container>
     </section>
+  );
+}
+
+function without(current: Set<string>, id: string) {
+  const next = new Set(current);
+  next.delete(id);
+  return next;
+}
+
+function Feedback({kind, message}: {kind: "success" | "error"; message: string}) {
+  return (
+    <div
+      role={kind === "error" ? "alert" : "status"}
+      className={`mb-5 rounded-control border px-4 py-3 text-sm font-semibold ${kind === "error" ? "border-red-500/25 bg-red-500/10 text-red-600 dark:text-red-300" : "border-cyan/25 bg-cyan/10 text-cyan"}`}
+    >
+      {message}
+    </div>
   );
 }

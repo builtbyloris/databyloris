@@ -317,9 +317,9 @@
   "Admin": {
     "eyebrow": "Workspace",
     "title": "Admin",
-    "description": "Gestisci progetti e configurazioni dashboard in una sessione di anteprima.",
-    "note": "Autenticazione e operazioni backend non sono incluse in questa fase.",
-    "prototypeNotice": "Prototipo operativo senza persistenza: le modifiche restano disponibili soltanto durante questa sessione.",
+    "description": "Gestisci progetti e configurazioni dashboard salvati in Supabase.",
+    "note": "Project Detail e dataset restano locali in questa fase.",
+    "prototypeNotice": "Progetti e DashboardConfig sono persistenti. Dataset, media e contenuti pubblici restano temporaneamente locali.",
     "sessionBadge": "Solo sessione",
     "auth": {
       "signedInAs": "Accesso effettuato come",
@@ -334,7 +334,7 @@
       "editor": "Editor",
       "builder": "Dashboard Builder",
       "media": "Media",
-      "sessionNote": "I dati non vengono salvati su database. Il collegamento a Supabase arriverà in una fase successiva."
+      "sessionNote": "Metadata progetto e DashboardConfig vengono salvati in Supabase. Dataset e media non sono ancora persistenti."
     },
     "overview": {
       "eyebrow": "Panoramica",
@@ -352,9 +352,11 @@
       "backToProjects": "Torna ai progetti",
       "backToEditor": "Torna al progetto",
       "removeBlock": "Rimuovi blocco",
-      "removeColumn": "Rimuovi colonna"
+      "removeColumn": "Rimuovi colonna",
+      "saveChanges": "Salva modifiche",
+      "saveConfiguration": "Salva configurazione"
     },
-    "common": {"yes": "Sì", "no": "No", "unsaved": "Modifiche non salvate", "sessionApplied": "Bozza applicata alla sessione"},
+    "common": {"yes": "Sì", "no": "No", "unsaved": "Modifiche non salvate", "sessionApplied": "Bozza applicata alla sessione", "saved": "Salvato su Supabase", "saving": "Salvataggio…", "creating": "Creazione…"},
     "status": {"draft": "Draft", "published": "Published", "archived": "Archiviato"},
     "projects": {
       "eyebrow": "Catalogo",
@@ -366,14 +368,17 @@
     },
     "editor": {"newTitle": "Nuova bozza", "metadata": "Metadata progetto", "options": "Opzioni progetto"},
     "fields": {
-      "title": "Titolo", "slug": "Slug", "description": "Descrizione", "category": "Categoria", "technologies": "Tecnologie (separate da virgola)", "status": "Stato", "repositoryUrl": "URL repository", "featured": "Progetto in evidenza", "dashboardAvailable": "Dashboard disponibile", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Titolo dashboard", "featuredChart": "Grafico principale", "label": "Label", "field": "Campo", "type": "Tipo", "aggregation": "Aggregazione", "format": "Formato", "chartTitle": "Titolo grafico", "dimension": "Dimensione / categoria", "metric": "Metrica", "sort": "Ordinamento", "valueFormat": "Formato valore", "limit": "Limite", "rankingTitle": "Titolo classifica", "dimensionLabel": "Label dimensione", "metricLabel": "Label metrica", "order": "Direzione"
+      "title": "Titolo", "titleIt": "Titolo (IT)", "titleEn": "Titolo (EN)", "slug": "Slug", "description": "Descrizione", "descriptionIt": "Descrizione (IT)", "descriptionEn": "Descrizione (EN)", "category": "Categoria", "technologies": "Tecnologie (separate da virgola)", "status": "Stato", "repositoryUrl": "URL repository", "featured": "Progetto in evidenza", "dashboardAvailable": "Dashboard disponibile", "id": "ID", "datasetId": "Dataset ID", "dashboardTitle": "Titolo dashboard", "featuredChart": "Grafico principale", "label": "Label", "field": "Campo", "type": "Tipo", "aggregation": "Aggregazione", "format": "Formato", "chartTitle": "Titolo grafico", "dimension": "Dimensione / categoria", "metric": "Metrica", "sort": "Ordinamento", "valueFormat": "Formato valore", "limit": "Limite", "rankingTitle": "Titolo classifica", "dimensionLabel": "Label dimensione", "metricLabel": "Label metrica", "order": "Direzione"
     },
     "dataset": {"title": "Dataset", "associated": "Dataset associato", "records": "Record", "fields": "Campi", "availableFields": "Campi disponibili", "none": "Nessun dataset collegato", "storageNote": "Il caricamento dei dataset sarà disponibile con l’integrazione Storage."},
     "builder": {"title": "Dashboard Builder", "configure": "Configura", "preview": "Anteprima", "settings": "Impostazioni dashboard", "filters": "Filtri", "kpis": "KPI", "charts": "Grafici", "rankings": "Ranking", "addFilter": "Aggiungi filtro", "addKpi": "Aggiungi KPI", "addChart": "Aggiungi grafico", "addRanking": "Aggiungi ranking", "detailColumns": "Colonne aggiuntive", "addColumn": "Aggiungi colonna"},
     "preview": {"noDatasetTitle": "Anteprima non disponibile", "noDatasetDescription": "Collega un dataset in una fase successiva per visualizzare questa configurazione con il Dashboard Engine.", "invalidTitle": "Configurazione incompleta", "invalidDescription": "Correggi questi campi prima di aprire l’anteprima."},
-    "json": {"title": "Configurazione risultante", "description": "Rappresenta il modello che potrà essere salvato in Supabase.", "show": "Visualizza configurazione", "hide": "Nascondi JSON", "copy": "Copia JSON", "copied": "Copiato"},
+    "json": {"title": "Configurazione risultante", "description": "È lo stesso DashboardConfig salvato direttamente in Supabase.", "show": "Visualizza configurazione", "hide": "Nascondi JSON", "copy": "Copia JSON", "copied": "Copiato"},
     "media": {"eyebrow": "Asset", "title": "Media", "description": "Questa sezione ospiterà immagini di copertina e file collegati ai progetti.", "storageNote": "Nessun upload è disponibile in questa V1. La gestione persistente arriverà con Supabase Storage."},
     "validation": {"required": "Campo obbligatorio", "invalidSlug": "Usa lettere minuscole, numeri e trattini", "duplicateSlug": "Questo slug è già utilizzato", "unsupportedValue": "Valore non supportato", "unknownField": "Il campo non esiste nel dataset", "fieldRequired": "Seleziona un campo", "duplicateId": "ID duplicato", "positiveLimit": "Inserisci un numero maggiore di zero"},
+    "feedback": {"projectCreated": "Nuova bozza creata e salvata.", "projectSaved": "Modifiche del progetto salvate.", "configSaved": "Configurazione dashboard salvata."},
+    "errors": {"databaseUnavailable": "Database non disponibile. Riprova tra poco.", "duplicateSlug": "Questo slug è già utilizzato da un altro progetto.", "invalidConfig": "La configurazione non è valida. Correggi i campi evidenziati.", "invalidProject": "I dati del progetto non sono validi.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "unknown": "Salvataggio non riuscito. Riprova."},
+    "publishNotice": "La pubblicazione sul sito pubblico verrà collegata nel prossimo step. Per ora questo stato è persistito soltanto nell’Admin.",
     "options": {"select": "Selezione singola", "multi-select": "Selezione multipla", "sum": "Somma", "count": "Conteggio", "distinctCount": "Conteggio distinti", "average": "Media", "number": "Numero", "sales": "Vendite", "currency": "Valuta", "percentage": "Percentuale", "duration": "Durata", "line": "Linea", "bar": "Barre", "pie": "Torta", "donut": "Donut", "category-asc": "Categoria crescente", "category-desc": "Categoria decrescente", "value-asc": "Valore crescente", "value-desc": "Valore decrescente", "asc": "Crescente", "desc": "Decrescente"}
   },
   "AdminAuth": {

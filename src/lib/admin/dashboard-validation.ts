@@ -91,7 +91,8 @@ export function validateDashboardConfig(config: DashboardConfig, fields: string[
 
 export function validateProjectDraft(draft: ProjectDraft, allDrafts: ProjectDraft[]): AdminValidationIssue[] {
   const issues: AdminValidationIssue[] = [];
-  required(draft.project.title, "project.title", issues);
+  required(draft.localizedTitle.it, "project.title.it", issues);
+  required(draft.localizedTitle.en, "project.title.en", issues);
   required(draft.project.slug, "project.slug", issues);
   required(draft.project.category, "project.category", issues);
   if (draft.project.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(draft.project.slug)) {

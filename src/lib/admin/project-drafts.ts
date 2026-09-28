@@ -1,4 +1,4 @@
-import type {DashboardConfig, DashboardRecord, Project, ProjectDraft} from "@/types";
+import type {DashboardConfig, DashboardRecord, LocalizedText, Project, ProjectDraft} from "@/types";
 
 export function slugifyProjectTitle(value: string) {
   return value
@@ -24,36 +24,22 @@ export function createEmptyDashboardConfig(slug: string): DashboardConfig {
   };
 }
 
-export function createProjectDraft(project: Project, definition?: {config: DashboardConfig; data: DashboardRecord[]}): ProjectDraft {
-  const records = definition?.data ?? [];
+export function createProjectDraft(project: Project, options?: {
+  config?: DashboardConfig | null;
+  data?: DashboardRecord[];
+  localizedTitle?: LocalizedText;
+  localizedDescription?: LocalizedText;
+}): ProjectDraft {
+  const records = options?.data ?? [];
   return {
     project: structuredClone(project),
-    dashboardConfig: definition ? structuredClone(definition.config) : createEmptyDashboardConfig(project.slug),
-    dataset: definition ? {
-      id: definition.config.datasetId,
+    localizedTitle: structuredClone(options?.localizedTitle ?? {it: project.title, en: project.title}),
+    localizedDescription: structuredClone(options?.localizedDescription ?? {it: project.description, en: project.description}),
+    dashboardConfig: options?.config ? structuredClone(options.config) : createEmptyDashboardConfig(project.slug),
+    dataset: options?.data ? {
+      id: options.config?.datasetId ?? project.slug,
       records: structuredClone(records),
       fields: Array.from(new Set(records.flatMap((record) => Object.keys(record)))).sort(),
     } : null,
-  };
-}
-
-export function createNewProjectDraft(sequence: number): ProjectDraft {
-  const id = `session-draft-${sequence}`;
-  return {
-    project: {
-      id,
-      slug: "",
-      title: "",
-      description: "",
-      category: "",
-      technologies: [],
-      image: "/images/projects/project-cover.svg",
-      featured: false,
-      status: "draft",
-      publishedAt: null,
-      dashboardAvailable: false,
-    },
-    dashboardConfig: createEmptyDashboardConfig("new-project"),
-    dataset: null,
   };
 }
