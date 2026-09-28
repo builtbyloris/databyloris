@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
     "echarts": "^6.1.0",
     "next": "^16.3.6",
     "next-intl": "^4.14.7",
@@ -25,6 +27,7 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.6",
     "postcss": "^8.5.28",
+    "supabase": "^2.118.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   }
