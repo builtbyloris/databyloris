@@ -21,12 +21,11 @@ function GithubIcon() {
   );
 }
 
-export async function ProjectDetailHero({project, locale}: {project: Project; locale: AppLocale}) {
+export async function ProjectDetailHero({project, locale, updatedAt}: {project: Project; locale: AppLocale; updatedAt?: string}) {
   const t = await getTranslations("ProjectDetail");
-  const contentT = await getTranslations("ProjectContent");
-  const displayDate = project.detail?.updatedAt ?? project.publishedAt;
+  const displayDate = updatedAt ?? project.publishedAt;
   const date = displayDate
-    ? new Intl.DateTimeFormat(locale, {day: "numeric", month: "short", year: "numeric"}).format(new Date(`${displayDate}T00:00:00`))
+    ? new Intl.DateTimeFormat(locale, {day: "numeric", month: "short", year: "numeric"}).format(new Date(displayDate))
     : null;
 
   return (
@@ -37,7 +36,7 @@ export async function ProjectDetailHero({project, locale}: {project: Project; lo
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:gap-14">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <Badge>{contentT(`${project.slug}.category`)}</Badge>
+            <Badge>{project.category}</Badge>
             <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-muted">
               <span className={project.status === "published" ? "text-cyan" : "text-violet"}>●</span>
               {t(`status.${project.status}`)}
@@ -47,7 +46,7 @@ export async function ProjectDetailHero({project, locale}: {project: Project; lo
             {project.title}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg sm:leading-8">
-            {contentT(`${project.slug}.description`)}
+            {project.description}
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {project.technologies.map((technology) => (
@@ -74,8 +73,7 @@ export async function ProjectDetailHero({project, locale}: {project: Project; lo
           <div className="relative aspect-[16/11] overflow-hidden rounded-[calc(var(--radius-card-value)-0.3rem)] bg-surface-raised">
             <Image src={project.image} alt={t("coverAlt", {title: project.title})} fill priority sizes="(max-width: 1023px) 100vw, 42vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-transparent to-transparent" />
-            <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">
-              <span className="text-4xl font-black tracking-[-0.08em] text-white/35">0{project.id.at(-1)}</span>
+            <div className="absolute inset-x-5 bottom-5 flex items-end justify-end gap-4">
               {date ? (
                 <span className="rounded-full border border-white/15 bg-background/75 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
                   {t("updated")} · {date}

@@ -89,32 +89,6 @@
       "button": "Explore all projects"
     }
   },
-  "ProjectContent": {
-    "video-game-sales": {
-      "category": "Entertainment",
-      "description": "Global sales patterns across platforms, genres and publishing eras."
-    },
-    "flight-analysis": {
-      "category": "Mobility",
-      "description": "Air traffic performance, routes and the leading drivers of flight delays."
-    },
-    "listening-insights": {
-      "category": "Media",
-      "description": "Listening habits translated into meaningful audience signals."
-    },
-    "stock-market-analysis": {
-      "category": "Finance",
-      "description": "Market movements, volatility and sector-level comparisons."
-    },
-    "city-data-analysis": {
-      "category": "Public data",
-      "description": "Urban indicators for mobility, services and quality of life."
-    },
-    "sports-performance": {
-      "category": "Sports",
-      "description": "Player and team performance through comparable metrics."
-    }
-  },
   "Projects": {
     "eyebrow": "Portfolio",
     "title": "Portfolio",
@@ -174,6 +148,18 @@
       "records": "Records",
       "period": "Period",
       "viewSource": "Open source"
+    },
+    "missing": {
+      "eyebrow": "Case study",
+      "title": "Details in progress",
+      "description": "The project is published, but its detailed case study is not available yet.",
+      "action": "Back to projects"
+    },
+    "error": {
+      "eyebrow": "Temporary error",
+      "title": "Project unavailable",
+      "description": "We could not load the project from Supabase. Please try again shortly.",
+      "action": "Try again"
     },
     "dashboard": {
       "eyebrow": "Explore the data",

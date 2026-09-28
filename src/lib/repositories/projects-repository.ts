@@ -6,8 +6,9 @@ import {
   projectRowToDomain,
   projectRowToProject,
 } from "@/lib/mappers/project-mapper";
+import {projectDetailRowToDomain} from "@/lib/mappers/project-detail-mapper";
 import {createClient} from "@/lib/supabase/server";
-import type {AdminProjectInput, AdminProjectRecord, Project} from "@/types";
+import type {AdminProjectInput, AdminProjectRecord, Project, ProjectDetail} from "@/types";
 import {RepositoryError} from "./repository-error";
 
 type SupportedLocale = "it" | "en";
@@ -32,6 +33,19 @@ function mapPublicProject(row: Parameters<typeof projectRowToProject>[0], locale
   }
 }
 
+function mapProjectDetail(row: Parameters<typeof projectDetailRowToDomain>[0]) {
+  try {
+    return projectDetailRowToDomain(row);
+  } catch {
+    throw new RepositoryError("invalid_data");
+  }
+}
+
+export interface PublishedProjectWithDetail {
+  project: Project;
+  detail: ProjectDetail | null;
+}
+
 export async function listPublishedProjects(locale: SupportedLocale): Promise<Project[]> {
   const supabase = await createClient();
   const {data, error} = await supabase
@@ -42,6 +56,35 @@ export async function listPublishedProjects(locale: SupportedLocale): Promise<Pr
 
   if (error) throw mapDatabaseError(error);
   return data.map((row) => mapPublicProject(row, locale));
+}
+
+export async function getPublishedProjectWithDetailBySlug(
+  slug: string,
+  locale: SupportedLocale,
+): Promise<PublishedProjectWithDetail | null> {
+  const supabase = await createClient();
+  const {data: projectRow, error: projectError} = await supabase
+    .from("projects")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
+  if (projectError) throw mapDatabaseError(projectError);
+  if (!projectRow) return null;
+
+  const {data: detailRow, error: detailError} = await supabase
+    .from("project_details")
+    .select("*")
+    .eq("project_id", projectRow.id)
+    .maybeSingle();
+
+  if (detailError) throw mapDatabaseError(detailError);
+
+  return {
+    project: mapPublicProject(projectRow, locale),
+    detail: detailRow ? mapProjectDetail(detailRow) : null,
+  };
 }
 
 export async function listAdminProjects(locale: SupportedLocale): Promise<AdminProjectRecord[]> {

@@ -89,32 +89,6 @@
       "button": "Esplora tutti i progetti"
     }
   },
-  "ProjectContent": {
-    "video-game-sales": {
-      "category": "Intrattenimento",
-      "description": "Tendenze di vendita globali tra piattaforme, generi ed epoche editoriali."
-    },
-    "flight-analysis": {
-      "category": "Mobilità",
-      "description": "Performance del traffico aereo, rotte e principali cause dei ritardi."
-    },
-    "listening-insights": {
-      "category": "Media",
-      "description": "Abitudini di ascolto trasformate in segnali utili per comprendere il pubblico."
-    },
-    "stock-market-analysis": {
-      "category": "Finanza",
-      "description": "Movimenti di mercato, volatilità e confronti tra settori."
-    },
-    "city-data-analysis": {
-      "category": "Dati pubblici",
-      "description": "Indicatori urbani su mobilità, servizi e qualità della vita."
-    },
-    "sports-performance": {
-      "category": "Sport",
-      "description": "Performance di atleti e squadre attraverso metriche confrontabili."
-    }
-  },
   "Projects": {
     "eyebrow": "Portfolio",
     "title": "Portfolio",
@@ -174,6 +148,18 @@
       "records": "Record",
       "period": "Periodo",
       "viewSource": "Apri la fonte"
+    },
+    "missing": {
+      "eyebrow": "Case study",
+      "title": "Dettaglio in preparazione",
+      "description": "Il progetto è pubblicato, ma il case study dettagliato non è ancora disponibile.",
+      "action": "Torna ai progetti"
+    },
+    "error": {
+      "eyebrow": "Errore temporaneo",
+      "title": "Progetto non disponibile",
+      "description": "Non è stato possibile caricare il progetto da Supabase. Riprova tra poco.",
+      "action": "Riprova"
     },
     "dashboard": {
       "eyebrow": "Esplora i dati",

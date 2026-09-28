@@ -8,47 +8,88 @@ import {
   ProjectDetailHero,
   ProjectDetailNav,
   ProjectDetailSection,
+  ProjectDetailState,
   ProjectFinalCta,
   ProjectInsights,
 } from "@/components/projects/detail";
 import {Container} from "@/components/ui";
-import {getProjectBySlug, projects} from "@/data/projects";
 import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
+import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
+import type {Project, ProjectDetail} from "@/types";
 
 interface ProjectPageProps {
   params: Promise<{locale: AppLocale; slug: string}>;
 }
 
-export function generateStaticParams() {
-  return projects.map(({slug}) => ({slug}));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({params}: ProjectPageProps): Promise<Metadata> {
   const {locale, slug} = await params;
-  const project = getProjectBySlug(slug);
-  if (!project) return {};
 
-  const contentT = await getTranslations({locale, namespace: "ProjectContent"});
-  return {title: project.title, description: contentT(`${project.slug}.description`)};
+  try {
+    const result = await getPublishedProjectWithDetailBySlug(slug, locale);
+    return result ? {title: result.project.title, description: result.project.description} : {};
+  } catch {
+    return {};
+  }
 }
 
 export default async function ProjectPage({params}: ProjectPageProps) {
   const {locale, slug} = await params;
   setRequestLocale(locale);
-  const project = getProjectBySlug(slug);
-  if (!project?.detail) notFound();
-  const t = await getTranslations("ProjectDetail.sections");
-  const detail = project.detail;
+
+  let result;
+  try {
+    result = await getPublishedProjectWithDetailBySlug(slug, locale);
+  } catch {
+    return (
+      <section className="relative overflow-hidden py-section">
+        <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[34rem]" />
+        <Container className="relative max-w-4xl">
+          <ProjectDetailState kind="error" retryHref={`/projects/${slug}`} />
+        </Container>
+      </section>
+    );
+  }
+
+  if (!result) notFound();
+
+  const {project, detail} = result;
 
   return (
     <>
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14 lg:pt-16">
         <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[34rem]" />
         <Container className="relative">
-          <ProjectDetailHero project={project} locale={locale} />
+          <ProjectDetailHero project={project} locale={locale} updatedAt={detail?.updatedAt} />
         </Container>
       </section>
+      {detail ? (
+        <ProjectCaseStudy project={project} detail={detail} locale={locale} />
+      ) : (
+        <Container className="max-w-6xl">
+          <ProjectDetailState kind="missing" />
+          <ProjectFinalCta slug={project.slug} dashboardAvailable={Boolean(project.dashboardAvailable)} />
+        </Container>
+      )}
+    </>
+  );
+}
+
+async function ProjectCaseStudy({
+  project,
+  detail,
+  locale,
+}: {
+  project: Project;
+  detail: ProjectDetail;
+  locale: AppLocale;
+}) {
+  const t = await getTranslations("ProjectDetail.sections");
+
+  return (
+    <>
       <ProjectDetailNav />
       <Container className="max-w-6xl">
         <ProjectDetailSection id="overview" eyebrow="01" title={t("overview.title")}>

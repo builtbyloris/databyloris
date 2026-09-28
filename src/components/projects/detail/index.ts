@@ -4,5 +4,6 @@ export {MethodologySteps} from "./methodology-steps";
 export {ProjectDetailHero} from "./project-detail-hero";
 export {ProjectDetailNav} from "./project-detail-nav";
 export {ProjectDetailSection} from "./project-detail-section";
+export {ProjectDetailState} from "./project-detail-state";
 export {ProjectFinalCta} from "./project-final-cta";
 export {ProjectInsights} from "./project-insights";

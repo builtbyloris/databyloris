@@ -1,5 +1,4 @@
 import type {Project} from "@/types";
-import {projectDetails} from "@/data/project-details";
 
 export const projects = [
   {
@@ -14,7 +13,6 @@ export const projects = [
     status: "published",
     publishedAt: "2026-08-20",
     dashboardAvailable: true,
-    detail: projectDetails["video-game-sales"],
   },
   {
     id: "project-002",
@@ -28,7 +26,6 @@ export const projects = [
     status: "published",
     publishedAt: "2026-07-12",
     dashboardAvailable: false,
-    detail: projectDetails["flight-analysis"],
   },
   {
     id: "project-003",
@@ -42,7 +39,6 @@ export const projects = [
     status: "published",
     publishedAt: "2026-06-05",
     dashboardAvailable: true,
-    detail: projectDetails["listening-insights"],
   },
   {
     id: "project-004",
@@ -56,7 +52,6 @@ export const projects = [
     status: "published",
     publishedAt: "2026-04-18",
     dashboardAvailable: false,
-    detail: projectDetails["stock-market-analysis"],
   },
   {
     id: "project-005",
@@ -70,7 +65,6 @@ export const projects = [
     status: "draft",
     publishedAt: null,
     dashboardAvailable: false,
-    detail: projectDetails["city-data-analysis"],
   },
   {
     id: "project-006",
@@ -84,7 +78,6 @@ export const projects = [
     status: "draft",
     publishedAt: null,
     dashboardAvailable: false,
-    detail: projectDetails["sports-performance"],
   },
 ] satisfies Project[];
 
