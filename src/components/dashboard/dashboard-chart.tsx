@@ -4,7 +4,7 @@ import type {EChartsCoreOption} from "echarts/core";
 import {useLocale, useTranslations} from "next-intl";
 import {useMemo} from "react";
 import {Card} from "@/components/ui";
-import {formatDashboardValue, prepareChartData} from "@/lib/dashboard";
+import {formatCompactDashboardValue, formatDashboardValue, prepareChartData} from "@/lib/dashboard";
 import type {ChartConfig, DashboardRecord} from "@/types";
 import {EChartsChart} from "./echarts-chart";
 
@@ -17,6 +17,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
   const option = useMemo<EChartsCoreOption>(() => {
     const format = config.valueFormat ?? "number";
     const valueFormatter = (value: string | number) => typeof value === "number" ? formatDashboardValue(value, format, locale) : String(value);
+    const axisValueFormatter = (value: number) => formatCompactDashboardValue(value, format, locale);
     const tooltip = {trigger: config.type === "donut" || config.type === "pie" ? "item" : "axis", valueFormatter};
     if (config.type === "donut" || config.type === "pie") {
       return {
@@ -31,8 +32,8 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
         aria: {enabled: true},
         tooltip,
         grid: {left: 8, right: 18, top: 10, bottom: 10, containLabel: true},
-        xAxis: {type: "value", splitNumber: 3, axisLabel: {formatter: (value: number) => formatDashboardValue(value, format, locale)}},
-        yAxis: {type: "category", inverse: true, data: points.map((point) => point.category)},
+        xAxis: {type: "value", splitNumber: 3, axisLabel: {formatter: axisValueFormatter, hideOverlap: true}},
+        yAxis: {type: "category", inverse: true, data: points.map((point) => point.category), axisLabel: {overflow: "truncate", width: 110}},
         series: [{type: "bar", data: points.map((point) => point.value), barMaxWidth: 20, itemStyle: {borderRadius: [0, 5, 5, 0]}}],
       };
     }
@@ -41,7 +42,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
       tooltip,
       grid: {left: 10, right: 18, top: 18, bottom: 10, containLabel: true},
       xAxis: {type: "category", boundaryGap: false, data: points.map((point) => point.category)},
-      yAxis: {type: "value", axisLabel: {formatter: (value: number) => formatDashboardValue(value, format, locale)}},
+      yAxis: {type: "value", splitNumber: 4, axisLabel: {formatter: axisValueFormatter, hideOverlap: true}},
       series: [{type: "line", smooth: true, symbolSize: 8, data: points.map((point) => point.value), lineStyle: {width: 3}, areaStyle: {opacity: 0.08}}],
     };
   }, [config.type, config.valueFormat, locale, points]);

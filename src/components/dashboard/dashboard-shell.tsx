@@ -27,9 +27,15 @@ export function DashboardShell({project, config, records, embedded = false}: {
   const filteredRecords = useMemo(() => applyDashboardFilters(records, config.filters, filters), [config.filters, filters, records]);
   const kpis = useMemo(() => calculateKpis(filteredRecords, config.kpis), [config.kpis, filteredRecords]);
   const resetFilters = () => setFilters(createInitialState(config));
+  const dashboardTitle = config.title.trim()
+    ? t.has(config.title) ? t(config.title) : config.title
+    : t("breadcrumb.dashboard");
+  const dashboardDescription = config.description?.trim()
+    ? t.has(config.description) ? t(config.description) : config.description
+    : null;
 
   const dashboardContent = (
-    <div className="min-w-0 space-y-5">
+    <div className="w-full min-w-0 max-w-full space-y-5">
       <DashboardFilters filters={config.filters} records={records} state={filters} onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))} onReset={resetFilters} />
       <DashboardKpiGrid items={kpis} />
 
@@ -64,11 +70,11 @@ export function DashboardShell({project, config, records, embedded = false}: {
         </div>
         <div className="mt-6 max-w-3xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{t(config.title)}</h1>
-          {config.description ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{t(config.description)}</p> : null}
+          <h1 className="mt-3 break-words text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{dashboardTitle}</h1>
+          {dashboardDescription ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{dashboardDescription}</p> : null}
         </div>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
+        <div className="mt-8 grid min-w-0 gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
           <DashboardSidebar slug={project.slug} />
           {dashboardContent}
         </div>

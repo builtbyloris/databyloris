@@ -223,6 +223,8 @@
       "category": "Category",
       "channel": "Channel",
       "all": "All",
+      "search": "Search options…",
+      "noResults": "No options found",
       "reset": "Reset filters"
     },
     "kpis": {

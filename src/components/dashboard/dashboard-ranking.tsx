@@ -4,7 +4,7 @@ import {useLocale, useTranslations} from "next-intl";
 import {useMemo} from "react";
 import {Card} from "@/components/ui";
 import {cn} from "@/lib/cn";
-import {calculateRanking, formatDashboardValue} from "@/lib/dashboard";
+import {calculateRanking, formatCompactDashboardValue, formatDashboardValue} from "@/lib/dashboard";
 import type {DashboardRecord, RankingConfig} from "@/types";
 
 export function DashboardRanking({config, records, className}: {config: RankingConfig; records: DashboardRecord[]; className?: string}) {
@@ -29,14 +29,16 @@ export function DashboardRanking({config, records, className}: {config: RankingC
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, index) => (
-              <tr key={row.dimension} className="border-t border-border first:border-0">
+            {rows.map((row, index) => {
+              const format = config.valueFormat ?? "number";
+              const fullValue = formatDashboardValue(row.value, format, locale);
+              return <tr key={row.dimension} className="border-t border-border first:border-0">
                 <td className="px-5 py-3 font-bold text-primary-strong">{String(index + 1).padStart(2, "0")}</td>
                 <th scope="row" className="px-3 py-3 font-semibold">{row.dimension}</th>
                 {config.detailColumns.map((column) => <td key={column.field} className="px-3 py-3 text-muted">{row.details[column.field]}</td>)}
-                <td className="px-5 py-3 text-right font-bold">{formatDashboardValue(row.value, config.valueFormat ?? "number", locale)}</td>
-              </tr>
-            ))}
+                <td title={fullValue} aria-label={fullValue} className="px-5 py-3 text-right font-bold">{formatCompactDashboardValue(row.value, format, locale)}</td>
+              </tr>;
+            })}
           </tbody>
         </table>
       </div>

@@ -223,6 +223,8 @@
       "category": "Categoria",
       "channel": "Canale",
       "all": "Tutti",
+      "search": "Cerca opzione…",
+      "noResults": "Nessuna opzione trovata",
       "reset": "Reimposta filtri"
     },
     "kpis": {
