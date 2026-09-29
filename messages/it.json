@@ -180,6 +180,14 @@
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
     "metadataDescription": "Dashboard interattiva di analisi dati.",
+    "states": {
+      "preparing": {"title": "Dashboard in preparazione"},
+      "missing-config": {"description": "La configurazione della dashboard non è ancora disponibile."},
+      "missing-dataset": {"description": "Il dataset non è disponibile. La dashboard sarà accessibile quando i dati saranno pronti."},
+      "invalid-config": {"title": "Configurazione non valida", "description": "La configurazione della dashboard non è compatibile con il dataset corrente."},
+      "error": {"title": "Impossibile caricare la dashboard", "description": "Si è verificato un problema durante il caricamento. Riprova più tardi.", "retry": "Riprova"},
+      "backToProject": "Torna al progetto"
+    },
     "videoGameSales": {
       "title": "Video Game Sales Dashboard",
       "description": "Esplora le vendite globali di videogiochi per periodo, piattaforma, genere e regione."

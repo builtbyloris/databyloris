@@ -9,7 +9,7 @@ import {
 } from "@/lib/mappers/dataset-mapper";
 import {createClient} from "@/lib/supabase/server";
 import type {AdminDatasetDraft, DashboardRecord, DatasetColumn} from "@/types";
-import {DATASET_ROW_BATCH_SIZE, DATASET_STORAGE_BUCKET} from "@/lib/datasets";
+import {DATASET_MAX_ROWS, DATASET_ROW_BATCH_SIZE, DATASET_STORAGE_BUCKET} from "@/lib/datasets";
 import {RepositoryError} from "./repository-error";
 
 export interface CreateDatasetInput {
@@ -75,6 +75,17 @@ export async function getDatasetRows(datasetId: string): Promise<DashboardRecord
       throw new RepositoryError("invalid_data");
     }
     if (data.length < pageSize) return records;
+    if (records.length >= DATASET_MAX_ROWS) {
+      const {data: overflow, error: overflowError} = await supabase
+        .from("dataset_rows")
+        .select("id")
+        .eq("dataset_id", datasetId)
+        .order("row_index", {ascending: true})
+        .range(DATASET_MAX_ROWS, DATASET_MAX_ROWS);
+      if (overflowError) throw new RepositoryError("database");
+      if (overflow.length > 0) throw new RepositoryError("invalid_data");
+      return records;
+    }
   }
 }
 

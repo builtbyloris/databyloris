@@ -58,31 +58,40 @@ export async function listPublishedProjects(locale: SupportedLocale): Promise<Pr
   return data.map((row) => mapPublicProject(row, locale));
 }
 
-export async function getPublishedProjectWithDetailBySlug(
+export async function getPublishedProjectBySlug(
   slug: string,
   locale: SupportedLocale,
-): Promise<PublishedProjectWithDetail | null> {
+): Promise<Project | null> {
   const supabase = await createClient();
-  const {data: projectRow, error: projectError} = await supabase
+  const {data, error} = await supabase
     .from("projects")
     .select("*")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
 
-  if (projectError) throw mapDatabaseError(projectError);
-  if (!projectRow) return null;
+  if (error) throw mapDatabaseError(error);
+  return data ? mapPublicProject(data, locale) : null;
+}
 
+export async function getPublishedProjectWithDetailBySlug(
+  slug: string,
+  locale: SupportedLocale,
+): Promise<PublishedProjectWithDetail | null> {
+  const project = await getPublishedProjectBySlug(slug, locale);
+  if (!project) return null;
+
+  const supabase = await createClient();
   const {data: detailRow, error: detailError} = await supabase
     .from("project_details")
     .select("*")
-    .eq("project_id", projectRow.id)
+    .eq("project_id", project.id)
     .maybeSingle();
 
   if (detailError) throw mapDatabaseError(detailError);
 
   return {
-    project: mapPublicProject(projectRow, locale),
+    project,
     detail: detailRow ? mapProjectDetail(detailRow) : null,
   };
 }
