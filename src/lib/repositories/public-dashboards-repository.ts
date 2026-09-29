@@ -1,6 +1,7 @@
 import "server-only";
 
 import {validateDashboardConfig} from "@/lib/admin";
+import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
 import {dashboardConfigFromJson} from "@/lib/mappers/dashboard-config-mapper";
 import {datasetSchemaFromJson} from "@/lib/mappers/dataset-mapper";
 import {createClient} from "@/lib/supabase/server";
@@ -56,12 +57,14 @@ export async function getPublishedDashboardBySlug(
   if (datasetError) throw new RepositoryError("database");
   if (datasets.length !== 1) return {kind: "missing-dataset", project};
 
-  let fields: string[];
+  let schemaFields: string[];
   try {
-    fields = datasetSchemaFromJson(datasets[0].schema).map((column) => column.name);
+    schemaFields = datasetSchemaFromJson(datasets[0].schema).map((column) => column.name);
   } catch {
     throw new RepositoryError("invalid_data");
   }
+  const records = await getDatasetRows(datasets[0].id);
+  const fields = getAvailableDatasetFields(schemaFields, records);
 
   if (validateDashboardConfig(config, fields).length > 0) {
     return {kind: "invalid-config", project};
@@ -71,6 +74,6 @@ export async function getPublishedDashboardBySlug(
     kind: "ready",
     project,
     config,
-    records: await getDatasetRows(datasets[0].id),
+    records,
   };
 }

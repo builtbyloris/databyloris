@@ -6,6 +6,7 @@ import type {
   KPIConfig,
   RankingConfig,
 } from "@/types";
+import {readDashboardField} from "@/lib/datasets/field-names";
 
 export const ALL_FILTER_VALUE = "__all__";
 export type DashboardFilterState = Record<string, string | string[]>;
@@ -24,7 +25,7 @@ export interface RankingRow {
 function numericValues(records: DashboardRecord[], field?: string) {
   if (!field) return [];
   return records
-    .map((record) => record[field])
+    .map((record) => readDashboardField(record, field))
     .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 }
 
@@ -32,7 +33,7 @@ export function aggregateRecords(records: DashboardRecord[], aggregation: Aggreg
   if (aggregation === "count") return records.length;
   if (!field) return 0;
   if (aggregation === "distinctCount") {
-    return new Set(records.map((record) => record[field]).filter((value) => value !== null && value !== undefined)).size;
+    return new Set(records.map((record) => readDashboardField(record, field)).filter((value) => value !== null && value !== undefined)).size;
   }
 
   const values = numericValues(records, field);
@@ -52,10 +53,11 @@ export function applyDashboardFilters(
     filters.every((filter) => {
       const selected = state[filter.id];
       if (!selected || selected === ALL_FILTER_VALUE) return true;
+      const value = readDashboardField(record, filter.field);
       if (Array.isArray(selected)) {
-        return selected.length === 0 || selected.includes(String(record[filter.field]));
+        return selected.length === 0 || selected.includes(String(value));
       }
-      return String(record[filter.field]) === selected;
+      return String(value) === selected;
     }),
   );
 }
@@ -65,7 +67,7 @@ export function getFilterOptions(records: DashboardRecord[], filter: FilterConfi
   const values = Array.from(
     new Set(
       records
-        .map((record) => record[filter.field])
+        .map((record) => readDashboardField(record, filter.field))
         .filter((value): value is string | number => typeof value === "string" || typeof value === "number"),
     ),
   );
@@ -88,7 +90,7 @@ export function calculateKpis(records: DashboardRecord[], configs: KPIConfig[]) 
 export function prepareChartData(records: DashboardRecord[], config: ChartConfig): AggregatedPoint[] {
   const groups = new Map<string | number, DashboardRecord[]>();
   for (const record of records) {
-    const rawCategory = record[config.categoryField];
+    const rawCategory = readDashboardField(record, config.categoryField);
     if (typeof rawCategory !== "string" && typeof rawCategory !== "number") continue;
     const group = groups.get(rawCategory) ?? [];
     group.push(record);
@@ -113,7 +115,7 @@ export function prepareChartData(records: DashboardRecord[], config: ChartConfig
 export function calculateRanking(records: DashboardRecord[], config: RankingConfig): RankingRow[] {
   const groups = new Map<string, DashboardRecord[]>();
   for (const record of records) {
-    const dimension = record[config.dimension];
+    const dimension = readDashboardField(record, config.dimension);
     if (dimension === null || dimension === undefined) continue;
     const key = String(dimension);
     groups.set(key, [...(groups.get(key) ?? []), record]);
@@ -122,7 +124,7 @@ export function calculateRanking(records: DashboardRecord[], config: RankingConf
   return Array.from(groups, ([dimension, group]) => ({
     dimension,
     details: Object.fromEntries(
-      config.detailColumns.map(({field}) => [field, String(group[0]?.[field] ?? "—")]),
+      config.detailColumns.map(({field}) => [field, String(group[0] ? readDashboardField(group[0], field) ?? "—" : "—")]),
     ),
     value: aggregateRecords(group, config.aggregation, config.metric),
   }))

@@ -8,6 +8,7 @@ import type {
   KPIFormat,
   ProjectDraft,
 } from "@/types";
+import {resolveDatasetFieldName} from "@/lib/datasets/field-names";
 
 const aggregations: AggregationType[] = ["sum", "count", "distinctCount", "average"];
 const chartTypes: ChartType[] = ["line", "bar", "pie", "donut"];
@@ -28,7 +29,9 @@ const field = (value: string | undefined, path: string, fields: string[], issues
     if (!optional) issues.push({path, code: "fieldRequired"});
     return;
   }
-  if (fields.length > 0 && !fields.includes(value)) issues.push({path, code: "unknownField"});
+  if (fields.length > 0 && resolveDatasetFieldName(value, fields) === null) {
+    issues.push({path, code: "unknownField"});
+  }
 };
 
 function duplicateIds(items: {id: string}[], path: string, issues: AdminValidationIssue[]) {

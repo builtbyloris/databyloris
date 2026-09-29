@@ -1,5 +1,6 @@
 import type {AdminDatasetDraft, DashboardRecord, DashboardValue, DatasetColumn, DatasetColumnType} from "@/types";
 import type {Database, Json} from "@/types/database";
+import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
 
 type DatasetRow = Database["public"]["Tables"]["datasets"]["Row"];
 
@@ -64,7 +65,7 @@ export function datasetRowToAdminDraft(
     recordCount: row.record_count,
     columns,
     records,
-    fields: columns.map((column) => column.name),
+    fields: getAvailableDatasetFields(columns.map((column) => column.name), records),
     source: "database",
     updatedAt: row.updated_at,
   };

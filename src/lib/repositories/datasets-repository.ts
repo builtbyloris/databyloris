@@ -7,6 +7,7 @@ import {
   datasetSchemaFromJson,
   datasetSchemaToJson,
 } from "@/lib/mappers/dataset-mapper";
+import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
 import {createClient} from "@/lib/supabase/server";
 import type {AdminDatasetDraft, DashboardRecord, DatasetColumn} from "@/types";
 import {DATASET_MAX_ROWS, DATASET_ROW_BATCH_SIZE, DATASET_STORAGE_BUCKET} from "@/lib/datasets";
@@ -49,11 +50,13 @@ export async function getAdminProjectDataset(projectId: string): Promise<AdminDa
 export async function getAdminProjectDatasetFields(projectId: string): Promise<string[] | null> {
   const datasets = await listProjectDatasets(projectId);
   if (!datasets[0]) return null;
+  let schemaFields: string[];
   try {
-    return datasetSchemaFromJson(datasets[0].schema).map((column) => column.name);
+    schemaFields = datasetSchemaFromJson(datasets[0].schema).map((column) => column.name);
   } catch {
     throw new RepositoryError("invalid_data");
   }
+  return getAvailableDatasetFields(schemaFields, await getDatasetRows(datasets[0].id));
 }
 
 export async function getDatasetRows(datasetId: string): Promise<DashboardRecord[]> {
