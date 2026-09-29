@@ -5,8 +5,7 @@ import type {
   Project,
 } from "@/types";
 import type {Json, Tables, TablesInsert, TablesUpdate} from "@/types/database";
-
-export const DEFAULT_PROJECT_IMAGE = "/images/projects/project-cover.svg";
+import {getProjectImageUrl} from "@/lib/project-media";
 
 type ProjectRow = Tables<"projects">;
 
@@ -52,7 +51,7 @@ export function projectRowToDomain(
       description: description[locale],
       category: row.category,
       technologies,
-      image: row.image_path ?? DEFAULT_PROJECT_IMAGE,
+      image: getProjectImageUrl(row.image_path),
       featured: row.featured,
       status: row.status,
       publishedAt: row.published_at,
@@ -61,6 +60,7 @@ export function projectRowToDomain(
     },
     localizedTitle: title,
     localizedDescription: description,
+    imagePath: row.image_path,
   };
 }
 
@@ -77,7 +77,7 @@ export function projectInputToInsert(
     description: localizedJson(input.description),
     category: input.category,
     technologies: input.technologies,
-    image_path: DEFAULT_PROJECT_IMAGE,
+    image_path: null,
     featured: input.featured,
     status: input.status,
     published_at: input.status === "published" ? new Date().toISOString() : null,

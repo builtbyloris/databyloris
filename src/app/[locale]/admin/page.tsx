@@ -30,6 +30,7 @@ export default async function AdminPage({params}: {params: Promise<{locale: AppL
         getAdminProjectDataset(record.project.id),
       ]);
       return createProjectDraft(record.project, {
+        imagePath: record.imagePath,
         config,
         dataset,
         projectDetail,

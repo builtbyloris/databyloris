@@ -44,12 +44,14 @@ export function createProjectDraft(project: Project, options?: {
   data?: DashboardRecord[];
   localizedTitle?: LocalizedText;
   localizedDescription?: LocalizedText;
+  imagePath?: string | null;
   projectDetail?: ProjectDetail | null;
 }): ProjectDraft {
   const records = options?.data ?? [];
   const registryFields = Array.from(new Set(records.flatMap((record) => Object.keys(record)))).sort();
   return {
     project: structuredClone(project),
+    imagePath: options?.imagePath ?? null,
     localizedTitle: structuredClone(options?.localizedTitle ?? {it: project.title, en: project.title}),
     localizedDescription: structuredClone(options?.localizedDescription ?? {it: project.description, en: project.description}),
     projectDetail: structuredClone(options?.projectDetail ?? createEmptyProjectDetail()),

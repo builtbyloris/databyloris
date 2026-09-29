@@ -12,6 +12,7 @@ import {
   DatasetParseError,
   parseCsvDataset,
 } from "@/lib/datasets";
+import {isProjectCoverStoragePath} from "@/lib/project-media";
 import {
   dashboardConfigFromJson,
   dashboardConfigToJson,
@@ -26,11 +27,13 @@ import {
   removeDatasetFile,
   updateDatasetGrain,
 } from "@/lib/repositories/datasets-repository";
+import {removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
 import {
   createProject,
   getAdminProjectById,
   upsertProjectDetail,
   updateProject,
+  updateProjectImagePath,
   updateProjectStatus,
 } from "@/lib/repositories/projects-repository";
 import {RepositoryError} from "@/lib/repositories/repository-error";
@@ -42,6 +45,7 @@ import type {
   AdminProjectRecord,
   DashboardConfig,
   ProjectDetail,
+  ProjectCoverResult,
   RegisterDatasetInput,
 } from "@/types";
 
@@ -91,6 +95,29 @@ async function cleanupUploadedFile(storagePath: string) {
     await removeDatasetFile(storagePath);
   } catch {
     // Best effort: the Admin can retry replacement if Storage cleanup is unavailable.
+  }
+}
+
+async function cleanupProjectMediaFile(storagePath: string) {
+  try {
+    await removeProjectMediaFile(storagePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function revalidateProjectSurfaces(locale: AppLocale, slug: string) {
+  try {
+    revalidatePath(adminRoute(locale));
+    revalidatePath("/");
+    revalidatePath("/en");
+    revalidatePath("/projects");
+    revalidatePath("/en/projects");
+    revalidatePath(`/projects/${slug}`);
+    revalidatePath(`/en/projects/${slug}`);
+  } catch {
+    // The unique Storage path prevents stale Next Image content if revalidation is unavailable.
   }
 }
 
@@ -161,6 +188,73 @@ export async function updateProjectStatusAction(
     return {ok: true, data: project};
   } catch (error) {
     return {ok: false, error: actionError(error)};
+  }
+}
+
+export async function updateProjectCoverAction(
+  locale: AppLocale,
+  projectId: unknown,
+  storagePath: unknown,
+): Promise<AdminActionResult<ProjectCoverResult>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isProjectCoverStoragePath(storagePath, projectId)) {
+    return {ok: false, error: "invalidCover"};
+  }
+
+  try {
+    const current = await getAdminProjectById(projectId, locale);
+    if (!current) {
+      await cleanupProjectMediaFile(storagePath);
+      return {ok: false, error: "projectNotFound"};
+    }
+
+    const saved = await updateProjectImagePath(projectId, storagePath, locale);
+    let cleanupIncomplete = false;
+    if (current.imagePath
+      && current.imagePath !== storagePath
+      && isProjectCoverStoragePath(current.imagePath, projectId)) {
+      cleanupIncomplete = !(await cleanupProjectMediaFile(current.imagePath));
+    }
+
+    revalidateProjectSurfaces(locale, saved.project.slug);
+    return {
+      ok: true,
+      data: {imagePath: saved.imagePath, imageUrl: saved.project.image, cleanupIncomplete},
+    };
+  } catch {
+    await cleanupProjectMediaFile(storagePath);
+    return {ok: false, error: "coverUpdateFailed"};
+  }
+}
+
+export async function removeProjectCoverAction(
+  locale: AppLocale,
+  projectId: unknown,
+  confirmed: unknown,
+): Promise<AdminActionResult<ProjectCoverResult>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || confirmed !== true) {
+    return {ok: false, error: "invalidCover"};
+  }
+
+  try {
+    const current = await getAdminProjectById(projectId, locale);
+    if (!current) return {ok: false, error: "projectNotFound"};
+
+    const saved = await updateProjectImagePath(projectId, null, locale);
+    const cleanupIncomplete = Boolean(
+      current.imagePath
+      && isProjectCoverStoragePath(current.imagePath, projectId)
+      && !(await cleanupProjectMediaFile(current.imagePath)),
+    );
+
+    revalidateProjectSurfaces(locale, saved.project.slug);
+    return {
+      ok: true,
+      data: {imagePath: null, imageUrl: saved.project.image, cleanupIncomplete},
+    };
+  } catch {
+    return {ok: false, error: "coverUpdateFailed"};
   }
 }
 

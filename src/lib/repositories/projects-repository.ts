@@ -208,3 +208,21 @@ export async function updateProjectStatus(
   if (!data) throw new RepositoryError("not_found");
   return mapProject(data, locale);
 }
+
+export async function updateProjectImagePath(
+  projectId: string,
+  imagePath: string | null,
+  locale: SupportedLocale,
+): Promise<AdminProjectRecord> {
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from("projects")
+    .update({image_path: imagePath})
+    .eq("id", projectId)
+    .select("*")
+    .maybeSingle();
+
+  if (error) throw mapDatabaseError(error);
+  if (!data) throw new RepositoryError("not_found");
+  return mapProject(data, locale);
+}

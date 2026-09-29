@@ -7,12 +7,13 @@ import type {Project, ProjectDetail, ProjectDraft} from "@/types";
 import type {AppLocale} from "@/i18n/routing";
 import type {AdminDatasetDraft} from "@/types";
 import {DatasetManager} from "./dataset-manager";
+import {ProjectCoverManager} from "./project-cover-manager";
 import {ProjectDetailEditor} from "./project-detail-editor";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 const textareaClass = "mt-1.5 min-h-28 w-full rounded-control border border-border bg-surface px-3 py-2.5 text-sm outline-none focus:border-primary";
 
-export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onDatasetChange, onSave, onDetailSave, onBuilder, onBack}: {
+export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onDatasetChange, onCoverChange, onSave, onDetailSave, onBuilder, onBack}: {
   draft: ProjectDraft;
   allDrafts: ProjectDraft[];
   locale: AppLocale;
@@ -23,6 +24,7 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
   onChange: (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => void;
   onDetailChange: (detail: ProjectDetail) => void;
   onDatasetChange: (dataset: AdminDatasetDraft) => void;
+  onCoverChange: (cover: {imagePath: string | null; imageUrl: string}) => void;
   onSave: () => void;
   onDetailSave: () => void;
   onBuilder: () => void;
@@ -118,6 +120,16 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
         <p className="mt-5 rounded-control border border-violet/20 bg-violet/10 px-4 py-3 text-xs font-medium text-muted">{t("publishNotice")}</p>
       </Card>
 
+      <ProjectCoverManager
+        key={`cover-${draft.project.id}`}
+        projectId={draft.project.id}
+        projectTitle={draft.project.title}
+        imagePath={draft.imagePath}
+        imageUrl={draft.project.image}
+        locale={appLocale}
+        onChange={onCoverChange}
+      />
+
       <ProjectDetailEditor
         detail={draft.projectDetail}
         dirty={detailDirty}
@@ -127,7 +139,7 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
       />
 
       <DatasetManager
-        key={draft.project.id}
+        key={`dataset-${draft.project.id}`}
         projectId={draft.project.id}
         projectTitle={draft.project.title}
         locale={appLocale}

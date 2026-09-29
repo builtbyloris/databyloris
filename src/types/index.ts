@@ -10,6 +10,7 @@ export type {
   AdminValidationIssue,
   AdminView,
   ProjectDraft,
+  ProjectCoverResult,
   RegisterDatasetInput,
 } from "./admin";
 export type {ChartConfig, ChartSort, ChartType} from "./chart-config";

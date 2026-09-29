@@ -36,6 +36,7 @@ export interface RegisterDatasetInput {
 
 export interface ProjectDraft {
   project: Project;
+  imagePath: string | null;
   localizedTitle: LocalizedText;
   localizedDescription: LocalizedText;
   projectDetail: ProjectDetail;
@@ -45,6 +46,7 @@ export interface ProjectDraft {
 
 export interface AdminProjectRecord {
   project: Project;
+  imagePath: string | null;
   localizedTitle: LocalizedText;
   localizedDescription: LocalizedText;
 }
@@ -68,6 +70,8 @@ export type AdminActionError =
   | "invalidConfig"
   | "invalidDetail"
   | "invalidDataset"
+  | "invalidCover"
+  | "coverUpdateFailed"
   | "datasetExists"
   | "datasetTooLarge"
   | "tooManyRows"
@@ -80,6 +84,12 @@ export type AdminActionError =
 export type AdminActionResult<T> =
   | {ok: true; data: T}
   | {ok: false; error: AdminActionError};
+
+export interface ProjectCoverResult {
+  imagePath: string | null;
+  imageUrl: string;
+  cleanupIncomplete: boolean;
+}
 
 export type AdminView = "overview" | "projects" | "editor" | "builder" | "media";
 
