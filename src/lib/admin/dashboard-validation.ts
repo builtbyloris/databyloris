@@ -16,16 +16,42 @@ const chartSorts: ChartSort[] = ["category-asc", "category-desc", "value-asc", "
 const filterTypes: FilterType[] = ["select", "multi-select"];
 const formats: KPIFormat[] = ["number", "sales", "currency", "percentage", "duration"];
 
-const required = (value: string | undefined, path: string, issues: AdminValidationIssue[]) => {
-  if (!value?.trim()) issues.push({path, code: "required"});
+const required = (value: unknown, path: string, issues: AdminValidationIssue[]) => {
+  if (typeof value !== "string" || !value.trim()) issues.push({path, code: "required"});
+};
+
+const dashboardText = (
+  value: unknown,
+  path: string,
+  issues: AdminValidationIssue[],
+  optional = false,
+) => {
+  if (value === undefined || value === null || value === "") {
+    if (!optional) issues.push({path, code: "required"});
+    return;
+  }
+
+  if (typeof value === "string") {
+    if (!value.trim() && !optional) issues.push({path, code: "required"});
+    return;
+  }
+
+  if (typeof value !== "object" || Array.isArray(value)) {
+    issues.push({path, code: "required"});
+    return;
+  }
+
+  const localized = value as {it?: unknown; en?: unknown};
+  required(localized.it, `${path}.it`, issues);
+  required(localized.en, `${path}.en`, issues);
 };
 
 const supported = <T extends string>(value: T, values: T[], path: string, issues: AdminValidationIssue[]) => {
   if (!values.includes(value)) issues.push({path, code: "unsupportedValue"});
 };
 
-const field = (value: string | undefined, path: string, fields: string[], issues: AdminValidationIssue[], optional = false) => {
-  if (!value?.trim()) {
+const field = (value: unknown, path: string, fields: string[], issues: AdminValidationIssue[], optional = false) => {
+  if (typeof value !== "string" || !value.trim()) {
     if (!optional) issues.push({path, code: "fieldRequired"});
     return;
   }
@@ -45,6 +71,8 @@ function duplicateIds(items: {id: string}[], path: string, issues: AdminValidati
 export function validateDashboardConfig(config: DashboardConfig, fields: string[]): AdminValidationIssue[] {
   const issues: AdminValidationIssue[] = [];
   required(config.id, "dashboard.id", issues);
+  dashboardText(config.title, "dashboard.title", issues);
+  dashboardText(config.description, "dashboard.description", issues, true);
   required(config.datasetId, "dashboard.datasetId", issues);
   duplicateIds(config.filters, "filters", issues);
   duplicateIds(config.kpis, "kpis", issues);
@@ -53,20 +81,22 @@ export function validateDashboardConfig(config: DashboardConfig, fields: string[
 
   config.filters.forEach((item, index) => {
     required(item.id, `filters.${index}.id`, issues);
-    required(item.label, `filters.${index}.label`, issues);
+    dashboardText(item.label, `filters.${index}.label`, issues);
     field(item.field, `filters.${index}.field`, fields, issues);
     supported(item.type, filterTypes, `filters.${index}.type`, issues);
   });
   config.kpis.forEach((item, index) => {
     required(item.id, `kpis.${index}.id`, issues);
-    required(item.label, `kpis.${index}.label`, issues);
+    dashboardText(item.label, `kpis.${index}.label`, issues);
+    dashboardText(item.description, `kpis.${index}.description`, issues, true);
     supported(item.aggregation, aggregations, `kpis.${index}.aggregation`, issues);
     field(item.field, `kpis.${index}.field`, fields, issues, item.aggregation === "count");
     supported(item.format, formats, `kpis.${index}.format`, issues);
   });
   config.charts.forEach((item, index) => {
     required(item.id, `charts.${index}.id`, issues);
-    required(item.title, `charts.${index}.title`, issues);
+    dashboardText(item.title, `charts.${index}.title`, issues);
+    dashboardText(item.description, `charts.${index}.description`, issues, true);
     supported(item.type, chartTypes, `charts.${index}.type`, issues);
     field(item.categoryField, `charts.${index}.categoryField`, fields, issues);
     supported(item.aggregation, aggregations, `charts.${index}.aggregation`, issues);
@@ -77,14 +107,14 @@ export function validateDashboardConfig(config: DashboardConfig, fields: string[
   });
   config.rankings.forEach((item, index) => {
     required(item.id, `rankings.${index}.id`, issues);
-    required(item.title, `rankings.${index}.title`, issues);
-    required(item.dimensionLabel, `rankings.${index}.dimensionLabel`, issues);
-    required(item.metricLabel, `rankings.${index}.metricLabel`, issues);
+    dashboardText(item.title, `rankings.${index}.title`, issues);
+    dashboardText(item.dimensionLabel, `rankings.${index}.dimensionLabel`, issues);
+    dashboardText(item.metricLabel, `rankings.${index}.metricLabel`, issues);
     field(item.dimension, `rankings.${index}.dimension`, fields, issues);
     field(item.metric, `rankings.${index}.metric`, fields, issues, item.aggregation === "count");
     supported(item.aggregation, aggregations, `rankings.${index}.aggregation`, issues);
     item.detailColumns.forEach((column, columnIndex) => {
-      required(column.label, `rankings.${index}.detailColumns.${columnIndex}.label`, issues);
+      dashboardText(column.label, `rankings.${index}.detailColumns.${columnIndex}.label`, issues);
       field(column.field, `rankings.${index}.detailColumns.${columnIndex}.field`, fields, issues);
     });
     if (item.limit < 1) issues.push({path: `rankings.${index}.limit`, code: "positiveLimit"});

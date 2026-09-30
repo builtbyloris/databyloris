@@ -20,6 +20,7 @@ export type {FilterConfig, FilterOption, FilterType} from "./filter-config";
 export type {AggregationType, KPI, KPIConfig, KPIFormat} from "./kpi";
 export type {
   DatasetSummary,
+  DashboardText,
   LocalizedText,
   MethodologyStep,
   Project,

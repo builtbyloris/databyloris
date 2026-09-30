@@ -5,6 +5,7 @@ import type {DashboardFilterState} from "@/lib/dashboard";
 import {ALL_FILTER_VALUE, getFilterOptions} from "@/lib/dashboard";
 import type {DashboardRecord, FilterConfig} from "@/types";
 import {SearchableFilter} from "./searchable-filter";
+import {useDashboardText} from "./use-dashboard-text";
 
 const SEARCHABLE_FILTER_THRESHOLD = 50;
 
@@ -16,7 +17,7 @@ export function DashboardFilters({filters, records, state, onChange, onReset}: {
   onReset: () => void;
 }) {
   const t = useTranslations("Dashboard");
-  const label = (value: string) => t.has(value) ? t(value) : value;
+  const dashboardText = useDashboardText();
 
   return (
     <div data-dashboard-section="filters" className="w-full min-w-0 max-w-full rounded-card border border-border bg-card p-4 shadow-soft sm:p-5">
@@ -24,7 +25,7 @@ export function DashboardFilters({filters, records, state, onChange, onReset}: {
         <div className="grid w-full min-w-0 max-w-full flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {filters.map((filter) => {
             const options = getFilterOptions(records, filter);
-            const filterLabel = label(filter.label);
+            const filterLabel = dashboardText(filter.label);
             const value = String(state[filter.id] ?? ALL_FILTER_VALUE);
             return (
               <div key={filter.id} className="block min-w-0">

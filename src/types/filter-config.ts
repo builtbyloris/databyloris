@@ -1,3 +1,5 @@
+import type {DashboardText} from "./project";
+
 export type FilterType = "select" | "multi-select";
 
 export interface FilterOption {
@@ -7,7 +9,7 @@ export interface FilterOption {
 
 export interface FilterConfig {
   id: string;
-  label: string;
+  label: DashboardText;
   field: string;
   type: FilterType;
   options?: FilterOption[];

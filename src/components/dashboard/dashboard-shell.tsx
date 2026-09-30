@@ -11,6 +11,7 @@ import {DashboardFilters} from "./dashboard-filters";
 import {DashboardKpiGrid} from "./dashboard-kpi-grid";
 import {DashboardRanking} from "./dashboard-ranking";
 import {DashboardSidebar} from "./dashboard-sidebar";
+import {useDashboardText} from "./use-dashboard-text";
 
 function createInitialState(config: DashboardConfig): DashboardFilterState {
   return Object.fromEntries(config.filters.map((filter) => [filter.id, filter.defaultValue ?? ALL_FILTER_VALUE]));
@@ -23,16 +24,13 @@ export function DashboardShell({project, config, records, embedded = false}: {
   embedded?: boolean;
 }) {
   const t = useTranslations("Dashboard");
+  const dashboardText = useDashboardText();
   const [filters, setFilters] = useState<DashboardFilterState>(() => createInitialState(config));
   const filteredRecords = useMemo(() => applyDashboardFilters(records, config.filters, filters), [config.filters, filters, records]);
   const kpis = useMemo(() => calculateKpis(filteredRecords, config.kpis), [config.kpis, filteredRecords]);
   const resetFilters = () => setFilters(createInitialState(config));
-  const dashboardTitle = config.title.trim()
-    ? t.has(config.title) ? t(config.title) : config.title
-    : t("breadcrumb.dashboard");
-  const dashboardDescription = config.description?.trim()
-    ? t.has(config.description) ? t(config.description) : config.description
-    : null;
+  const dashboardTitle = dashboardText(config.title).trim() || t("breadcrumb.dashboard");
+  const dashboardDescription = dashboardText(config.description).trim();
 
   const dashboardContent = (
     <div className="w-full min-w-0 max-w-full space-y-5">

@@ -13,8 +13,7 @@ export function slugifyProjectTitle(value: string) {
 export function createEmptyDashboardConfig(slug: string): DashboardConfig {
   return {
     id: `${slug || "new-project"}-dashboard`,
-    title: "Dashboard",
-    description: "",
+    title: {it: "Dashboard", en: "Dashboard"},
     datasetId: "",
     filters: [],
     kpis: [],

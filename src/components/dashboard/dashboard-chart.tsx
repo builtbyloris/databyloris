@@ -7,12 +7,15 @@ import {Card} from "@/components/ui";
 import {formatCompactDashboardValue, formatDashboardValue, prepareChartData} from "@/lib/dashboard";
 import type {ChartConfig, DashboardRecord} from "@/types";
 import {EChartsChart} from "./echarts-chart";
+import {useDashboardText} from "./use-dashboard-text";
 
 export function DashboardChart({config, records, featured = false}: {config: ChartConfig; records: DashboardRecord[]; featured?: boolean}) {
   const t = useTranslations("Dashboard");
   const locale = useLocale();
+  const dashboardText = useDashboardText();
   const points = useMemo(() => prepareChartData(records, config), [config, records]);
-  const title = t.has(config.title) ? t(config.title) : config.title;
+  const title = dashboardText(config.title);
+  const description = dashboardText(config.description).trim();
 
   const option = useMemo<EChartsCoreOption>(() => {
     const format = config.valueFormat ?? "number";
@@ -50,6 +53,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
   return (
     <Card data-dashboard-section="charts" className={`min-w-0 p-5 sm:p-6 ${featured ? "lg:col-span-2 xl:col-span-2" : ""}`}>
       <h2 className="text-base font-bold tracking-tight sm:text-lg">{title}</h2>
+      {description ? <p className="mt-1 text-sm leading-6 text-muted">{description}</p> : null}
       <EChartsChart option={option} label={t("charts.accessibleLabel", {title})} className={featured ? "h-80 sm:h-96" : "h-80"} />
     </Card>
   );

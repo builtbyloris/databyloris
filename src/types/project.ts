@@ -5,6 +5,8 @@ export interface LocalizedText {
   en: string;
 }
 
+export type DashboardText = string | LocalizedText;
+
 export interface DatasetSummary {
   name: string;
   source: LocalizedText;

@@ -10,7 +10,6 @@ export function dashboardConfigFromJson(value: Json): DashboardConfig | null {
   if (
     !isRecord(value)
     || typeof value.id !== "string"
-    || typeof value.title !== "string"
     || typeof value.datasetId !== "string"
     || !Array.isArray(value.filters)
     || !Array.isArray(value.kpis)
