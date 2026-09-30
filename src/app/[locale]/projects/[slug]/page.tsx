@@ -15,7 +15,9 @@ import {
 import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
+import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
 import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
+import {createLocalizedMetadata, getAbsoluteUrl, getSiteUrl, serializeJsonLd} from "@/lib/seo";
 import type {Project, ProjectDetail} from "@/types";
 
 interface ProjectPageProps {
@@ -29,7 +31,13 @@ export async function generateMetadata({params}: ProjectPageProps): Promise<Meta
 
   try {
     const result = await getPublishedProjectWithDetailBySlug(slug, locale);
-    return result ? {title: result.project.title, description: result.project.description} : {};
+    return result ? createLocalizedMetadata({
+      locale,
+      pathname: `/projects/${slug}`,
+      title: result.project.title,
+      description: result.project.description,
+      image: result.project.image === DEFAULT_PROJECT_IMAGE ? undefined : result.project.image,
+    }) : {};
   } catch {
     return {};
   }
@@ -56,9 +64,28 @@ export default async function ProjectPage({params}: ProjectPageProps) {
   if (!result) notFound();
 
   const {project, detail} = result;
+  const projectUrl = getAbsoluteUrl(locale, `/projects/${project.slug}`);
+  const projectImage = project.image === DEFAULT_PROJECT_IMAGE
+    ? undefined
+    : new URL(project.image, getSiteUrl()).toString();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            "@id": `${projectUrl}#project`,
+            url: projectUrl,
+            name: project.title,
+            description: project.description,
+            inLanguage: locale,
+            ...(projectImage ? {image: projectImage} : {}),
+          }),
+        }}
+      />
       <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14 lg:pt-16">
         <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[34rem]" />
         <Container className="relative">

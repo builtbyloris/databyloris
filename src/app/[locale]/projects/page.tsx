@@ -11,6 +11,7 @@ import {
 import {Card, Container, Section} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {listPublishedProjects} from "@/lib/repositories/projects-repository";
+import {createLocalizedMetadata} from "@/lib/seo";
 import type {Project} from "@/types";
 
 interface ProjectsPageProps {
@@ -38,9 +39,15 @@ function toCategorySlug(category: string) {
   return normalize(category).replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Projects");
-  return {title: t("title"), description: t("description")};
+export async function generateMetadata({params}: Pick<ProjectsPageProps, "params">): Promise<Metadata> {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: "Projects"});
+  return createLocalizedMetadata({
+    locale,
+    pathname: "/projects",
+    title: t("title"),
+    description: t("description"),
+  });
 }
 
 export default async function ProjectsPage({params, searchParams}: ProjectsPageProps) {

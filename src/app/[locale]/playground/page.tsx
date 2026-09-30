@@ -4,10 +4,18 @@ import {PlaygroundDashboard, PlaygroundHeader, PlaygroundIntro} from "@/componen
 import {Container} from "@/components/ui";
 import {retailPulseDashboard} from "@/data/playground/retail-pulse-dashboard";
 import {retailPulseData} from "@/data/playground/retail-pulse-data";
+import type {AppLocale} from "@/i18n/routing";
+import {createLocalizedMetadata} from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Playground");
-  return {title: t("title"), description: t("description")};
+export async function generateMetadata({params}: {params: Promise<{locale: AppLocale}>}): Promise<Metadata> {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: "Playground"});
+  return createLocalizedMetadata({
+    locale,
+    pathname: "/playground",
+    title: t("title"),
+    description: t("description"),
+  });
 }
 
 export default async function PlaygroundPage() {

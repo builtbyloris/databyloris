@@ -3,8 +3,10 @@ import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {DashboardShell, DashboardState} from "@/components/dashboard";
 import type {AppLocale} from "@/i18n/routing";
+import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
 import {getPublishedDashboardBySlug} from "@/lib/repositories/public-dashboards-repository";
 import {getPublishedProjectBySlug} from "@/lib/repositories/projects-repository";
+import {createLocalizedMetadata} from "@/lib/seo";
 
 interface DashboardPageProps {
   params: Promise<{locale: AppLocale; slug: string}>;
@@ -19,7 +21,13 @@ export async function generateMetadata({params}: DashboardPageProps): Promise<Me
   try {
     const project = await getPublishedProjectBySlug(slug, locale);
     return project?.dashboardAvailable
-      ? {title: `${t("breadcrumb.dashboard")} · ${project.title}`, description: t("metadataDescription")}
+      ? createLocalizedMetadata({
+        locale,
+        pathname: `/projects/${slug}/dashboard`,
+        title: `${t("breadcrumb.dashboard")} · ${project.title}`,
+        description: t("metadataDescription"),
+        image: project.image === DEFAULT_PROJECT_IMAGE ? undefined : project.image,
+      })
       : {};
   } catch {
     return {};
