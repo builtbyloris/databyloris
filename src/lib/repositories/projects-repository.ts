@@ -1,5 +1,6 @@
 import "server-only";
 
+import {cache} from "react";
 import {
   projectInputToInsert,
   projectInputToUpdate,
@@ -58,7 +59,7 @@ export async function listPublishedProjects(locale: SupportedLocale): Promise<Pr
   return data.map((row) => mapPublicProject(row, locale));
 }
 
-export async function getPublishedProjectBySlug(
+export const getPublishedProjectBySlug = cache(async function getPublishedProjectBySlug(
   slug: string,
   locale: SupportedLocale,
 ): Promise<Project | null> {
@@ -72,9 +73,9 @@ export async function getPublishedProjectBySlug(
 
   if (error) throw mapDatabaseError(error);
   return data ? mapPublicProject(data, locale) : null;
-}
+});
 
-export async function getPublishedProjectWithDetailBySlug(
+export const getPublishedProjectWithDetailBySlug = cache(async function getPublishedProjectWithDetailBySlug(
   slug: string,
   locale: SupportedLocale,
 ): Promise<PublishedProjectWithDetail | null> {
@@ -94,7 +95,7 @@ export async function getPublishedProjectWithDetailBySlug(
     project,
     detail: detailRow ? mapProjectDetail(detailRow) : null,
   };
-}
+});
 
 export async function getAdminProjectDetail(projectId: string): Promise<ProjectDetail | null> {
   const supabase = await createClient();

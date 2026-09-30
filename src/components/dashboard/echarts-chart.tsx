@@ -16,7 +16,14 @@ function cssToken(styles: CSSStyleDeclaration, token: string) {
 
 export function EChartsChart({option, label, className = "h-80"}: {option: EChartsCoreOption; label: string; className?: string}) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<ReturnType<typeof echarts.init> | null>(null);
+  const optionRef = useRef(option);
   const {resolvedTheme} = useTheme();
+
+  useEffect(() => {
+    optionRef.current = option;
+    chartRef.current?.setOption(option, {notMerge: true});
+  }, [option]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -34,15 +41,17 @@ export function EChartsChart({option, label, className = "h-80"}: {option: EChar
       legend: {textStyle: {color: muted}},
       tooltip: {backgroundColor: surface, borderColor: border, textStyle: {color: foreground}},
     });
-    chart.setOption(option);
+    chartRef.current = chart;
+    chart.setOption(optionRef.current, {notMerge: true});
 
     const observer = new ResizeObserver(() => chart.resize());
     observer.observe(containerRef.current);
     return () => {
       observer.disconnect();
+      chartRef.current = null;
       chart.dispose();
     };
-  }, [option, resolvedTheme]);
+  }, [resolvedTheme]);
 
   return <div ref={containerRef} role="img" aria-label={label} className={`w-full ${className}`} />;
 }

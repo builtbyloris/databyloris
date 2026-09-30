@@ -118,7 +118,9 @@ export function calculateRanking(records: DashboardRecord[], config: RankingConf
     const dimension = readDashboardField(record, config.dimension);
     if (dimension === null || dimension === undefined) continue;
     const key = String(dimension);
-    groups.set(key, [...(groups.get(key) ?? []), record]);
+    const group = groups.get(key);
+    if (group) group.push(record);
+    else groups.set(key, [record]);
   }
 
   return Array.from(groups, ([dimension, group]) => ({

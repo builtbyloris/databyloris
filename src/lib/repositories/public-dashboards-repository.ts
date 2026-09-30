@@ -1,7 +1,7 @@
 import "server-only";
 
 import {validateDashboardConfig} from "@/lib/admin";
-import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
+import {getAvailableDatasetFields, readDashboardField} from "@/lib/datasets/field-names";
 import {dashboardConfigFromJson} from "@/lib/mappers/dashboard-config-mapper";
 import {datasetSchemaFromJson} from "@/lib/mappers/dataset-mapper";
 import {createClient} from "@/lib/supabase/server";
@@ -23,6 +23,29 @@ export type PublishedDashboardResult =
       config: DashboardConfig;
       records: DashboardRecord[];
     };
+
+function getConfiguredFields(config: DashboardConfig) {
+  return Array.from(new Set([
+    ...config.filters.map((filter) => filter.field),
+    ...config.kpis.flatMap((kpi) => kpi.field ? [kpi.field] : []),
+    ...config.charts.flatMap((chart) => [chart.categoryField, chart.valueField].filter((field): field is string => Boolean(field))),
+    ...config.rankings.flatMap((ranking) => [
+      ranking.dimension,
+      ranking.metric,
+      ...ranking.detailColumns.map((column) => column.field),
+    ]),
+  ]));
+}
+
+function projectDashboardRecords(records: DashboardRecord[], config: DashboardConfig) {
+  const configuredFields = getConfiguredFields(config);
+  return records.map((record) => Object.fromEntries(
+    configuredFields.flatMap((field) => {
+      const value = readDashboardField(record, field);
+      return value === undefined ? [] : [[field, value]];
+    }),
+  ) as DashboardRecord);
+}
 
 export async function getPublishedDashboardBySlug(
   slug: string,
@@ -74,6 +97,6 @@ export async function getPublishedDashboardBySlug(
     kind: "ready",
     project,
     config,
-    records,
+    records: projectDashboardRecords(records, config),
   };
 }
