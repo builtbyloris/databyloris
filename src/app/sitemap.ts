@@ -10,7 +10,6 @@ import {listPublishedProjects} from "@/lib/repositories/projects-repository";
 const staticRoutes = [
   {pathname: "", changeFrequency: "weekly", priority: 1},
   {pathname: "/projects", changeFrequency: "weekly", priority: 0.9},
-  {pathname: "/#how-it-works", changeFrequency: "monthly", priority: 0.7},
   {pathname: "/playground", changeFrequency: "monthly", priority: 0.8},
 ] as const;
 
