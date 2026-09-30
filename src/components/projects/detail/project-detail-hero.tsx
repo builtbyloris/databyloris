@@ -70,7 +70,7 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
         </div>
 
         <Card className="min-w-0 overflow-hidden p-2.5 sm:p-3">
-          <div className="relative isolate aspect-[16/11] overflow-hidden rounded-[calc(var(--radius-card-value)-0.3rem)] bg-surface-raised">
+          <div className="relative isolate aspect-video overflow-hidden rounded-[calc(var(--radius-card-value)-0.3rem)] bg-surface-raised">
             <Image src={project.image} alt={t("coverAlt", {title: project.title})} fill priority sizes="(max-width: 1023px) 100vw, 42vw" className="rounded-[inherit] object-cover object-center" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-transparent to-transparent" />
             <div className="absolute inset-x-5 bottom-5 flex items-end justify-end gap-4">

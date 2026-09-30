@@ -12,9 +12,9 @@ export async function Hero() {
       <Container className="relative grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
         <div className="max-w-3xl">
           <Badge>{t("eyebrow")}</Badge>
-          <h1 className="mt-7 text-[clamp(3.25rem,7vw,6rem)] font-black leading-[0.98] tracking-[-0.06em]">
+          <h1 className="mt-7 text-[clamp(3.25rem,7vw,6rem)] font-black leading-[0.94] tracking-[-0.06em]">
             <span className="block">{t("titleLead")}</span>
-            <span className="text-gradient block">{t("titleAccent")}</span>
+            <span className="text-gradient -mb-[0.06em] block pb-[0.06em]">{t("titleAccent")}</span>
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-7 text-muted sm:text-lg sm:leading-8">{t("description")}</p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
