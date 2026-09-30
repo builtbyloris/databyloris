@@ -70,7 +70,7 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
           <label htmlFor="projects-search" className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-muted">
             {t("searchLabel")}
           </label>
-          <div className="flex min-h-13 items-center gap-3 rounded-control border border-border bg-surface-raised px-4 transition-colors focus-within:border-primary/50 focus-within:bg-surface">
+          <div className="flex min-h-13 items-center gap-3 rounded-control border border-control-border bg-surface-raised px-4 transition-colors focus-within:border-primary focus-within:bg-surface">
             <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5 shrink-0 text-muted" fill="none" stroke="currentColor" strokeWidth="1.8">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m16 16 4 4" />
@@ -84,7 +84,7 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
               placeholder={t("searchPlaceholder")}
               autoComplete="off"
               onChange={(event) => scheduleSearch(event.currentTarget.value)}
-              className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted/75"
+              className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted"
             />
             <button type="submit" className={buttonStyles({size: "sm", className: "shrink-0"})}>
               <span className="hidden sm:inline">{t("searchAction")}</span>
@@ -106,7 +106,7 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
               id="projects-sort"
               value={sort}
               onChange={(event) => navigate({sort: event.currentTarget.value as ProjectsSort})}
-              className="h-13 w-full appearance-none rounded-control border border-border bg-surface-raised px-4 pr-10 text-sm font-semibold text-foreground outline-none transition-colors focus:border-primary/50"
+              className="h-13 w-full appearance-none rounded-control border border-control-border bg-surface-raised px-4 pr-10 text-sm font-semibold text-foreground outline-none transition-colors focus:border-primary"
             >
               <option value="recent">{t("sortRecent")}</option>
               <option value="name-asc">{t("sortNameAsc")}</option>

@@ -33,6 +33,7 @@ export function SearchableFilter({
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -60,6 +61,11 @@ export function SearchableFilter({
     document.addEventListener("pointerdown", closeOnOutsideClick);
     return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
   }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    optionRefs.current[activeIndex]?.scrollIntoView({block: "nearest"});
+  }, [activeIndex, open]);
 
   const close = () => {
     setOpen(false);
@@ -107,7 +113,7 @@ export function SearchableFilter({
           }
           if (event.key === "Escape") close();
         }}
-        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-control border border-border bg-surface px-3 text-left text-sm font-medium text-foreground shadow-sm outline-none transition-colors focus:border-primary"
+        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-control border border-control-border bg-surface px-3 text-left text-sm font-medium text-foreground shadow-sm outline-none transition-colors focus:border-primary"
       >
         <span className="min-w-0 truncate" title={selectedLabel}>{selectedLabel}</span>
         <span aria-hidden="true" className="shrink-0 text-muted">⌄</span>
@@ -147,19 +153,25 @@ export function SearchableFilter({
                   event.preventDefault();
                   close();
                   triggerRef.current?.focus();
+                } else if (event.key === "Tab") {
+                  close();
                 }
               }}
               placeholder={searchLabel}
-              className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary"
+              className="h-10 w-full rounded-md border border-control-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary"
             />
           </div>
           <div id={`${id}-listbox`} role="listbox" aria-label={label} className="max-h-60 overflow-y-auto overscroll-contain p-1">
             {visibleOptions.map((option, index) => (
               <button
+                ref={(element) => {
+                  optionRefs.current[index] = element;
+                }}
                 key={option.value}
                 id={`${id}-option-${index}`}
                 type="button"
                 role="option"
+                tabIndex={-1}
                 aria-selected={option.value === value}
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => select(option)}
@@ -169,8 +181,8 @@ export function SearchableFilter({
                 {option.label}
               </button>
             ))}
-            {filteredOptions.length === 0 ? <p className="px-3 py-3 text-sm text-muted">{noResultsLabel}</p> : null}
           </div>
+          {filteredOptions.length === 0 ? <p role="status" className="border-t border-border px-4 py-3 text-sm text-muted">{noResultsLabel}</p> : null}
         </div>
       ) : null}
     </div>

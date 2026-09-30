@@ -23,10 +23,10 @@ export function DashboardKpiGrid({items}: {items: {config: KPIConfig; value: num
             {description ? <p className="mt-1 break-words text-xs leading-5 text-muted">{description}</p> : null}
             <p
               title={fullValue}
-              aria-label={`${itemLabel}: ${fullValue}`}
               className="mt-3 break-words text-[clamp(1.25rem,7vw,1.875rem)] font-black leading-none tracking-[-0.04em] sm:text-3xl"
             >
               <span aria-hidden="true">{compactValue}</span>
+              <span className="sr-only">{fullValue}</span>
             </p>
           </article>
         );

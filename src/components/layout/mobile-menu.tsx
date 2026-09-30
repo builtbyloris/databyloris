@@ -1,7 +1,7 @@
 "use client";
 
-import {useTranslations} from "next-intl";
-import {useState} from "react";
+import {useLocale, useTranslations} from "next-intl";
+import {useEffect, useRef, useState} from "react";
 import {LanguageSwitcher} from "@/components/language-switcher";
 import {ThemeToggle} from "@/components/theme-toggle";
 import {buttonStyles} from "@/components/ui";
@@ -10,7 +10,11 @@ import {cn} from "@/lib/cn";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const locale = useLocale();
   const t = useTranslations("Navigation");
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const previousLocaleRef = useRef(locale);
   const links = [
     {href: "/" as const, label: t("home")},
     {href: "/projects" as const, label: t("portfolio")},
@@ -18,9 +22,32 @@ export function MobileMenu() {
     {href: "/#how-it-works" as const, label: t("about")},
   ];
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    menuRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setIsOpen(false);
+      buttonRef.current?.focus();
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (previousLocaleRef.current !== locale) {
+      previousLocaleRef.current = locale;
+      setIsOpen(false);
+    }
+  }, [locale]);
+
   return (
     <div className="lg:hidden">
       <button
+        ref={buttonRef}
         type="button"
         className="grid size-10 place-items-center rounded-control border border-border bg-surface/70 text-foreground transition-colors hover:bg-surface-raised"
         aria-label={isOpen ? t("closeMenu") : t("openMenu")}
@@ -37,6 +64,7 @@ export function MobileMenu() {
 
       {isOpen && (
         <div
+          ref={menuRef}
           id="mobile-navigation"
           className="absolute inset-x-0 top-full border-b border-border bg-background/95 px-gutter pb-6 pt-3 shadow-card backdrop-blur-xl"
         >

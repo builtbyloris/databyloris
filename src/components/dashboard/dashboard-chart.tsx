@@ -27,7 +27,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
         aria: {enabled: true},
         tooltip,
         legend: {type: "scroll", bottom: 0, left: "center"},
-        series: [{type: "pie", radius: config.type === "donut" ? ["46%", "70%"] : "70%", center: ["50%", "43%"], data: points.map((point) => ({name: String(point.category), value: point.value})), label: {show: false}, emphasis: {scaleSize: 5}}],
+        series: [{name: title, type: "pie", radius: config.type === "donut" ? ["46%", "70%"] : "70%", center: ["50%", "43%"], data: points.map((point) => ({name: String(point.category), value: point.value})), label: {show: false}, emphasis: {scaleSize: 5}}],
       };
     }
     if (config.type === "bar") {
@@ -37,7 +37,7 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
         grid: {left: 8, right: 18, top: 10, bottom: 10, containLabel: true},
         xAxis: {type: "value", splitNumber: 3, axisLabel: {formatter: axisValueFormatter, hideOverlap: true}},
         yAxis: {type: "category", inverse: true, data: points.map((point) => point.category), axisLabel: {overflow: "truncate", width: 110}},
-        series: [{type: "bar", data: points.map((point) => point.value), barMaxWidth: 20, itemStyle: {borderRadius: [0, 5, 5, 0]}}],
+        series: [{name: title, type: "bar", data: points.map((point) => point.value), barMaxWidth: 20, itemStyle: {borderRadius: [0, 5, 5, 0]}}],
       };
     }
     return {
@@ -46,9 +46,9 @@ export function DashboardChart({config, records, featured = false}: {config: Cha
       grid: {left: 10, right: 18, top: 18, bottom: 10, containLabel: true},
       xAxis: {type: "category", boundaryGap: false, data: points.map((point) => point.category)},
       yAxis: {type: "value", splitNumber: 4, axisLabel: {formatter: axisValueFormatter, hideOverlap: true}},
-      series: [{type: "line", smooth: true, symbolSize: 8, data: points.map((point) => point.value), lineStyle: {width: 3}, areaStyle: {opacity: 0.08}}],
+      series: [{name: title, type: "line", smooth: true, symbolSize: 8, data: points.map((point) => point.value), lineStyle: {width: 3}, areaStyle: {opacity: 0.08}}],
     };
-  }, [config.type, config.valueFormat, locale, points]);
+  }, [config.type, config.valueFormat, locale, points, title]);
 
   return (
     <Card data-dashboard-section="charts" className={`min-w-0 p-5 sm:p-6 ${featured ? "lg:col-span-2 xl:col-span-2" : ""}`}>

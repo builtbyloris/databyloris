@@ -59,13 +59,13 @@ export function DashboardShell({project, config, records, embedded = false}: {
     <section className="relative min-h-[75vh] overflow-hidden py-8 sm:py-10 lg:py-12">
       <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[26rem]" />
       <Container className="relative">
-        <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
+        <nav aria-label={t("breadcrumb.label")} className="flex flex-wrap items-center gap-2 text-sm text-muted">
           <Link href="/projects" className="font-medium hover:text-foreground">{t("breadcrumb.projects")}</Link>
           <span aria-hidden="true">/</span>
           <Link href={`/projects/${project.slug}`} className="font-medium hover:text-foreground">{project.title}</Link>
           <span aria-hidden="true">/</span>
           <span className="font-semibold text-foreground">{t("breadcrumb.dashboard")}</span>
-        </div>
+        </nav>
         <div className="mt-6 max-w-3xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
           <h1 className="mt-3 break-words text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{dashboardTitle}</h1>

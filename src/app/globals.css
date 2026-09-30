@@ -10,10 +10,11 @@
   --foreground: #101b33;
   --muted: #5f6c84;
   --border: rgb(25 50 91 / 0.12);
+  --control-border: #7f8a9e;
   --primary: #2563eb;
   --primary-strong: #1d4ed8;
   --violet: #7c3aed;
-  --cyan: #0891b2;
+  --cyan: #0e7490;
   --primary-contrast: #ffffff;
   --admin-sidebar: #07101f;
   --grid-line: rgb(24 57 106 / 0.06);
@@ -37,6 +38,7 @@
   --foreground: #f2f7ff;
   --muted: #9aa9c3;
   --border: rgb(148 172 211 / 0.14);
+  --control-border: #66758e;
   --primary: #5b8cff;
   --primary-strong: #82a6ff;
   --violet: #9b7cff;
@@ -59,6 +61,7 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-control-border: var(--control-border);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
   --color-violet: var(--violet);
@@ -121,7 +124,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--primary) !important;
   outline-offset: 3px;
 }
 
@@ -136,4 +139,18 @@ body {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
   box-shadow: var(--shadow-card-value), 0 0 0 7px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

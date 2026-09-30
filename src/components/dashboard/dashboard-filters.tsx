@@ -46,7 +46,7 @@ export function DashboardFilters({filters, records, state, onChange, onReset}: {
                     id={`${filter.id}-filter`}
                     value={value}
                     onChange={(event) => onChange(filter.id, event.target.value)}
-                    className="h-11 w-full appearance-none rounded-control border border-border bg-surface px-3 text-sm font-medium text-foreground shadow-sm outline-none transition-colors focus:border-primary"
+                    className="h-11 w-full appearance-none rounded-control border border-control-border bg-surface px-3 text-sm font-medium text-foreground shadow-sm outline-none transition-colors focus:border-primary"
                   >
                     <option value={ALL_FILTER_VALUE}>{t("filters.all")}</option>
                     {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}

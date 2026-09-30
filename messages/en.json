@@ -201,6 +201,7 @@
       "description": "A demo dashboard for exploring revenue, orders and customers through a simple retail dataset."
     },
     "breadcrumb": {
+      "label": "Breadcrumb",
       "projects": "Projects",
       "dashboard": "Dashboard"
     },
@@ -253,6 +254,7 @@
       "accessibleLabel": "Chart: {title}"
     },
     "ranking": {
+      "position": "Position",
       "videoGames": {
         "title": "Top 10 games",
         "game": "Game",
