@@ -1,15 +1,17 @@
 import {createServerClient} from "@supabase/ssr";
 import {NextResponse, type NextRequest} from "next/server";
 import type {Database} from "@/types/database";
+import {getSupabaseEnvironment} from "./env";
 
 const sessionCacheHeaders = ["cache-control", "expires", "pragma"] as const;
 
 export async function refreshSupabaseSession(request: NextRequest) {
   let response = NextResponse.next({request});
+  const {url, publishableKey} = getSupabaseEnvironment();
 
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    url,
+    publishableKey,
     {
       cookies: {
         getAll() {

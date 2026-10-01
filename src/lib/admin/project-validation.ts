@@ -1,4 +1,5 @@
 import type {AdminProjectInput, LocalizedText} from "@/types";
+import {isSafeExternalUrl} from "@/lib/urls";
 
 function isLocalizedText(value: unknown): value is LocalizedText {
   if (!value || typeof value !== "object") return false;
@@ -25,6 +26,6 @@ export function isValidAdminProjectInput(value: unknown): value is AdminProjectI
     && typeof input.featured === "boolean"
     && (input.status === "draft" || input.status === "published")
     && typeof input.dashboardAvailable === "boolean"
-    && (input.repositoryUrl === undefined || typeof input.repositoryUrl === "string")
+    && (input.repositoryUrl === undefined || isSafeExternalUrl(input.repositoryUrl))
   );
 }

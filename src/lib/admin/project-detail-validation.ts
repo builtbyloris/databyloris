@@ -1,4 +1,5 @@
 import type {LocalizedText, ProjectDetail} from "@/types";
+import {isSafeExternalUrl} from "@/lib/urls";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -9,15 +10,7 @@ function isLocalizedText(value: unknown): value is LocalizedText {
 }
 
 function isOptionalUrl(value: unknown) {
-  if (value === undefined) return true;
-  if (typeof value !== "string") return false;
-
-  try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
+  return value === undefined || isSafeExternalUrl(value);
 }
 
 export function isValidProjectId(value: unknown): value is string {

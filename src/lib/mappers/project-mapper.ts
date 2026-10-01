@@ -6,6 +6,7 @@ import type {
 } from "@/types";
 import type {Json, Tables, TablesInsert, TablesUpdate} from "@/types/database";
 import {getProjectImageUrl} from "@/lib/project-media";
+import {safeExternalUrl} from "@/lib/urls";
 
 type ProjectRow = Tables<"projects">;
 
@@ -55,7 +56,7 @@ export function projectRowToDomain(
       featured: row.featured,
       status: row.status,
       publishedAt: row.published_at,
-      repositoryUrl: row.repository_url ?? undefined,
+      repositoryUrl: safeExternalUrl(row.repository_url),
       dashboardAvailable: row.dashboard_available,
     },
     localizedTitle: title,

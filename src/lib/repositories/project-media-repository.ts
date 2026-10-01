@@ -9,3 +9,10 @@ export async function removeProjectMediaFile(storagePath: string) {
   const {error} = await supabase.storage.from(PROJECT_MEDIA_BUCKET).remove([storagePath]);
   if (error) throw new RepositoryError("database");
 }
+
+export async function downloadProjectMediaFile(storagePath: string) {
+  const supabase = await createClient();
+  const {data, error} = await supabase.storage.from(PROJECT_MEDIA_BUCKET).download(storagePath);
+  if (error) throw new RepositoryError("database");
+  return data;
+}

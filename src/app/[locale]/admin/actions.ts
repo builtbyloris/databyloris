@@ -12,7 +12,7 @@ import {
   DatasetParseError,
   parseCsvDataset,
 } from "@/lib/datasets";
-import {isProjectCoverStoragePath} from "@/lib/project-media";
+import {isProjectCoverStoragePath, isValidProjectCoverFile} from "@/lib/project-media";
 import {
   dashboardConfigFromJson,
   dashboardConfigToJson,
@@ -27,7 +27,7 @@ import {
   removeDatasetFile,
   updateDatasetGrain,
 } from "@/lib/repositories/datasets-repository";
-import {removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
+import {downloadProjectMediaFile, removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
 import {
   createProject,
   getAdminProjectById,
@@ -178,7 +178,7 @@ export async function updateProjectStatusAction(
   status: "draft" | "published",
 ): Promise<AdminActionResult<AdminProjectRecord>> {
   await requireAdmin(locale);
-  if (!projectId || (status !== "draft" && status !== "published")) {
+  if (!isValidProjectId(projectId) || (status !== "draft" && status !== "published")) {
     return {ok: false, error: "invalidProject"};
   }
 
@@ -206,6 +206,12 @@ export async function updateProjectCoverAction(
     if (!current) {
       await cleanupProjectMediaFile(storagePath);
       return {ok: false, error: "projectNotFound"};
+    }
+
+    const coverFile = await downloadProjectMediaFile(storagePath);
+    if (!(await isValidProjectCoverFile(coverFile, storagePath))) {
+      await cleanupProjectMediaFile(storagePath);
+      return {ok: false, error: "invalidCover"};
     }
 
     const saved = await updateProjectImagePath(projectId, storagePath, locale);
@@ -264,6 +270,7 @@ export async function saveDashboardConfigAction(
   config: DashboardConfig,
 ): Promise<AdminActionResult<DashboardConfig>> {
   await requireAdmin(locale);
+  if (!isValidProjectId(projectId)) return {ok: false, error: "invalidConfig"};
 
   try {
     const project = await getAdminProjectById(projectId, locale);

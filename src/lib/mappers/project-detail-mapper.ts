@@ -6,6 +6,7 @@ import type {
   ProjectInsight,
 } from "@/types";
 import type {Json, Tables, TablesInsert} from "@/types/database";
+import {safeExternalUrl} from "@/lib/urls";
 
 type ProjectDetailRow = Tables<"project_details">;
 
@@ -40,14 +41,14 @@ function parseDatasetSummary(value: Json | null): DatasetSummary | null {
   const source = parseLocalizedText(value.source);
   const description = parseLocalizedText(value.description);
   const period = value.period === undefined ? undefined : parseLocalizedText(value.period);
-  const sourceUrl = value.sourceUrl;
+  const sourceUrl = safeExternalUrl(value.sourceUrl);
   const records = value.records;
 
   if (
     !source
     || !description
     || (value.period !== undefined && !period)
-    || (sourceUrl !== undefined && typeof sourceUrl !== "string")
+    || (value.sourceUrl !== undefined && sourceUrl === undefined)
     || (records !== undefined && (typeof records !== "number" || !Number.isInteger(records) || records < 0))
   ) {
     return null;

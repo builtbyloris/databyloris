@@ -42,7 +42,7 @@ export async function loginAction(
 
   if (adminCheck.status !== "admin") {
     await supabase.auth.signOut();
-    return {error: adminCheck.status === "forbidden" ? "access-denied" : "unexpected"};
+    return {error: adminCheck.status === "forbidden" ? "invalid-credentials" : "unexpected"};
   }
 
   redirect(adminPath(locale));
