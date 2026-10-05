@@ -3,13 +3,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f4f7fb;
+  --background: #f5f7fb;
   --surface: #ffffff;
-  --surface-raised: #f9fbff;
-  --card: rgb(255 255 255 / 0.82);
+  --surface-raised: #f0f4f9;
+  --card: #ffffff;
   --foreground: #101b33;
   --muted: #5f6c84;
-  --border: rgb(25 50 91 / 0.12);
+  --border: rgb(25 50 91 / 0.14);
   --control-border: #7f8a9e;
   --primary: #2563eb;
   --primary-strong: #1d4ed8;
@@ -18,14 +18,14 @@
   --primary-contrast: #ffffff;
   --admin-sidebar: #07101f;
   --grid-line: rgb(24 57 106 / 0.06);
-  --aurora-blue: rgb(37 99 235 / 0.15);
-  --aurora-violet: rgb(124 58 237 / 0.12);
-  --aurora-cyan: rgb(6 182 212 / 0.10);
-  --shadow-soft-value: 0 16px 40px -24px rgb(30 64 175 / 0.28);
-  --shadow-card-value: 0 24px 70px -42px rgb(15 23 42 / 0.34);
+  --aurora-blue: rgb(37 99 235 / 0.11);
+  --aurora-violet: rgb(124 58 237 / 0.09);
+  --aurora-cyan: rgb(6 182 212 / 0.07);
+  --shadow-soft-value: 0 6px 18px -14px rgb(30 64 175 / 0.24);
+  --shadow-card-value: 0 12px 32px -24px rgb(15 23 42 / 0.28);
   --radius-control-value: 0.75rem;
-  --radius-card-value: 1.25rem;
-  --radius-panel-value: 1.75rem;
+  --radius-card-value: 1rem;
+  --radius-panel-value: 1.5rem;
   --section-space-value: clamp(4.5rem, 9vw, 8rem);
   --container-gutter-value: clamp(1.25rem, 4vw, 2.5rem);
 }
@@ -33,11 +33,11 @@
 .dark {
   --background: #07101f;
   --surface: #0b1629;
-  --surface-raised: #101d34;
-  --card: rgb(15 29 52 / 0.78);
+  --surface-raised: #101c30;
+  --card: #0d192c;
   --foreground: #f2f7ff;
   --muted: #9aa9c3;
-  --border: rgb(148 172 211 / 0.14);
+  --border: rgb(148 172 211 / 0.16);
   --control-border: #66758e;
   --primary: #5b8cff;
   --primary-strong: #82a6ff;
@@ -46,11 +46,11 @@
   --primary-contrast: #07101f;
   --admin-sidebar: #07101f;
   --grid-line: rgb(138 169 220 / 0.06);
-  --aurora-blue: rgb(37 99 235 / 0.20);
-  --aurora-violet: rgb(124 58 237 / 0.16);
-  --aurora-cyan: rgb(6 182 212 / 0.10);
-  --shadow-soft-value: 0 18px 45px -28px rgb(0 0 0 / 0.72);
-  --shadow-card-value: 0 28px 80px -46px rgb(0 0 0 / 0.82);
+  --aurora-blue: rgb(37 99 235 / 0.14);
+  --aurora-violet: rgb(124 58 237 / 0.11);
+  --aurora-cyan: rgb(6 182 212 / 0.07);
+  --shadow-soft-value: 0 8px 22px -16px rgb(0 0 0 / 0.56);
+  --shadow-card-value: 0 14px 36px -26px rgb(0 0 0 / 0.68);
 }
 
 @theme inline {
@@ -92,6 +92,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -138,7 +148,7 @@ body {
 [data-playground-highlight="ranking"] [data-dashboard-section="ranking"] {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
-  box-shadow: var(--shadow-card-value), 0 0 0 7px color-mix(in srgb, var(--primary) 10%, transparent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 9%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

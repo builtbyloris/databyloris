@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
 
   return (
     <div
-      className="flex rounded-control border border-border bg-surface/60 p-0.5"
+      className="flex rounded-control border border-border bg-surface p-0.5"
       aria-label={t("label")}
       role="group"
     >

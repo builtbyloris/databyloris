@@ -49,7 +49,7 @@ export function MobileMenu() {
       <button
         ref={buttonRef}
         type="button"
-        className="grid size-10 place-items-center rounded-control border border-border bg-surface/70 text-foreground transition-colors hover:bg-surface-raised"
+        className="grid size-10 place-items-center rounded-control border border-border bg-surface text-foreground transition-colors hover:bg-surface-raised"
         aria-label={isOpen ? t("closeMenu") : t("openMenu")}
         aria-expanded={isOpen}
         aria-controls="mobile-navigation"
@@ -66,7 +66,7 @@ export function MobileMenu() {
         <div
           ref={menuRef}
           id="mobile-navigation"
-          className="absolute inset-x-0 top-full border-b border-border bg-background/95 px-gutter pb-6 pt-3 shadow-card backdrop-blur-xl"
+          className="absolute inset-x-0 top-full border-b border-border bg-background/96 px-gutter pb-6 pt-3 shadow-card backdrop-blur-md"
         >
           <nav className="flex flex-col" aria-label={t("menu")}>
             {links.map((link) => (

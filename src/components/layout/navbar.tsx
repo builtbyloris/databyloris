@@ -15,10 +15,10 @@ export async function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/78 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/92 backdrop-blur-md">
       <Container className="flex h-[4.5rem] items-center justify-between gap-5">
         <Link href="/" className="group inline-flex items-center gap-2.5" aria-label={t("logoLabel")}>
-          <span className="brand-gradient grid size-8 place-items-center rounded-[0.65rem] shadow-soft">
+          <span className="brand-gradient grid size-8 place-items-center rounded-[0.65rem]">
             <span className="size-2 rounded-full bg-white" />
           </span>
           <span className="text-sm font-extrabold tracking-[-0.02em]">
