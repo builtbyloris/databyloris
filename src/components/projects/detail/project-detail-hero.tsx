@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {getTranslations} from "next-intl/server";
-import {Badge, Card, buttonStyles} from "@/components/ui";
+import {Badge, buttonStyles} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {Link} from "@/i18n/navigation";
 import type {Project} from "@/types";
@@ -37,10 +37,7 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <Badge>{project.category}</Badge>
-            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-muted">
-              <span className={project.status === "published" ? "text-cyan" : "text-violet"}>●</span>
-              {t(`status.${project.status}`)}
-            </span>
+            {date ? <span className="text-xs font-semibold uppercase tracking-[0.13em] text-muted">{t("updated")} · {date}</span> : null}
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-black tracking-[-0.05em] sm:text-5xl lg:text-6xl">
             {project.title}
@@ -50,7 +47,7 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {project.technologies.map((technology) => (
-              <span key={technology} className="rounded-full border border-border bg-surface/70 px-3 py-1.5 text-xs font-medium text-muted">
+              <span key={technology} className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted">
                 {technology}
               </span>
             ))}
@@ -69,19 +66,9 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
           </div>
         </div>
 
-        <Card className="min-w-0 overflow-hidden p-2.5 sm:p-3">
-          <div className="relative isolate aspect-[16/9] overflow-hidden rounded-[calc(var(--radius-card-value)-0.3rem)] bg-surface-raised">
-            <Image src={project.image} alt={t("coverAlt", {title: project.title})} fill priority sizes="(max-width: 1023px) 100vw, 42vw" className="rounded-[inherit] object-cover object-center" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-transparent to-transparent" />
-            <div className="absolute inset-x-5 bottom-5 flex items-end justify-end gap-4">
-              {date ? (
-                <span className="rounded-full border border-white/15 bg-background/75 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
-                  {t("updated")} · {date}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        </Card>
+        <div className="relative isolate aspect-[16/9] min-w-0 overflow-hidden rounded-card bg-surface-raised">
+          <Image src={project.image} alt={t("coverAlt", {title: project.title})} fill priority sizes="(max-width: 1023px) 100vw, 42vw" className="object-cover object-center" />
+        </div>
       </div>
     </div>
   );

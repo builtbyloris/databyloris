@@ -136,7 +136,7 @@
       "insights": "Insights"
     },
     "sections": {
-      "overview": {"title": "The context"},
+      "overview": {"title": "The project", "contextLabel": "Context", "objectiveLabel": "Objective"},
       "dataset": {"title": "The dataset"},
       "objective": {"title": "The objective"},
       "methodology": {"title": "The methodology"},
@@ -158,7 +158,7 @@
     "error": {
       "eyebrow": "Temporary error",
       "title": "Project unavailable",
-      "description": "We could not load the project from Supabase. Please try again shortly.",
+      "description": "We could not load the project. Please try again shortly.",
       "action": "Try again"
     },
     "dashboard": {

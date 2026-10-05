@@ -136,7 +136,7 @@
       "insights": "Insight"
     },
     "sections": {
-      "overview": {"title": "Il contesto"},
+      "overview": {"title": "Il progetto", "contextLabel": "Contesto", "objectiveLabel": "Obiettivo"},
       "dataset": {"title": "Il dataset"},
       "objective": {"title": "L'obiettivo"},
       "methodology": {"title": "La metodologia"},
@@ -158,7 +158,7 @@
     "error": {
       "eyebrow": "Errore temporaneo",
       "title": "Progetto non disponibile",
-      "description": "Non è stato possibile caricare il progetto da Supabase. Riprova tra poco.",
+      "description": "Non è stato possibile caricare il progetto. Riprova tra poco.",
       "action": "Riprova"
     },
     "dashboard": {

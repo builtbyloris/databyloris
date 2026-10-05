@@ -119,23 +119,30 @@ async function ProjectCaseStudy({
     <>
       <ProjectDetailNav />
       <Container className="max-w-6xl">
-        <ProjectDetailSection id="overview" eyebrow="01" title={t("overview.title")}>
-          <p className="max-w-3xl text-lg leading-8 text-muted">{localize(detail.context, locale)}</p>
+        <ProjectDetailSection id="overview" title={t("overview.title")}>
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-primary-strong">{t("overview.contextLabel")}</h3>
+              <p className="mt-3 text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.context, locale)}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-primary-strong">{t("overview.objectiveLabel")}</h3>
+              <p className="mt-3 text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.objective, locale)}</p>
+            </div>
+          </div>
         </ProjectDetailSection>
-        <ProjectDetailSection id="dataset" eyebrow="02" title={t("dataset.title")}>
+        <ProjectDetailSection id="dataset" title={t("dataset.title")}>
           <DatasetSummaryCard dataset={detail.dataset} locale={locale} />
         </ProjectDetailSection>
-        <ProjectDetailSection id="objective" eyebrow="03" title={t("objective.title")}>
-          <p className="max-w-3xl text-lg leading-8 text-muted">{localize(detail.objective, locale)}</p>
-        </ProjectDetailSection>
-        <ProjectDetailSection id="methodology" eyebrow="04" title={t("methodology.title")}>
+        <ProjectDetailSection id="methodology" title={t("methodology.title")}>
           <MethodologySteps steps={detail.methodology} locale={locale} />
         </ProjectDetailSection>
-        <ProjectDetailSection id="insights" eyebrow="05" title={t("insights.title")}>
+        <ProjectDetailSection id="insights" title={t("insights.title")}>
           <ProjectInsights insights={detail.insights} locale={locale} />
         </ProjectDetailSection>
-        {project.dashboardAvailable ? <DashboardPreview slug={project.slug} /> : null}
-        <ProjectFinalCta slug={project.slug} dashboardAvailable={Boolean(project.dashboardAvailable)} />
+        {project.dashboardAvailable
+          ? <DashboardPreview slug={project.slug} />
+          : <ProjectFinalCta slug={project.slug} dashboardAvailable={false} />}
       </Container>
     </>
   );
