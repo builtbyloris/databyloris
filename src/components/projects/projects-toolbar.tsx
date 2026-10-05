@@ -16,17 +16,19 @@ export interface ProjectCategoryOption {
 interface ProjectsToolbarProps {
   categories: ProjectCategoryOption[];
   query: string;
+  resultCount: number;
   selectedCategory: string;
   sort: ProjectsSort;
 }
 
-export function ProjectsToolbar({categories, query, selectedCategory, sort}: ProjectsToolbarProps) {
+export function ProjectsToolbar({categories, query, resultCount, selectedCategory, sort}: ProjectsToolbarProps) {
   const t = useTranslations("Projects");
   const pathname = usePathname();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isPending, startTransition] = useTransition();
+  const hasActiveControls = query.trim().length > 0 || selectedCategory !== "all" || sort !== "recent";
 
   useEffect(() => {
     if (inputRef.current && document.activeElement !== inputRef.current) {
@@ -63,8 +65,20 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
     navigate({query: inputRef.current?.value ?? ""});
   }
 
+  function resetControls() {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    if (inputRef.current) inputRef.current.value = "";
+    navigate({query: "", category: "all", sort: "recent"});
+  }
+
   return (
-    <div aria-busy={isPending} className={cn("transition-opacity", isPending && "opacity-70")}>
+    <div
+      aria-busy={isPending}
+      className={cn(
+        "rounded-card border border-border bg-card p-4 shadow-card transition-opacity sm:p-5",
+        isPending && "opacity-70",
+      )}
+    >
       <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
         <form onSubmit={submitSearch} role="search">
           <label htmlFor="projects-search" className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-muted">
@@ -119,7 +133,7 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4 border-t border-border pt-4">
         <p id="category-filter-label" className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
           {t("categoryLabel")}
         </p>
@@ -158,6 +172,21 @@ export function ProjectsToolbar({categories, query, selectedCategory, sort}: Pro
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="mt-4 flex min-h-9 flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+        <p className="text-sm font-semibold text-muted" aria-live="polite" aria-atomic="true">
+          {t("results", {count: resultCount})}
+        </p>
+        {hasActiveControls ? (
+          <button
+            type="button"
+            onClick={resetControls}
+            className="rounded-control px-3 py-2 text-sm font-semibold text-primary-strong transition-colors hover:bg-surface-raised hover:text-primary"
+          >
+            {t("resetFilters")}
+          </button>
+        ) : null}
       </div>
     </div>
   );

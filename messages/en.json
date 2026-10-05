@@ -109,7 +109,7 @@
     "emptyDescription": "Try changing your search or selecting a different category.",
     "resetFilters": "Reset filters",
     "dataErrorTitle": "Projects temporarily unavailable",
-    "dataErrorDescription": "We could not load projects from Supabase. Please try again shortly.",
+    "dataErrorDescription": "We could not load the projects. Please try again shortly.",
     "dataErrorRetry": "Try again",
     "statusDraft": "In progress",
     "statusPublished": "Published",

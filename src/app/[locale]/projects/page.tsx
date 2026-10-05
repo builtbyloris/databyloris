@@ -8,7 +8,7 @@ import {
   type ProjectCategoryOption,
   type ProjectsSort,
 } from "@/components/projects/projects-toolbar";
-import {Card, Container, Section} from "@/components/ui";
+import {Container, Section} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {listPublishedProjects} from "@/lib/repositories/projects-repository";
 import {createLocalizedMetadata} from "@/lib/seo";
@@ -81,6 +81,7 @@ export default async function ProjectsPage({params, searchParams}: ProjectsPageP
   const selectedCategory = categories.some((category) => category.value === requestedCategory)
     ? requestedCategory
     : "all";
+  const titleCollator = new Intl.Collator(locale, {numeric: true, sensitivity: "base"});
 
   const filteredProjects = publicProjects
     .filter((project) => {
@@ -99,8 +100,8 @@ export default async function ProjectsPage({params, searchParams}: ProjectsPageP
       return searchableContent.includes(query);
     })
     .sort((left, right) => {
-      if (sort === "name-asc") return left.title.localeCompare(right.title);
-      if (sort === "name-desc") return right.title.localeCompare(left.title);
+      if (sort === "name-asc") return titleCollator.compare(left.title, right.title);
+      if (sort === "name-desc") return titleCollator.compare(right.title, left.title);
       return (right.publishedAt ?? "").localeCompare(left.publishedAt ?? "");
     });
 
@@ -112,15 +113,16 @@ export default async function ProjectsPage({params, searchParams}: ProjectsPageP
         {dataError ? (
           <div className="mt-10 sm:mt-12"><ProjectsDataError retryHref="/projects" /></div>
         ) : (
-          <Card className="mt-10 p-4 sm:mt-12 sm:p-6 lg:p-8">
+          <div className="mt-10 sm:mt-12">
             <ProjectsToolbar
               categories={categories}
               query={rawQuery}
+              resultCount={filteredProjects.length}
               selectedCategory={selectedCategory}
               sort={sort}
             />
             <ProjectsGrid projects={filteredProjects} />
-          </Card>
+          </div>
         )}
       </Container>
     </Section>

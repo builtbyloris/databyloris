@@ -109,7 +109,7 @@
     "emptyDescription": "Prova a modificare la ricerca o a selezionare un'altra categoria.",
     "resetFilters": "Reimposta filtri",
     "dataErrorTitle": "Progetti temporaneamente non disponibili",
-    "dataErrorDescription": "Non è stato possibile caricare i progetti da Supabase. Riprova tra poco.",
+    "dataErrorDescription": "Non è stato possibile caricare i progetti. Riprova tra poco.",
     "dataErrorRetry": "Riprova",
     "statusDraft": "In preparazione",
     "statusPublished": "Pubblicato",
