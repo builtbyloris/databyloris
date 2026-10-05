@@ -11,6 +11,7 @@ const staticRoutes = [
   {pathname: "", changeFrequency: "weekly", priority: 1},
   {pathname: "/projects", changeFrequency: "weekly", priority: 0.9},
   {pathname: "/playground", changeFrequency: "monthly", priority: 0.8},
+  {pathname: "/recruiter", changeFrequency: "monthly", priority: 0.7},
 ] as const;
 
 function localizedSitemapEntry(

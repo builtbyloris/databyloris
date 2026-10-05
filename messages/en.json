@@ -9,6 +9,7 @@
     "portfolio": "Portfolio",
     "playground": "Data Playground",
     "about": "About",
+    "recruiter": "Recruiter Mode",
     "admin": "Admin",
     "openProjects": "Explore projects",
     "cta": "Explore",
@@ -176,6 +177,23 @@
       "descriptionProjects": "Discover more projects and the different approaches used to turn data into insight.",
       "backToProjects": "View all projects"
     }
+  },
+  "Recruiter": {
+    "eyebrow": "Recruiter Mode",
+    "title": "A faster way to get oriented",
+    "intro": "A concise overview of published projects and the paths available for deeper exploration.",
+    "metadataTitle": "Recruiter Mode",
+    "metadataDescription": "A quick overview of data analysis projects, technologies used and available paths for deeper exploration.",
+    "profileTitle": "Profile",
+    "projectsTitle": "Projects to explore",
+    "projectsDescription": "A selection of published projects that make the approach, method and outcomes easy to understand.",
+    "projectCount": "{count, plural, =0 {No projects} =1 {# project} other {# projects}}",
+    "noProjects": "There are no published projects to show yet.",
+    "technologiesTitle": "Technologies used in projects",
+    "technologiesDescription": "Stack detected only from published projects; it is not a list of declared skills.",
+    "portfolioCta": "Open portfolio",
+    "exitCta": "Back to site",
+    "exitLink": "Exit Recruiter Mode and return Home"
   },
   "Dashboard": {
     "eyebrow": "Interactive dashboard",
