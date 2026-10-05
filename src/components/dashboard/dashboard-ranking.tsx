@@ -2,7 +2,6 @@
 
 import {useLocale, useTranslations} from "next-intl";
 import {useId, useMemo} from "react";
-import {Card} from "@/components/ui";
 import {cn} from "@/lib/cn";
 import {calculateRanking, formatCompactDashboardValue, formatDashboardValue} from "@/lib/dashboard";
 import type {DashboardRecord, RankingConfig} from "@/types";
@@ -16,12 +15,12 @@ export function DashboardRanking({config, records, className}: {config: RankingC
   const rows = useMemo(() => calculateRanking(records, config), [config, records]);
 
   return (
-    <Card data-dashboard-section="ranking" className={cn("min-w-0 overflow-hidden", className)}>
+    <section data-dashboard-section="ranking" className={cn("min-w-0 overflow-hidden rounded-card border border-border bg-card", className)}>
       <div className="border-b border-border px-5 py-5 sm:px-6">
         <h2 id={titleId} className="text-base font-bold tracking-tight sm:text-lg">{dashboardText(config.title)}</h2>
       </div>
-      <div className="overflow-x-auto">
-        <table aria-labelledby={titleId} className="w-full min-w-[38rem] border-collapse text-left text-sm">
+      <div role="region" aria-labelledby={titleId} tabIndex={0} className="overflow-x-auto outline-none">
+        <table className="w-full min-w-[34rem] border-collapse text-left text-sm sm:min-w-[38rem]">
           <thead className="bg-surface-raised text-xs uppercase tracking-wider text-muted">
             <tr>
               <th scope="col" className="px-5 py-3 font-semibold">
@@ -47,6 +46,7 @@ export function DashboardRanking({config, records, className}: {config: RankingC
           </tbody>
         </table>
       </div>
-    </Card>
+      <p aria-hidden="true" className="border-t border-border px-4 py-2 text-right text-xs font-medium text-muted sm:hidden">{t("scrollHint")}</p>
+    </section>
   );
 }

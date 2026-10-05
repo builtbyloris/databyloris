@@ -14,19 +14,23 @@ export function SearchableFilter({
   label,
   value,
   options,
+  multiple = false,
   allLabel,
   searchLabel,
   noResultsLabel,
+  selectedCountLabel,
   onChange,
 }: {
   controlId: string;
   label: string;
-  value: string;
+  value: string | string[];
   options: FilterOption[];
+  multiple?: boolean;
   allLabel: string;
   searchLabel: string;
   noResultsLabel: string;
-  onChange: (value: string) => void;
+  selectedCountLabel: string;
+  onChange: (value: string | string[]) => void;
 }) {
   const locale = useLocale();
   const id = useId();
@@ -38,7 +42,12 @@ export function SearchableFilter({
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [popupPosition, setPopupPosition] = useState({left: 0, top: 0, width: 0});
-  const selectedLabel = options.find((option) => option.value === value)?.label ?? allLabel;
+  const selectedValues = Array.isArray(value) ? value : value === ALL_FILTER_VALUE ? [] : [value];
+  const selectedLabel = selectedValues.length === 0
+    ? allLabel
+    : selectedValues.length === 1
+      ? options.find((option) => option.value === selectedValues[0])?.label ?? selectedValues[0]
+      : selectedCountLabel;
   const normalizedQuery = normalizeSearchValue(query, locale);
   const filteredOptions = useMemo(() => options.filter((option) => (
     normalizeSearchValue(option.label, locale).includes(normalizedQuery)
@@ -73,6 +82,13 @@ export function SearchableFilter({
     setActiveIndex(0);
   };
   const select = (option: FilterOption) => {
+    if (multiple) {
+      if (option.value === ALL_FILTER_VALUE) onChange([]);
+      else onChange(selectedValues.includes(option.value)
+        ? selectedValues.filter((item) => item !== option.value)
+        : [...selectedValues, option.value]);
+      return;
+    }
     onChange(option.value);
     close();
     triggerRef.current?.focus();
@@ -93,7 +109,7 @@ export function SearchableFilter({
       setPopupPosition({left, top, width});
     }
     setOpen(true);
-    setActiveIndex(Math.max(0, visibleOptions.findIndex((option) => option.value === value)));
+    setActiveIndex(Math.max(0, visibleOptions.findIndex((option) => selectedValues.includes(option.value))));
   };
 
   return (
@@ -113,7 +129,7 @@ export function SearchableFilter({
           }
           if (event.key === "Escape") close();
         }}
-        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-control border border-control-border bg-surface px-3 text-left text-sm font-medium text-foreground shadow-sm outline-none transition-colors focus:border-primary"
+        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-control border border-control-border bg-surface px-3 text-left text-sm font-medium text-foreground outline-none transition-colors focus:border-primary"
       >
         <span className="min-w-0 truncate" title={selectedLabel}>{selectedLabel}</span>
         <span aria-hidden="true" className="shrink-0 text-muted">⌄</span>
@@ -161,7 +177,7 @@ export function SearchableFilter({
               className="h-10 w-full rounded-md border border-control-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary"
             />
           </div>
-          <div id={`${id}-listbox`} role="listbox" aria-label={label} className="max-h-60 overflow-y-auto overscroll-contain p-1">
+          <div id={`${id}-listbox`} role="listbox" aria-multiselectable={multiple || undefined} aria-label={label} className="max-h-60 overflow-y-auto overscroll-contain p-1">
             {visibleOptions.map((option, index) => (
               <button
                 ref={(element) => {
@@ -172,13 +188,14 @@ export function SearchableFilter({
                 type="button"
                 role="option"
                 tabIndex={-1}
-                aria-selected={option.value === value}
+                aria-selected={option.value === ALL_FILTER_VALUE ? selectedValues.length === 0 : selectedValues.includes(option.value)}
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => select(option)}
-                className={`block w-full truncate rounded-md px-3 py-2.5 text-left text-sm outline-none ${index === activeIndex ? "bg-primary/10 text-primary-strong" : "text-foreground hover:bg-surface-raised"}`}
+                className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm outline-none ${index === activeIndex ? "bg-primary/10 text-primary-strong" : "text-foreground hover:bg-surface-raised"}`}
                 title={option.label}
               >
-                {option.label}
+                <span className="truncate">{option.label}</span>
+                {multiple && (option.value === ALL_FILTER_VALUE ? selectedValues.length === 0 : selectedValues.includes(option.value)) ? <span aria-hidden="true">✓</span> : null}
               </button>
             ))}
           </div>

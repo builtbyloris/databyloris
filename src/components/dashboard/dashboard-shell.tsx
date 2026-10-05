@@ -14,7 +14,25 @@ import {DashboardSidebar} from "./dashboard-sidebar";
 import {useDashboardText} from "./use-dashboard-text";
 
 function createInitialState(config: DashboardConfig): DashboardFilterState {
-  return Object.fromEntries(config.filters.map((filter) => [filter.id, filter.defaultValue ?? ALL_FILTER_VALUE]));
+  return Object.fromEntries(config.filters.map((filter) => {
+    const fallback = filter.type === "multi-select" ? [] : ALL_FILTER_VALUE;
+    const value = filter.defaultValue ?? fallback;
+    return [filter.id, Array.isArray(value) ? [...value] : value];
+  }));
+}
+
+function equalFilterValues(left: string | string[] | undefined, right: string | string[] | undefined) {
+  if (Array.isArray(left) || Array.isArray(right)) {
+    if (!Array.isArray(left) || !Array.isArray(right)) return false;
+    const sortedLeft = [...left].sort();
+    const sortedRight = [...right].sort();
+    return sortedLeft.length === sortedRight.length && sortedLeft.every((value, index) => value === sortedRight[index]);
+  }
+  return left === right;
+}
+
+function isFilterActive(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value.length > 0 : Boolean(value && value !== ALL_FILTER_VALUE);
 }
 
 export function DashboardShell({project, config, records, embedded = false}: {
@@ -25,29 +43,43 @@ export function DashboardShell({project, config, records, embedded = false}: {
 }) {
   const t = useTranslations("Dashboard");
   const dashboardText = useDashboardText();
-  const [filters, setFilters] = useState<DashboardFilterState>(() => createInitialState(config));
+  const initialFilters = useMemo(() => createInitialState(config), [config]);
+  const [filters, setFilters] = useState<DashboardFilterState>(() => initialFilters);
   const filteredRecords = useMemo(() => applyDashboardFilters(records, config.filters, filters), [config.filters, filters, records]);
   const kpis = useMemo(() => calculateKpis(filteredRecords, config.kpis), [config.kpis, filteredRecords]);
+  const activeFilterCount = config.filters.filter((filter) => isFilterActive(filters[filter.id])).length;
+  const canReset = config.filters.some((filter) => !equalFilterValues(filters[filter.id], initialFilters[filter.id]));
   const resetFilters = () => setFilters(createInitialState(config));
   const dashboardTitle = dashboardText(config.title).trim() || t("breadcrumb.dashboard");
   const dashboardDescription = dashboardText(config.description).trim();
 
   const dashboardContent = (
     <div className="w-full min-w-0 max-w-full space-y-5">
-      <DashboardFilters filters={config.filters} records={records} state={filters} onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))} onReset={resetFilters} />
-      <DashboardKpiGrid items={kpis} />
+      <DashboardFilters
+        filters={config.filters}
+        records={records}
+        filteredCount={filteredRecords.length}
+        activeFilterCount={activeFilterCount}
+        canReset={canReset && filteredRecords.length > 0}
+        state={filters}
+        onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))}
+        onReset={resetFilters}
+      />
 
       {filteredRecords.length === 0 ? (
-        <div className="rounded-card border border-border bg-card px-6 py-16 text-center shadow-card">
+        <div className="rounded-card border border-border bg-card px-6 py-14 text-center sm:py-16">
           <h2 className="text-xl font-bold">{t("empty.title")}</h2>
           <p className="mt-2 text-sm text-muted">{t("empty.description")}</p>
           <button type="button" onClick={resetFilters} className={buttonStyles({variant: "secondary", className: "mt-6"})}>{t("filters.reset")}</button>
         </div>
       ) : (
-        <div className="grid min-w-0 gap-5 xl:grid-cols-3">
-          {config.charts.map((chart) => <DashboardChart key={chart.id} config={chart} records={filteredRecords} featured={chart.id === config.layout.featuredChartId} />)}
-          {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} className="xl:col-span-2" />)}
-        </div>
+        <>
+          <DashboardKpiGrid items={kpis} />
+          <div className="grid min-w-0 gap-5 xl:grid-cols-3">
+            {config.charts.map((chart) => <DashboardChart key={chart.id} config={chart} records={filteredRecords} featured={chart.id === config.layout.featuredChartId} />)}
+            {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} className="xl:col-span-2" />)}
+          </div>
+        </>
       )}
     </div>
   );

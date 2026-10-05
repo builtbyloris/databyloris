@@ -226,7 +226,11 @@
       "all": "All",
       "search": "Search options…",
       "noResults": "No options found",
-      "reset": "Reset filters"
+      "reset": "Reset filters",
+      "sectionLabel": "Dashboard filters",
+      "selectedCount": "{count, plural, one {# selection} other {# selections}}",
+      "recordCount": "{filtered, number} of {total, number} records",
+      "activeCount": "{count, plural, one {# active filter} other {# active filters}}"
     },
     "kpis": {
       "sales": "Sales",
@@ -255,6 +259,7 @@
     },
     "ranking": {
       "position": "Position",
+      "scrollHint": "Scroll horizontally →",
       "videoGames": {
         "title": "Top 10 games",
         "game": "Game",

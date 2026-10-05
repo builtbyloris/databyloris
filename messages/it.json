@@ -226,7 +226,11 @@
       "all": "Tutti",
       "search": "Cerca opzione…",
       "noResults": "Nessuna opzione trovata",
-      "reset": "Reimposta filtri"
+      "reset": "Reimposta filtri",
+      "sectionLabel": "Filtri dashboard",
+      "selectedCount": "{count, plural, one {# selezione} other {# selezioni}}",
+      "recordCount": "{filtered, number} di {total, number} record",
+      "activeCount": "{count, plural, one {# filtro attivo} other {# filtri attivi}}"
     },
     "kpis": {
       "sales": "Vendite",
@@ -255,6 +259,7 @@
     },
     "ranking": {
       "position": "Posizione",
+      "scrollHint": "Scorri orizzontalmente →",
       "videoGames": {
         "title": "Top 10 giochi",
         "game": "Gioco",
