@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
 import {getTranslations} from "next-intl/server";
-import {PlaygroundDashboard, PlaygroundHeader, PlaygroundIntro} from "@/components/playground";
+import {PlaygroundDashboard, PlaygroundHeader} from "@/components/playground";
 import {Container} from "@/components/ui";
 import {retailPulseDashboard} from "@/data/playground/retail-pulse-dashboard";
 import {retailPulseData} from "@/data/playground/retail-pulse-data";
@@ -24,7 +24,6 @@ export default async function PlaygroundPage() {
       <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[34rem]" />
       <Container className="relative">
         <PlaygroundHeader />
-        <PlaygroundIntro />
         <PlaygroundDashboard config={retailPulseDashboard} records={retailPulseData} />
       </Container>
     </section>

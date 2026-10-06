@@ -139,7 +139,7 @@ p {
 }
 
 [data-dashboard-section] {
-  transition: outline-color 180ms ease, box-shadow 180ms ease;
+  transition: outline-color 180ms ease;
 }
 
 [data-playground-highlight="filters"] [data-dashboard-section="filters"],
@@ -148,7 +148,6 @@ p {
 [data-playground-highlight="ranking"] [data-dashboard-section="ranking"] {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 9%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

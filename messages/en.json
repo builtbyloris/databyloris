@@ -306,19 +306,14 @@
   "Playground": {
     "eyebrow": "Learn by exploring",
     "title": "Data Playground",
-    "description": "Learn how to read and use an interactive dashboard through a demo dataset.",
-    "demoBadge": "Demo Dataset",
+    "description": "Retail Pulse is already loaded. Follow the four-step guide or explore the dashboard freely.",
+    "demoBadge": "Demo data",
     "demoNotice": "Retail Pulse uses demonstration data only and is not part of the Portfolio.",
-    "intro": {
-      "eyebrow": "The journey",
-      "title": "Four steps to read the data",
-      "description": "Follow the guide or interact freely: every selection updates the entire dashboard.",
-      "kpis": {"title": "Observe the KPIs", "description": "Start with the main metrics to quickly understand the scale of the dataset."},
-      "filters": {"title": "Apply a filter", "description": "Narrow the analysis by month, city, category or channel."},
-      "charts": {"title": "Explore the charts", "description": "Read trends, comparisons and distributions from different perspectives."},
-      "ranking": {"title": "Compare the ranking", "description": "Quickly identify the cities with the most relevant results."}
-    },
+    "start": "Start the guide",
     "tutorial": {
+      "guideLabel": "Playground guide",
+      "viewSection": "Go to the highlighted section",
+      "filterIndependence": "Filters change the data, not your place in the guide. Use Next to move to the following step.",
       "counter": "Step {current} of {total}",
       "progressLabel": "Guide progress",
       "stepLabel": "Step {step}",
@@ -336,7 +331,7 @@
       "explore": {
         "badge": "Free exploration",
         "title": "Now explore on your own",
-        "description": "The dashboard remains fully interactive. Try different combinations or restart the guide whenever you want."
+        "description": "The guide is closed, but the dashboard and filters remain interactive. Restart it whenever you want."
       }
     }
   },

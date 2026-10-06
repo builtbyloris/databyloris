@@ -306,19 +306,14 @@
   "Playground": {
     "eyebrow": "Impara esplorando",
     "title": "Data Playground",
-    "description": "Scopri come leggere e utilizzare una dashboard interattiva attraverso un dataset demo.",
-    "demoBadge": "Dataset Demo",
+    "description": "Retail Pulse è già caricato. Segui la guida in quattro passi oppure esplora la dashboard liberamente.",
+    "demoBadge": "Dati demo",
     "demoNotice": "Retail Pulse utilizza esclusivamente dati dimostrativi e non fa parte del Portfolio.",
-    "intro": {
-      "eyebrow": "Il percorso",
-      "title": "Quattro passaggi per leggere i dati",
-      "description": "Segui la guida oppure interagisci liberamente: ogni selezione aggiorna l'intera dashboard.",
-      "kpis": {"title": "Osserva i KPI", "description": "Parti dalle metriche principali per capire subito la scala del dataset."},
-      "filters": {"title": "Applica un filtro", "description": "Restringi l'analisi per mese, città, categoria o canale."},
-      "charts": {"title": "Esplora i grafici", "description": "Leggi trend, confronti e distribuzioni da prospettive diverse."},
-      "ranking": {"title": "Confronta la classifica", "description": "Individua rapidamente le città con i risultati più rilevanti."}
-    },
+    "start": "Inizia la guida",
     "tutorial": {
+      "guideLabel": "Guida al Playground",
+      "viewSection": "Vai alla sezione evidenziata",
+      "filterIndependence": "I filtri cambiano i dati, non l'avanzamento della guida. Usa Avanti per passare al passo successivo.",
       "counter": "Step {current} di {total}",
       "progressLabel": "Avanzamento della guida",
       "stepLabel": "Step {step}",
@@ -336,7 +331,7 @@
       "explore": {
         "badge": "Modalità libera",
         "title": "Ora esplora in autonomia",
-        "description": "La dashboard resta completamente interattiva. Prova combinazioni diverse o riavvia la guida quando vuoi."
+        "description": "La guida è chiusa, ma la dashboard e i filtri restano interattivi. Puoi riavviarla quando vuoi."
       }
     }
   },
