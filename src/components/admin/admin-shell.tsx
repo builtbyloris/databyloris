@@ -1,9 +1,10 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslations} from "next-intl";
 import {
   createProjectAction,
+  getPublishingQualityAction,
   saveDashboardConfigAction,
   saveProjectDetailAction,
   updateProjectAction,
@@ -12,6 +13,7 @@ import {logoutAction} from "@/app/[locale]/admin/login/actions";
 import {Button, Card, Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {createProjectDraft} from "@/lib/admin";
+import type {PublishingQualityResult} from "@/lib/admin/publishing-quality-gate";
 import type {AdminDatasetDraft, AdminProjectInput, AdminView, DashboardConfig, ProjectDetail, ProjectDraft} from "@/types";
 import {AdminOverview} from "./admin-overview";
 import {AdminSidebar} from "./admin-sidebar";
@@ -43,15 +45,57 @@ export function AdminShell({
   const [feedback, setFeedback] = useState<{kind: "success" | "error"; code: string} | null>(
     initialLoadError ? {kind: "error", code: "databaseUnavailable"} : null,
   );
+  const [qualityById, setQualityById] = useState<Record<string, PublishingQualityResult>>({});
+  const [qualityLoadingId, setQualityLoadingId] = useState<string | null>(null);
   const selected = drafts.find(({project}) => project.id === selectedId) ?? null;
   const selectedDetailDirty = selected
     ? serializeDetail(selected.projectDetail) !== persistedDetails[selected.project.id]
     : false;
 
+  useEffect(() => {
+    if (!selectedId) return;
+    let active = true;
+    getPublishingQualityAction(locale, selectedId).then((result) => {
+      if (active && result.ok) setQualityById((current) => ({...current, [selectedId]: result.data}));
+    });
+    return () => { active = false; };
+  }, [locale, selectedId]);
+
+  const refreshQuality = async (projectId: string, proposed?: AdminProjectInput) => {
+    setQualityLoadingId(projectId);
+    const result = await getPublishingQualityAction(locale, projectId, proposed);
+    setQualityLoadingId(null);
+    setQualityById((current) => {
+      if (result.ok) return {...current, [projectId]: result.data};
+      const next = {...current};
+      delete next[projectId];
+      return next;
+    });
+    return result;
+  };
+
+  const selectedInput = (): AdminProjectInput | null => selected ? {
+    id: selected.project.id,
+    slug: selected.project.slug,
+    title: selected.localizedTitle,
+    description: selected.localizedDescription,
+    category: selected.project.category,
+    technologies: selected.project.technologies,
+    featured: selected.project.featured,
+    status: selected.project.status === "published" ? "published" : "draft",
+    dashboardAvailable: Boolean(selected.project.dashboardAvailable),
+    repositoryUrl: selected.project.repositoryUrl,
+  } : null;
+
   const updateSelected = (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => {
     if (!selectedId) return;
     setDrafts((current) => current.map((draft) => draft.project.id === selectedId ? {...draft, ...change} : draft));
     setProjectDirtyIds((current) => new Set(current).add(selectedId));
+    setQualityById((current) => {
+      const next = {...current};
+      delete next[selectedId];
+      return next;
+    });
     setFeedback(null);
   };
   const updateSelectedConfig = (dashboardConfig: DashboardConfig) => {
@@ -70,12 +114,14 @@ export function AdminShell({
     setDrafts((current) => current.map((draft) => draft.project.id === selectedId
       ? {...draft, dataset}
       : draft));
+    void refreshQuality(selectedId);
   };
   const updateSelectedCover = ({imagePath, imageUrl}: {imagePath: string | null; imageUrl: string}) => {
     if (!selectedId) return;
     setDrafts((current) => current.map((draft) => draft.project.id === selectedId
       ? {...draft, imagePath, project: {...draft.project, image: imageUrl}}
       : draft));
+    void refreshQuality(selectedId);
   };
   const edit = (id: string) => { setSelectedId(id); setView("editor"); };
   const create = async () => {
@@ -120,6 +166,7 @@ export function AdminShell({
     setPending(null);
 
     if (!result.ok) {
+      if (result.issues) setQualityById((current) => ({...current, [selected.project.id]: {ready: false, issues: result.issues ?? [], featuredDraftWarning: false}}));
       setFeedback({kind: "error", code: result.error});
       return;
     }
@@ -134,6 +181,7 @@ export function AdminShell({
         }
       : draft));
     setProjectDirtyIds((current) => without(current, result.data.project.id));
+    void refreshQuality(result.data.project.id);
     setFeedback({kind: "success", code: "projectSaved"});
   };
   const saveConfig = async () => {
@@ -144,6 +192,7 @@ export function AdminShell({
     setPending(null);
 
     if (!result.ok) {
+      if (result.issues) setQualityById((current) => ({...current, [selected.project.id]: {ready: false, issues: result.issues!, featuredDraftWarning: false}}));
       setFeedback({kind: "error", code: result.error});
       return;
     }
@@ -152,6 +201,7 @@ export function AdminShell({
       ? {...draft, dashboardConfig: result.data}
       : draft));
     setConfigDirtyIds((current) => without(current, selected.project.id));
+    void refreshQuality(selected.project.id);
     setFeedback({kind: "success", code: "configSaved"});
   };
   const saveDetail = async () => {
@@ -162,6 +212,7 @@ export function AdminShell({
     setPending(null);
 
     if (!result.ok) {
+      if (result.issues) setQualityById((current) => ({...current, [selected.project.id]: {ready: false, issues: result.issues!, featuredDraftWarning: false}}));
       setFeedback({kind: "error", code: result.error});
       return;
     }
@@ -170,6 +221,7 @@ export function AdminShell({
       ? {...draft, projectDetail: result.data}
       : draft));
     setPersistedDetails((current) => ({...current, [selected.project.id]: serializeDetail(result.data)}));
+    void refreshQuality(selected.project.id);
     setFeedback({kind: "success", code: "detailSaved"});
   };
   const navigate = (next: AdminView) => {
@@ -200,7 +252,7 @@ export function AdminShell({
             {feedback ? <Feedback kind={feedback.kind} message={t(`${feedback.kind === "error" ? "errors" : "feedback"}.${feedback.code}`)} /> : null}
             {view === "overview" ? <AdminOverview drafts={drafts} creating={pending === "create"} onNew={create} onProjects={() => setView("projects")} onEdit={edit} /> : null}
             {view === "projects" ? <ProjectsTable drafts={drafts} creating={pending === "create"} onNew={create} onEdit={edit} /> : null}
-            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} locale={locale} dirty={projectDirtyIds.has(selected.project.id)} detailDirty={selectedDetailDirty} saving={pending === "project"} detailSaving={pending === "detail"} onChange={updateSelected} onDetailChange={updateSelectedDetail} onDatasetChange={updateSelectedDataset} onCoverChange={updateSelectedCover} onSave={saveProject} onDetailSave={saveDetail} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
+            {view === "editor" && selected ? <ProjectEditor draft={selected} allDrafts={drafts} locale={locale} dirty={projectDirtyIds.has(selected.project.id)} detailDirty={selectedDetailDirty} saving={pending === "project"} detailSaving={pending === "detail"} quality={qualityById[selected.project.id] ?? null} qualityLoading={qualityLoadingId === selected.project.id} onCheckQuality={() => { const input = selectedInput(); if (input) void refreshQuality(selected.project.id, input); }} onChange={updateSelected} onDetailChange={updateSelectedDetail} onDatasetChange={updateSelectedDataset} onCoverChange={updateSelectedCover} onSave={saveProject} onDetailSave={saveDetail} onBuilder={() => setView("builder")} onBack={() => setView("projects")} /> : null}
             {view === "builder" && selected ? <DashboardBuilder draft={selected} dirty={configDirtyIds.has(selected.project.id)} saving={pending === "config"} onChange={updateSelectedConfig} onSave={saveConfig} onBack={() => setView("editor")} /> : null}
             {view === "media" ? <Card className="p-8 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("media.eyebrow")}</p><h1 className="mt-3 text-3xl font-black tracking-tight">{t("media.title")}</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-muted">{t("media.description")}</p><div className="mt-6 rounded-control border border-dashed border-border bg-surface-raised p-5 text-sm text-muted">{t("media.storageNote")}</div></Card> : null}
           </div>

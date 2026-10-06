@@ -1,6 +1,7 @@
 import type {DashboardConfig} from "./dashboard-config";
 import type {DashboardRecord} from "./dataset";
 import type {LocalizedText, Project, ProjectDetail} from "./project";
+import type {PublishingIssue} from "@/lib/admin/publishing-quality-gate";
 
 export interface AdminDatasetDraft {
   id: string;
@@ -78,12 +79,13 @@ export type AdminActionError =
   | "datasetUploadFailed"
   | "datasetProcessingFailed"
   | "invalidProject"
+  | "publishingBlocked"
   | "projectNotFound"
   | "unknown";
 
 export type AdminActionResult<T> =
   | {ok: true; data: T}
-  | {ok: false; error: AdminActionError};
+  | {ok: false; error: AdminActionError; issues?: PublishingIssue[]};
 
 export interface ProjectCoverResult {
   imagePath: string | null;

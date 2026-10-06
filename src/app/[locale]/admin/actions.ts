@@ -4,6 +4,8 @@ import {revalidatePath} from "next/cache";
 import {dashboardRegistry} from "@/data/dashboards/registry";
 import type {AppLocale} from "@/i18n/routing";
 import {isValidAdminProjectInput, isValidProjectDetail, isValidProjectId, validateDashboardConfig} from "@/lib/admin";
+import {isProjectQualityCandidate} from "@/lib/admin/project-validation";
+import {getPublishingQuality, projectInputFromRecord} from "@/lib/admin/publishing-quality-gate-server";
 import {requireAdmin} from "@/lib/auth/require-admin";
 import {
   DATASET_MAX_FILE_BYTES,
@@ -48,6 +50,7 @@ import type {
   ProjectCoverResult,
   RegisterDatasetInput,
 } from "@/types";
+import type {PublishingQualityResult} from "@/lib/admin/publishing-quality-gate";
 
 function adminRoute(locale: AppLocale) {
   return locale === "en" ? "/en/admin" : "/admin";
@@ -164,6 +167,11 @@ export async function updateProjectAction(
   if (!isValidAdminProjectInput(input)) return {ok: false, error: "invalidProject"};
 
   try {
+    if (input.status === "published") {
+      const gate = await getPublishingQuality(input.id, locale, {project: input});
+      if (!gate) return {ok: false, error: "projectNotFound"};
+      if (!gate.ready) return {ok: false, error: "publishingBlocked", issues: gate.issues};
+    }
     const project = await updateProject(input, locale);
     revalidatePath(adminRoute(locale));
     return {ok: true, data: project};
@@ -183,9 +191,34 @@ export async function updateProjectStatusAction(
   }
 
   try {
+    if (status === "published") {
+      const current = await getAdminProjectById(projectId, locale);
+      if (!current) return {ok: false, error: "projectNotFound"};
+      const gate = await getPublishingQuality(projectId, locale, {
+        project: {...projectInputFromRecord(current), status},
+      });
+      if (!gate?.ready) return {ok: false, error: "publishingBlocked", issues: gate?.issues};
+    }
     const project = await updateProjectStatus(projectId, status, locale);
     revalidatePath(adminRoute(locale));
     return {ok: true, data: project};
+  } catch (error) {
+    return {ok: false, error: actionError(error)};
+  }
+}
+
+export async function getPublishingQualityAction(
+  locale: AppLocale,
+  projectId: string,
+  proposed?: AdminProjectInput,
+): Promise<AdminActionResult<PublishingQualityResult>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || (proposed && (proposed.id !== projectId || !isProjectQualityCandidate(proposed)))) {
+    return {ok: false, error: "invalidProject"};
+  }
+  try {
+    const result = await getPublishingQuality(projectId, locale, proposed ? {project: proposed} : undefined);
+    return result ? {ok: true, data: result} : {ok: false, error: "projectNotFound"};
   } catch (error) {
     return {ok: false, error: actionError(error)};
   }
@@ -246,6 +279,10 @@ export async function removeProjectCoverAction(
   try {
     const current = await getAdminProjectById(projectId, locale);
     if (!current) return {ok: false, error: "projectNotFound"};
+    if (current.project.status === "published") {
+      const gate = await getPublishingQuality(projectId, locale, {imagePath: null});
+      return {ok: false, error: "publishingBlocked", issues: gate?.issues};
+    }
 
     const saved = await updateProjectImagePath(projectId, null, locale);
     const cleanupIncomplete = Boolean(
@@ -284,6 +321,10 @@ export async function saveDashboardConfigAction(
       await dashboardFields(projectId, project.project.slug),
     );
     if (issues.length > 0) return {ok: false, error: "invalidConfig"};
+    if (project.project.status === "published") {
+      const gate = await getPublishingQuality(projectId, locale, {config: normalizedConfig});
+      if (!gate?.ready) return {ok: false, error: "publishingBlocked", issues: gate?.issues};
+    }
 
     const saved = await upsertDashboardConfig(projectId, normalizedConfig);
     revalidatePath(adminRoute(locale));
@@ -311,6 +352,10 @@ export async function registerDatasetAction(
     }
 
     const existing = await listProjectDatasets(input.projectId);
+    if (project.project.status === "published" && project.project.dashboardAvailable && existing.length > 0) {
+      await cleanupUploadedFile(input.storagePath);
+      return {ok: false, error: "publishingBlocked"};
+    }
     if (existing.length > 0 && !input.replaceExisting) {
       await cleanupUploadedFile(input.storagePath);
       return {ok: false, error: "datasetExists"};
@@ -398,6 +443,10 @@ export async function saveProjectDetailAction(
   try {
     const project = await getAdminProjectById(projectId, locale);
     if (!project) return {ok: false, error: "projectNotFound"};
+    if (project.project.status === "published") {
+      const gate = await getPublishingQuality(projectId, locale, {detail});
+      if (!gate?.ready) return {ok: false, error: "publishingBlocked", issues: gate?.issues};
+    }
 
     const saved = await upsertProjectDetail(projectId, detail);
     revalidatePath(adminRoute(locale));

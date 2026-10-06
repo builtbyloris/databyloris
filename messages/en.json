@@ -438,7 +438,7 @@
       "savingGrain": "Saving…",
       "configWarning": "The dashboard configuration contains {count} references that do not match this dataset's fields.",
       "feedback": {"uploaded": "Dataset uploaded and saved to Supabase.", "replaced": "Dataset replaced successfully.", "grainSaved": "Grain updated."},
-      "errors": {"csvRequired": "Select a file with a .csv extension.", "confirmReplacement": "Explicitly confirm the replacement.", "invalidDataset": "Invalid CSV: check headers, rows and values.", "datasetExists": "A dataset already exists: confirm replacement and try again.", "datasetTooLarge": "The file exceeds the allowed size.", "tooManyRows": "The CSV exceeds the 10,000-row limit.", "datasetUploadFailed": "Storage upload failed.", "datasetProcessingFailed": "The dataset was not saved. The newly uploaded file was removed when possible.", "projectNotFound": "The project no longer exists or is not accessible.", "databaseUnavailable": "The database is unavailable.", "unknown": "The operation failed. Please try again."}
+      "errors": {"csvRequired": "Select a file with a .csv extension.", "confirmReplacement": "Explicitly confirm the replacement.", "invalidDataset": "Invalid CSV: check headers, rows and values.", "datasetExists": "A dataset already exists: confirm replacement and try again.", "datasetTooLarge": "The file exceeds the allowed size.", "tooManyRows": "The CSV exceeds the 10,000-row limit.", "datasetUploadFailed": "Storage upload failed.", "datasetProcessingFailed": "The dataset was not saved. The newly uploaded file was removed when possible.", "publishingBlocked": "Move the project to draft before replacing the published Dashboard dataset.", "projectNotFound": "The project no longer exists or is not accessible.", "databaseUnavailable": "The database is unavailable.", "unknown": "The operation failed. Please try again."}
     },
     "cover": {
       "title": "Project cover",
@@ -455,7 +455,7 @@
       "remove": "Remove cover",
       "removing": "Removing…",
       "feedback": {"uploaded": "Upload completed.", "replaced": "Cover replaced.", "removed": "Cover removed: the fallback is active.", "cleanupIncomplete": "The change was saved, but the old file could not be cleaned up."},
-      "errors": {"unsupportedFormat": "Unsupported format. Use JPEG, PNG, WebP or AVIF.", "tooLarge": "The file exceeds the 5 MiB limit.", "uploadFailed": "An error occurred while uploading the cover.", "updateFailed": "The cover could not be saved.", "invalidCover": "The cover file or path is invalid.", "coverUpdateFailed": "The cover could not be updated.", "projectNotFound": "The project no longer exists or is not accessible."}
+      "errors": {"unsupportedFormat": "Unsupported format. Use JPEG, PNG, WebP or AVIF.", "tooLarge": "The file exceeds the 5 MiB limit.", "uploadFailed": "An error occurred while uploading the cover.", "updateFailed": "The cover could not be saved.", "invalidCover": "The cover file or path is invalid.", "coverUpdateFailed": "The cover could not be updated.", "publishingBlocked": "A published project needs a cover. Move it to draft before removing it.", "projectNotFound": "The project no longer exists or is not accessible."}
     },
     "builder": {"title": "Dashboard Builder", "configure": "Configure", "preview": "Preview", "settings": "Dashboard settings", "filters": "Filters", "kpis": "KPIs", "charts": "Charts", "rankings": "Rankings", "addFilter": "Add filter", "addKpi": "Add KPI", "addChart": "Add chart", "addRanking": "Add ranking", "detailColumns": "Additional columns", "addColumn": "Add column"},
     "preview": {"noDatasetTitle": "Preview unavailable", "noDatasetDescription": "Connect a dataset in a later phase to render this configuration with the Dashboard Engine.", "invalidTitle": "Incomplete configuration", "invalidDescription": "Fix these fields before opening the preview."},
@@ -463,8 +463,40 @@
     "media": {"eyebrow": "Assets", "title": "Media", "description": "Persistent covers are managed directly in the Project Editor.", "storageNote": "Galleries and multiple screenshots are not included in this V1."},
     "validation": {"required": "Required field", "invalidSlug": "Use lowercase letters, numbers and hyphens", "duplicateSlug": "This slug is already in use", "unsupportedValue": "Unsupported value", "unknownField": "This field does not exist in the dataset", "fieldRequired": "Select a field", "duplicateId": "Duplicate ID", "positiveLimit": "Enter a number greater than zero"},
     "feedback": {"projectCreated": "New draft created and saved.", "projectSaved": "Project changes saved.", "detailSaved": "Case study saved successfully.", "configSaved": "Dashboard configuration saved."},
-    "errors": {"databaseUnavailable": "The database is unavailable. Please try again shortly.", "duplicateSlug": "This slug is already used by another project.", "invalidConfig": "The configuration is invalid. Correct the highlighted fields.", "invalidDetail": "The case study is invalid. Check the highlighted fields.", "invalidProject": "The project data is invalid.", "projectNotFound": "The project no longer exists or is not accessible.", "unknown": "Save failed. Please try again."},
-    "publishNotice": "An incomplete case study does not block project publishing.",
+    "errors": {"databaseUnavailable": "The database is unavailable. Please try again shortly.", "duplicateSlug": "This slug is already used by another project.", "invalidConfig": "The configuration is invalid. Correct the highlighted fields.", "invalidDetail": "The case study is invalid. Check the highlighted fields.", "invalidProject": "The project data is invalid.", "publishingBlocked": "Publishing blocked: complete the requirements in the checklist.", "projectNotFound": "The project no longer exists or is not accessible.", "unknown": "Save failed. Please try again."},
+    "quality": {
+      "title": "Publishing quality",
+      "draftAllowed": "Incomplete drafts can be saved; requirements apply when publishing and editing live projects.",
+      "checking": "Checking…",
+      "unavailable": "Check unavailable. Try again.",
+      "ready": "Ready to publish.",
+      "incomplete": "{count, plural, one {# requirement to complete.} other {# requirements to complete.}}",
+      "check": "Check requirements",
+      "goTo": "Go to section",
+      "unsaved": "Case Study and Dashboard changes count only after saving. Check again before publishing.",
+      "featuredDraft": "Featured takes effect only after publishing.",
+      "issues": {
+        "titleIt": "Add the Italian title.", "titleEn": "Add the English title.",
+        "descriptionIt": "Add the Italian description.", "descriptionEn": "Add the English description.",
+        "slug": "Enter a valid slug.", "category": "Add a category.",
+        "cover": "Upload and save the project cover.", "caseStudy": "Save the Case Study.",
+        "contextIt": "Complete the Italian context.", "contextEn": "Complete the English context.",
+        "objectiveIt": "Complete the Italian objective.", "objectiveEn": "Complete the English objective.",
+        "datasetName": "Add the dataset name in the Case Study.",
+        "datasetSourceIt": "Add the dataset source in Italian.", "datasetSourceEn": "Add the dataset source in English.",
+        "datasetDescriptionIt": "Describe the dataset in Italian.", "datasetDescriptionEn": "Describe the dataset in English.",
+        "methodology": "Add at least one complete methodology step in IT/EN.",
+        "insights": "Add at least one complete insight in IT/EN.",
+        "repositoryUrl": "Correct the repository link.", "sourceUrl": "Correct the dataset source link.",
+        "dashboardDataset": "Associate one saved dataset with the project.",
+        "dashboardSchema": "The dataset needs a valid schema with unique columns.",
+        "dashboardRows": "The dataset needs at least one usable row.",
+        "dashboardConfig": "Save the Dashboard configuration.",
+        "dashboardDatasetId": "Connect the configuration to the project's dataset.",
+        "dashboardFields": "Correct the Dashboard configuration fields.",
+        "dashboardContent": "Add at least one KPI, chart or ranking to the Dashboard."
+      }
+    },
     "options": {"select": "Single select", "multi-select": "Multi select", "sum": "Sum", "count": "Count", "distinctCount": "Distinct count", "average": "Average", "number": "Number", "sales": "Sales", "currency": "Currency", "percentage": "Percentage", "duration": "Duration", "line": "Line", "bar": "Bar", "pie": "Pie", "donut": "Donut", "category-asc": "Category ascending", "category-desc": "Category descending", "value-asc": "Value ascending", "value-desc": "Value descending", "asc": "Ascending", "desc": "Descending"}
   },
   "AdminAuth": {

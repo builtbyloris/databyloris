@@ -3,17 +3,19 @@
 import {useLocale, useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
 import {slugifyProjectTitle, validateProjectDraft} from "@/lib/admin";
+import type {PublishingQualityResult} from "@/lib/admin/publishing-quality-gate";
 import type {Project, ProjectDetail, ProjectDraft} from "@/types";
 import type {AppLocale} from "@/i18n/routing";
 import type {AdminDatasetDraft} from "@/types";
 import {DatasetManager} from "./dataset-manager";
 import {ProjectCoverManager} from "./project-cover-manager";
 import {ProjectDetailEditor} from "./project-detail-editor";
+import {PublishingChecklist} from "./publishing-checklist";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 const textareaClass = "mt-1.5 min-h-28 w-full rounded-control border border-border bg-surface px-3 py-2.5 text-sm outline-none focus:border-primary";
 
-export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detailDirty, saving, detailSaving, onChange, onDetailChange, onDatasetChange, onCoverChange, onSave, onDetailSave, onBuilder, onBack}: {
+export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detailDirty, saving, detailSaving, quality, qualityLoading, onCheckQuality, onChange, onDetailChange, onDatasetChange, onCoverChange, onSave, onDetailSave, onBuilder, onBack}: {
   draft: ProjectDraft;
   allDrafts: ProjectDraft[];
   locale: AppLocale;
@@ -21,6 +23,9 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
   detailDirty: boolean;
   saving: boolean;
   detailSaving: boolean;
+  quality: PublishingQualityResult | null;
+  qualityLoading: boolean;
+  onCheckQuality: () => void;
   onChange: (change: Partial<Pick<ProjectDraft, "project" | "localizedTitle" | "localizedDescription">>) => void;
   onDetailChange: (detail: ProjectDetail) => void;
   onDatasetChange: (dataset: AdminDatasetDraft) => void;
@@ -75,7 +80,7 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
         </div>
       </div>
 
-      <Card className="p-5 sm:p-6">
+      <Card id="project-metadata" className="scroll-mt-24 p-5 sm:p-6">
         <h2 className="text-lg font-bold">{t("editor.metadata")}</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           <label className="text-sm font-semibold">{t("fields.titleIt")}
@@ -90,6 +95,14 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
             <input className={inputClass} value={draft.project.slug} aria-invalid={Boolean(error("project.slug"))} onChange={(event) => set("slug", event.target.value)} />
             {error("project.slug") ? <span className="mt-1 block text-xs text-red-500">{error("project.slug")}</span> : null}
           </label>
+          <label className="text-sm font-semibold">{t("fields.status")}
+            <select className={inputClass} value={draft.project.status} aria-describedby="publishing-quality-status" onChange={(event) => set("status", event.target.value as Project["status"])}>
+              <option value="draft">{t("status.draft")}</option><option value="published">{t("status.published")}</option>
+            </select>
+          </label>
+          <div className="md:col-span-2">
+            <PublishingChecklist quality={quality} loading={qualityLoading} hasUnsavedChanges={dirty || detailDirty} onCheck={onCheckQuality} onBuilder={onBuilder} />
+          </div>
           <label className="text-sm font-semibold">{t("fields.descriptionIt")}
             <textarea className={textareaClass} value={draft.localizedDescription.it} onChange={(event) => setLocalizedDescription("it", event.target.value)} />
           </label>
@@ -103,11 +116,6 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
           <label className="text-sm font-semibold">{t("fields.technologies")}
             <input className={inputClass} value={draft.project.technologies.join(", ")} onChange={(event) => set("technologies", event.target.value.split(",").map((value) => value.trim()).filter(Boolean))} />
           </label>
-          <label className="text-sm font-semibold">{t("fields.status")}
-            <select className={inputClass} value={draft.project.status} onChange={(event) => set("status", event.target.value as Project["status"])}>
-              <option value="draft">{t("status.draft")}</option><option value="published">{t("status.published")}</option>
-            </select>
-          </label>
           <label className="text-sm font-semibold">{t("fields.repositoryUrl")}
             <input type="url" className={inputClass} value={draft.project.repositoryUrl ?? ""} onChange={(event) => set("repositoryUrl", event.target.value || undefined)} />
           </label>
@@ -117,36 +125,41 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, dirty, detai
           <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={draft.project.featured} onChange={(event) => set("featured", event.target.checked)} />{t("fields.featured")}</label>
           <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={Boolean(draft.project.dashboardAvailable)} onChange={(event) => set("dashboardAvailable", event.target.checked)} />{t("fields.dashboardAvailable")}</label>
         </fieldset>
-        <p className="mt-5 rounded-control border border-violet/20 bg-violet/10 px-4 py-3 text-xs font-medium text-muted">{t("publishNotice")}</p>
       </Card>
 
-      <ProjectCoverManager
-        key={`cover-${draft.project.id}`}
-        projectId={draft.project.id}
-        projectTitle={draft.project.title}
-        imagePath={draft.imagePath}
-        imageUrl={draft.project.image}
-        locale={appLocale}
-        onChange={onCoverChange}
-      />
+      <div id="project-cover" className="scroll-mt-24">
+        <ProjectCoverManager
+          key={`cover-${draft.project.id}`}
+          projectId={draft.project.id}
+          projectTitle={draft.project.title}
+          imagePath={draft.imagePath}
+          imageUrl={draft.project.image}
+          locale={appLocale}
+          onChange={onCoverChange}
+        />
+      </div>
 
-      <ProjectDetailEditor
-        detail={draft.projectDetail}
-        dirty={detailDirty}
-        saving={detailSaving}
-        onChange={onDetailChange}
-        onSave={onDetailSave}
-      />
+      <div id="project-case-study" className="scroll-mt-24">
+        <ProjectDetailEditor
+          detail={draft.projectDetail}
+          dirty={detailDirty}
+          saving={detailSaving}
+          onChange={onDetailChange}
+          onSave={onDetailSave}
+        />
+      </div>
 
-      <DatasetManager
-        key={`dataset-${draft.project.id}`}
-        projectId={draft.project.id}
-        projectTitle={draft.project.title}
-        locale={appLocale}
-        dataset={draft.dataset}
-        dashboardConfig={draft.dashboardConfig}
-        onDatasetChange={onDatasetChange}
-      />
+      <div id="project-dataset" className="scroll-mt-24">
+        <DatasetManager
+          key={`dataset-${draft.project.id}`}
+          projectId={draft.project.id}
+          projectTitle={draft.project.title}
+          locale={appLocale}
+          dataset={draft.dataset}
+          dashboardConfig={draft.dashboardConfig}
+          onDatasetChange={onDatasetChange}
+        />
+      </div>
     </div>
   );
 }
