@@ -230,7 +230,15 @@
     "pageOf": "Page {page} of {pages}",
     "loading": "Loading dataset…",
     "errorTitle": "Dataset unavailable",
-    "errorDescription": "We could not load the dataset. Please try again later."
+    "errorDescription": "We could not load the dataset. Please try again later.",
+    "dictionary": {
+      "title": "Data Dictionary",
+      "intro": "Definitions for the approved public fields in this dataset.",
+      "type": "Type",
+      "unit": "Unit",
+      "format": "Format",
+      "types": {"string": "Text", "number": "Number", "boolean": "Boolean", "date": "Date"}
+    }
   },
   "Dashboard": {
     "eyebrow": "Interactive dashboard",
@@ -489,6 +497,23 @@
       "saved": "Explorer settings saved.",
       "invalidFields": "Select only valid fields from this dataset schema.",
       "saveError": "Could not save Explorer settings. Try again."
+    },
+    "dictionary": {
+      "title": "Data Dictionary",
+      "description": "Describe real dataset columns. Only approved Explorer fields appear publicly.",
+      "field": "Dataset column",
+      "schemaType": "Inferred schema type: {type}",
+      "label": {"it": "Label (IT)", "en": "Label (EN)"},
+      "descriptionField": {"it": "Description (IT)", "en": "Description (EN)"},
+      "dataType": "Dictionary type",
+      "unit": "Unit (optional)",
+      "format": "Format (optional)",
+      "types": {"string": "Text", "number": "Number", "boolean": "Boolean", "date": "Date"},
+      "save": "Save dictionary",
+      "saving": "Saving…",
+      "saved": "Data Dictionary saved.",
+      "invalid": "Use only real columns and valid metadata values.",
+      "saveError": "Could not save the Data Dictionary. Try again."
     },
     "cover": {
       "title": "Project cover",

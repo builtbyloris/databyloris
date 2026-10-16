@@ -230,7 +230,15 @@
     "pageOf": "Pagina {page} di {pages}",
     "loading": "Caricamento dataset…",
     "errorTitle": "Dataset non disponibile",
-    "errorDescription": "Non è stato possibile caricare il dataset. Riprova più tardi."
+    "errorDescription": "Non è stato possibile caricare il dataset. Riprova più tardi.",
+    "dictionary": {
+      "title": "Dizionario dei dati",
+      "intro": "Definizioni dei campi pubblici approvati per questo dataset.",
+      "type": "Tipo",
+      "unit": "Unità",
+      "format": "Formato",
+      "types": {"string": "Testo", "number": "Numero", "boolean": "Booleano", "date": "Data"}
+    }
   },
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
@@ -489,6 +497,23 @@
       "saved": "Impostazioni Explorer salvate.",
       "invalidFields": "Seleziona solo campi validi dello schema del dataset.",
       "saveError": "Impossibile salvare le impostazioni Explorer. Riprova."
+    },
+    "dictionary": {
+      "title": "Dizionario dei dati",
+      "description": "Descrivi le colonne reali del dataset. Solo i campi approvati nell’Explorer sono visibili al pubblico.",
+      "field": "Colonna del dataset",
+      "schemaType": "Tipo inferito dallo schema: {type}",
+      "label": {"it": "Etichetta (IT)", "en": "Etichetta (EN)"},
+      "descriptionField": {"it": "Descrizione (IT)", "en": "Descrizione (EN)"},
+      "dataType": "Tipo nel dizionario",
+      "unit": "Unità (facoltativa)",
+      "format": "Formato (facoltativo)",
+      "types": {"string": "Testo", "number": "Numero", "boolean": "Booleano", "date": "Data"},
+      "save": "Salva dizionario",
+      "saving": "Salvataggio…",
+      "saved": "Dizionario dei dati salvato.",
+      "invalid": "Usa solo colonne reali e metadata validi.",
+      "saveError": "Impossibile salvare il dizionario dei dati. Riprova."
     },
     "cover": {
       "title": "Cover progetto",

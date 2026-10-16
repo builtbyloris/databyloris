@@ -17,6 +17,7 @@ import {
 import {createClient} from "@/lib/supabase/client";
 import type {AdminActionError, AdminDatasetDraft, DashboardConfig} from "@/types";
 import {DatasetExplorerSettings} from "./dataset-explorer-settings";
+import {DataDictionaryEditor} from "./data-dictionary-editor";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 
@@ -137,13 +138,22 @@ export function DatasetManager({
       )}
 
       {dbDataset ? (
-        <DatasetExplorerSettings
-          key={dbDataset.id}
-          locale={locale}
-          projectId={projectId}
-          dataset={dbDataset}
-          onDatasetChange={onDatasetChange}
-        />
+        <>
+          <DatasetExplorerSettings
+            key={`explorer-${dbDataset.id}`}
+            locale={locale}
+            projectId={projectId}
+            dataset={dbDataset}
+            onDatasetChange={onDatasetChange}
+          />
+          <DataDictionaryEditor
+            key={`dictionary-${dbDataset.id}`}
+            locale={locale}
+            projectId={projectId}
+            dataset={dbDataset}
+            onDatasetChange={onDatasetChange}
+          />
+        </>
       ) : null}
 
       {configIssues.length > 0 ? (

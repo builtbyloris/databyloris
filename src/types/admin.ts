@@ -16,6 +16,7 @@ export interface AdminDatasetDraft {
   fields: string[];
   explorerEnabled: boolean;
   explorerFields: string[];
+  dictionary: DatasetDictionary;
   source: "database" | "registry";
   updatedAt: string | null;
 }
@@ -27,6 +28,16 @@ export interface DatasetColumn {
   type: DatasetColumnType;
   nullable: boolean;
 }
+
+export interface DatasetFieldMetadata {
+  label: LocalizedText;
+  description: LocalizedText;
+  dataType?: DatasetColumnType;
+  unit?: string;
+  format?: string;
+}
+
+export type DatasetDictionary = Record<string, DatasetFieldMetadata>;
 
 export interface RegisterDatasetInput {
   projectId: string;
