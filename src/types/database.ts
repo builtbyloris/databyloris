@@ -96,6 +96,8 @@ export type Database = {
       datasets: {
         Row: {
           created_at: string
+          explorer_enabled: boolean
+          explorer_fields: string[]
           grain: string | null
           id: string
           name: string
@@ -107,6 +109,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          explorer_enabled?: boolean
+          explorer_fields?: string[]
           grain?: string | null
           id?: string
           name: string
@@ -118,6 +122,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          explorer_enabled?: boolean
+          explorer_fields?: string[]
           grain?: string | null
           id?: string
           name?: string
@@ -237,6 +243,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_published_dashboard_page: {
+        Args: {p_slug: string; p_after_row_index?: number; p_page_size?: number}
+        Returns: Json
+      }
+      get_published_explorer_page: {
+        Args: {
+          p_slug: string
+          p_dataset_id: string
+          p_offset?: number
+          p_page_size?: number
+          p_sort_field?: string | null
+          p_sort_direction?: string
+          p_search?: string | null
+          p_filter_field?: string | null
+          p_filter_value?: string | null
+        }
+        Returns: Json
+      }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
