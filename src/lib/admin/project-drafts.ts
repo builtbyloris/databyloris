@@ -66,6 +66,8 @@ export function createProjectDraft(project: Project, options?: {
       columns: registryFields.map((name) => ({name, type: "string" as const, nullable: false})),
       records: structuredClone(records),
       fields: registryFields,
+      explorerEnabled: false,
+      explorerFields: [],
       source: "registry" as const,
       updatedAt: null,
     } : null),

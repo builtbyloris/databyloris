@@ -66,6 +66,8 @@ export function datasetRowToAdminDraft(
     columns,
     records,
     fields: getAvailableDatasetFields(columns.map((column) => column.name), records),
+    explorerEnabled: row.explorer_enabled,
+    explorerFields: row.explorer_fields,
     source: "database",
     updatedAt: row.updated_at,
   };

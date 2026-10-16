@@ -144,6 +144,46 @@ export async function updateDatasetGrain(datasetId: string, grain: string): Prom
   }
 }
 
+export async function updateDatasetExplorer(
+  projectId: string,
+  datasetId: string,
+  enabled: boolean,
+  fields: string[],
+): Promise<AdminDatasetDraft> {
+  const supabase = await createClient();
+  const {data: existing, error: readError} = await supabase
+    .from("datasets")
+    .select("schema")
+    .eq("id", datasetId)
+    .eq("project_id", projectId)
+    .maybeSingle();
+  if (readError) throw new RepositoryError("database");
+  if (!existing) throw new RepositoryError("not_found");
+
+  let schemaFields: string[];
+  try {
+    schemaFields = datasetSchemaFromJson(existing.schema).map((column) => column.name);
+  } catch {
+    throw new RepositoryError("invalid_data");
+  }
+  if (new Set(schemaFields).size !== schemaFields.length
+    || new Set(fields).size !== fields.length
+    || fields.some((field) => !schemaFields.includes(field))) {
+    throw new RepositoryError("invalid_data");
+  }
+
+  const {data: row, error} = await supabase
+    .from("datasets")
+    .update({explorer_enabled: enabled, explorer_fields: fields})
+    .eq("id", datasetId)
+    .eq("project_id", projectId)
+    .select("*")
+    .maybeSingle();
+  if (error) throw new RepositoryError("database");
+  if (!row) throw new RepositoryError("not_found");
+  return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));
+}
+
 export async function deleteDataset(datasetId: string) {
   const supabase = await createClient();
   const {error} = await supabase.from("datasets").delete().eq("id", datasetId);

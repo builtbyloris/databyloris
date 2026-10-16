@@ -243,6 +243,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_published_explorer_dataset_id: {
+        Args: {p_slug: string}
+        Returns: string | null
+      }
       get_published_dashboard_page: {
         Args: {p_slug: string; p_after_row_index?: number; p_page_size?: number}
         Returns: Json
