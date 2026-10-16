@@ -68,6 +68,7 @@ export function createProjectDraft(project: Project, options?: {
       fields: registryFields,
       explorerEnabled: false,
       explorerFields: [],
+      dictionary: {},
       source: "registry" as const,
       updatedAt: null,
     } : null),

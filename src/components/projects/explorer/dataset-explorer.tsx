@@ -111,6 +111,34 @@ export async function DatasetExplorer({project, locale, page, pageNumber, contro
           {page.hasMore && pageNumber < 401 ? <a href={hrefForPage(pageNumber + 1)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("next")}</a> : <span />}
         </nav>
       ) : null}
+      <section aria-labelledby="data-dictionary-title" className="mt-12 border-t border-border pt-8">
+        <h2 id="data-dictionary-title" className="text-xl font-bold">{t("dictionary.title")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("dictionary.intro")}</p>
+        <dl className="mt-5 divide-y divide-border border-y border-border">
+          {page.columns.map((column) => {
+            const metadata = page.dictionary[column.name];
+            const label = metadata?.label[locale]?.trim();
+            const description = metadata?.description[locale]?.trim();
+            const dataType = metadata?.dataType ?? column.type;
+            return (
+              <div key={column.name} className="grid gap-2 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] sm:gap-6">
+                <dt className="min-w-0">
+                  {label ? <span className="block font-semibold">{label}</span> : null}
+                  <code className="break-all text-sm text-muted">{column.name}</code>
+                </dt>
+                <dd className="min-w-0 text-sm">
+                  {description ? <p className="leading-6">{description}</p> : null}
+                  <div className={`flex flex-wrap gap-x-4 gap-y-1 text-muted ${description ? "mt-2" : ""}`}>
+                    <span>{t("dictionary.type")}: {t(`dictionary.types.${dataType}`)}</span>
+                    {metadata?.unit ? <span>{t("dictionary.unit")}: {metadata.unit}</span> : null}
+                    {metadata?.format ? <span>{t("dictionary.format")}: {metadata.format}</span> : null}
+                  </div>
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
     </Container>
   );
 }

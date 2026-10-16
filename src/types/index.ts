@@ -4,6 +4,8 @@ export type {
   AdminDatasetDraft,
   DatasetColumn,
   DatasetColumnType,
+  DatasetDictionary,
+  DatasetFieldMetadata,
   AdminProjectInput,
   AdminProjectRecord,
   AdminValidationCode,

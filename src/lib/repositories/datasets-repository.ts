@@ -9,7 +9,8 @@ import {
 } from "@/lib/mappers/dataset-mapper";
 import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
 import {createClient} from "@/lib/supabase/server";
-import type {AdminDatasetDraft, DashboardRecord, DatasetColumn} from "@/types";
+import type {AdminDatasetDraft, DashboardRecord, DatasetColumn, DatasetColumnType, DatasetDictionary} from "@/types";
+import type {Json} from "@/types/database";
 import {DATASET_MAX_ROWS, DATASET_ROW_BATCH_SIZE, DATASET_STORAGE_BUCKET} from "@/lib/datasets";
 import {RepositoryError} from "./repository-error";
 
@@ -179,6 +180,66 @@ export async function updateDatasetExplorer(
     .eq("project_id", projectId)
     .select("*")
     .maybeSingle();
+  if (error) throw new RepositoryError("database");
+  if (!row) throw new RepositoryError("not_found");
+  return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));
+}
+
+export async function updateDatasetDictionary(
+  projectId: string,
+  datasetId: string,
+  input: DatasetDictionary,
+): Promise<AdminDatasetDraft> {
+  const supabase = await createClient();
+  const {data: existing, error: readError} = await supabase.from("datasets")
+    .select("schema").eq("id", datasetId).eq("project_id", projectId).maybeSingle();
+  if (readError) throw new RepositoryError("database");
+  if (!existing) throw new RepositoryError("not_found");
+
+  let columns: DatasetColumn[];
+  try {
+    columns = datasetSchemaFromJson(existing.schema);
+  } catch {
+    throw new RepositoryError("invalid_data");
+  }
+  const byName = new Map(columns.map((column) => [column.name, column]));
+  if (byName.size !== columns.length || Object.keys(input).length > columns.length) {
+    throw new RepositoryError("invalid_data");
+  }
+  const dictionary: Record<string, Json> = {};
+  for (const [name, metadata] of Object.entries(input)) {
+    const column = byName.get(name);
+    if (!column || !metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+      throw new RepositoryError("invalid_data");
+    }
+    const {label, description, dataType, unit, format} = metadata;
+    if (!label || !description || typeof label.it !== "string" || typeof label.en !== "string"
+      || typeof description.it !== "string" || typeof description.en !== "string"
+      || [label.it, label.en].some((text) => text.length > 120)
+      || [description.it, description.en].some((text) => text.length > 500)
+      || (dataType !== undefined && !(["string", "number", "boolean", "date"] as DatasetColumnType[]).includes(dataType))
+      || (unit !== undefined && (typeof unit !== "string" || unit.length > 40))
+      || (format !== undefined && (typeof format !== "string" || format.length > 40))) {
+      throw new RepositoryError("invalid_data");
+    }
+    const normalized = {
+      label: {it: label.it.trim(), en: label.en.trim()},
+      description: {it: description.it.trim(), en: description.en.trim()},
+      ...(dataType && dataType !== column.type ? {dataType} : {}),
+      ...(unit?.trim() ? {unit: unit.trim()} : {}),
+      ...(format?.trim() ? {format: format.trim()} : {}),
+    };
+    if (normalized.label.it || normalized.label.en || normalized.description.it || normalized.description.en
+      || "dataType" in normalized || "unit" in normalized || "format" in normalized) {
+      dictionary[name] = normalized;
+    }
+  }
+  if (!existing.schema || typeof existing.schema !== "object" || Array.isArray(existing.schema)) {
+    throw new RepositoryError("invalid_data");
+  }
+  const {data: row, error} = await supabase.from("datasets")
+    .update({schema: {...existing.schema, dictionary}})
+    .eq("id", datasetId).eq("project_id", projectId).select("*").maybeSingle();
   if (error) throw new RepositoryError("database");
   if (!row) throw new RepositoryError("not_found");
   return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));

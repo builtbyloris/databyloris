@@ -1,4 +1,4 @@
-import type {AdminDatasetDraft, DashboardRecord, DashboardValue, DatasetColumn, DatasetColumnType} from "@/types";
+import type {AdminDatasetDraft, DashboardRecord, DashboardValue, DatasetColumn, DatasetColumnType, DatasetDictionary} from "@/types";
 import type {Database, Json} from "@/types/database";
 import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
 
@@ -35,6 +35,25 @@ export function datasetSchemaToJson(columns: DatasetColumn[], originalFilename: 
   return {columns: columns.map((column) => ({...column})), originalFilename};
 }
 
+export function datasetDictionaryFromJson(value: Json, columns: DatasetColumn[]): DatasetDictionary {
+  if (!isObject(value) || !isObject(value.dictionary)) return {};
+  const allowed = new Set(columns.map((column) => column.name));
+  const dictionary: DatasetDictionary = {};
+  for (const [name, raw] of Object.entries(value.dictionary)) {
+    if (!allowed.has(name) || !isObject(raw)) continue;
+    const label = isObject(raw.label) ? raw.label : {};
+    const description = isObject(raw.description) ? raw.description : {};
+    dictionary[name] = {
+      label: {it: typeof label.it === "string" ? label.it : "", en: typeof label.en === "string" ? label.en : ""},
+      description: {it: typeof description.it === "string" ? description.it : "", en: typeof description.en === "string" ? description.en : ""},
+      ...(columnTypes.includes(raw.dataType as DatasetColumnType) ? {dataType: raw.dataType as DatasetColumnType} : {}),
+      ...(typeof raw.unit === "string" ? {unit: raw.unit} : {}),
+      ...(typeof raw.format === "string" ? {format: raw.format} : {}),
+    };
+  }
+  return dictionary;
+}
+
 function isDashboardValue(value: unknown): value is DashboardValue {
   return value === null || ["string", "number", "boolean"].includes(typeof value);
 }
@@ -68,6 +87,7 @@ export function datasetRowToAdminDraft(
     fields: getAvailableDatasetFields(columns.map((column) => column.name), records),
     explorerEnabled: row.explorer_enabled,
     explorerFields: row.explorer_fields,
+    dictionary: datasetDictionaryFromJson(row.schema, columns),
     source: "database",
     updatedAt: row.updated_at,
   };

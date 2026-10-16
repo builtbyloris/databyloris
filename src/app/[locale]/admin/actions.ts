@@ -29,6 +29,7 @@ import {
   removeDatasetFile,
   updateDatasetGrain,
   updateDatasetExplorer,
+  updateDatasetDictionary,
 } from "@/lib/repositories/datasets-repository";
 import {downloadProjectMediaFile, removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
 import {
@@ -44,6 +45,7 @@ import type {
   AdminActionError,
   AdminActionResult,
   AdminDatasetDraft,
+  DatasetDictionary,
   AdminProjectInput,
   AdminProjectRecord,
   DashboardConfig,
@@ -449,6 +451,30 @@ export async function updateDatasetExplorerAction(
 
   try {
     const saved = await updateDatasetExplorer(projectId, datasetId, enabled, fields);
+    const project = await getAdminProjectById(projectId, locale);
+    if (project) revalidateProjectSurfaces(locale, project.project.slug);
+    return {ok: true, data: saved};
+  } catch (error) {
+    return {ok: false, error: error instanceof RepositoryError && error.code === "invalid_data"
+      ? "invalidDataset" : actionError(error)};
+  }
+}
+
+export async function updateDatasetDictionaryAction(
+  locale: AppLocale,
+  projectId: string,
+  datasetId: string,
+  dictionary: DatasetDictionary,
+): Promise<AdminActionResult<AdminDatasetDraft>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isValidProjectId(datasetId)
+    || !dictionary || typeof dictionary !== "object" || Array.isArray(dictionary)
+    || Object.keys(dictionary).length > 100) {
+    return {ok: false, error: "invalidDataset"};
+  }
+
+  try {
+    const saved = await updateDatasetDictionary(projectId, datasetId, dictionary);
     const project = await getAdminProjectById(projectId, locale);
     if (project) revalidateProjectSurfaces(locale, project.project.slug);
     return {ok: true, data: saved};
