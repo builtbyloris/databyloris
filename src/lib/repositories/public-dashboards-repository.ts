@@ -1,12 +1,12 @@
 import "server-only";
 
 import {validateDashboardConfig} from "@/lib/admin";
-import {getAvailableDatasetFields, readDashboardField} from "@/lib/datasets/field-names";
+import {DATASET_MAX_ROWS} from "@/lib/datasets";
 import {dashboardConfigFromJson} from "@/lib/mappers/dashboard-config-mapper";
-import {datasetSchemaFromJson} from "@/lib/mappers/dataset-mapper";
+import {datasetRecordFromJson} from "@/lib/mappers/dataset-mapper";
 import {createClient} from "@/lib/supabase/server";
 import type {DashboardConfig, DashboardRecord, Project} from "@/types";
-import {getDatasetRows} from "./datasets-repository";
+import type {Json} from "@/types/database";
 import {getPublishedProjectBySlug} from "./projects-repository";
 import {RepositoryError} from "./repository-error";
 
@@ -24,27 +24,27 @@ export type PublishedDashboardResult =
       records: DashboardRecord[];
     };
 
-function getConfiguredFields(config: DashboardConfig) {
-  return Array.from(new Set([
-    ...config.filters.map((filter) => filter.field),
-    ...config.kpis.flatMap((kpi) => kpi.field ? [kpi.field] : []),
-    ...config.charts.flatMap((chart) => [chart.categoryField, chart.valueField].filter((field): field is string => Boolean(field))),
-    ...config.rankings.flatMap((ranking) => [
-      ranking.dimension,
-      ranking.metric,
-      ...ranking.detailColumns.map((column) => column.field),
-    ]),
-  ]));
+function isRecord(value: Json | undefined): value is {[key: string]: Json | undefined} {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function projectDashboardRecords(records: DashboardRecord[], config: DashboardConfig) {
-  const configuredFields = getConfiguredFields(config);
-  return records.map((record) => Object.fromEntries(
-    configuredFields.flatMap((field) => {
-      const value = readDashboardField(record, field);
-      return value === undefined ? [] : [[field, value]];
-    }),
-  ) as DashboardRecord);
+function parseDashboardPage(value: Json | null) {
+  if (!isRecord(value) || !Array.isArray(value.fields) || !value.fields.every((field) => typeof field === "string")
+    || !Array.isArray(value.rows) || (value.nextCursor !== null && !Number.isInteger(value.nextCursor))) {
+    throw new RepositoryError("invalid_data");
+  }
+
+  const fields = value.fields as string[];
+  const rows = value.rows.map((item) => {
+    if (!isRecord(item) || !Number.isInteger(item.rowIndex) || !isRecord(item.data)) {
+      throw new RepositoryError("invalid_data");
+    }
+    const record = datasetRecordFromJson(item.data);
+    if (Object.keys(record).some((field) => !fields.includes(field))) throw new RepositoryError("invalid_data");
+    return {rowIndex: item.rowIndex as number, record};
+  });
+
+  return {fields, rows, nextCursor: value.nextCursor as number | null};
 }
 
 export async function getPublishedDashboardBySlug(
@@ -71,32 +71,44 @@ export async function getPublishedDashboardBySlug(
   }
   if (!config) return {kind: "invalid-config", project};
 
-  const {data: datasets, error: datasetError} = await supabase
-    .from("datasets")
-    .select("id, schema")
-    .eq("project_id", project.id)
-    .order("updated_at", {ascending: false})
-    .limit(2);
-  if (datasetError) throw new RepositoryError("database");
-  if (datasets.length !== 1) return {kind: "missing-dataset", project};
+  const records: DashboardRecord[] = [];
+  let cursor = -1;
+  let fields: string[] | null = null;
+  while (true) {
+    const {data, error} = await supabase.rpc("get_published_dashboard_page", {
+      p_slug: slug,
+      p_after_row_index: cursor,
+      p_page_size: 1000,
+    });
+    if (error) throw new RepositoryError("database");
+    if (data === null) return {kind: "invalid-config", project};
 
-  let schemaFields: string[];
-  try {
-    schemaFields = datasetSchemaFromJson(datasets[0].schema).map((column) => column.name);
-  } catch {
-    throw new RepositoryError("invalid_data");
-  }
-  const records = await getDatasetRows(datasets[0].id);
-  const fields = getAvailableDatasetFields(schemaFields, records);
-
-  if (validateDashboardConfig(config, fields).length > 0) {
-    return {kind: "invalid-config", project};
+    let page: ReturnType<typeof parseDashboardPage>;
+    try {
+      page = parseDashboardPage(data);
+    } catch {
+      throw new RepositoryError("invalid_data");
+    }
+    if (fields === null) {
+      fields = page.fields;
+      if (validateDashboardConfig(config, fields).length > 0) return {kind: "invalid-config", project};
+    } else if (fields.length !== page.fields.length || fields.some((field, index) => field !== page.fields[index])) {
+      throw new RepositoryError("invalid_data");
+    }
+    for (const {rowIndex, record} of page.rows) {
+      if (rowIndex <= cursor) throw new RepositoryError("invalid_data");
+      cursor = rowIndex;
+      records.push(record);
+    }
+    if (records.length > DATASET_MAX_ROWS) throw new RepositoryError("invalid_data");
+    if (page.nextCursor === null) break;
+    if (page.nextCursor !== cursor || page.rows.length === 0) throw new RepositoryError("invalid_data");
   }
 
   return {
     kind: "ready",
     project,
     config,
-    records: projectDashboardRecords(records, config),
+    records,
   };
 }

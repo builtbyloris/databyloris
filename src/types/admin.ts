@@ -14,6 +14,8 @@ export interface AdminDatasetDraft {
   columns: DatasetColumn[];
   records: DashboardRecord[];
   fields: string[];
+  explorerEnabled: boolean;
+  explorerFields: string[];
   source: "database" | "registry";
   updatedAt: string | null;
 }

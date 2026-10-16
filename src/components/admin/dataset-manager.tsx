@@ -16,6 +16,7 @@ import {
 } from "@/lib/datasets";
 import {createClient} from "@/lib/supabase/client";
 import type {AdminActionError, AdminDatasetDraft, DashboardConfig} from "@/types";
+import {DatasetExplorerSettings} from "./dataset-explorer-settings";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 
@@ -134,6 +135,16 @@ export function DatasetManager({
           <p className="mt-2 text-sm text-muted">{t("emptyDescription")}</p>
         </div>
       )}
+
+      {dbDataset ? (
+        <DatasetExplorerSettings
+          key={dbDataset.id}
+          locale={locale}
+          projectId={projectId}
+          dataset={dbDataset}
+          onDatasetChange={onDatasetChange}
+        />
+      ) : null}
 
       {configIssues.length > 0 ? (
         <div role="alert" className="mt-5 rounded-control border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">

@@ -28,6 +28,7 @@ import {
   listProjectDatasets,
   removeDatasetFile,
   updateDatasetGrain,
+  updateDatasetExplorer,
 } from "@/lib/repositories/datasets-repository";
 import {downloadProjectMediaFile, removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
 import {
@@ -119,6 +120,8 @@ function revalidateProjectSurfaces(locale: AppLocale, slug: string) {
     revalidatePath("/en/projects");
     revalidatePath(`/projects/${slug}`);
     revalidatePath(`/en/projects/${slug}`);
+    revalidatePath(`/projects/${slug}/dataset`);
+    revalidatePath(`/en/projects/${slug}/dataset`);
   } catch {
     // The unique Storage path prevents stale Next Image content if revalidation is unavailable.
   }
@@ -427,6 +430,31 @@ export async function updateDatasetGrainAction(
     return {ok: true, data: saved};
   } catch {
     return {ok: false, error: "datasetProcessingFailed"};
+  }
+}
+
+export async function updateDatasetExplorerAction(
+  locale: AppLocale,
+  projectId: string,
+  datasetId: string,
+  enabled: boolean,
+  fields: string[],
+): Promise<AdminActionResult<AdminDatasetDraft>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isValidProjectId(datasetId)
+    || typeof enabled !== "boolean" || !Array.isArray(fields)
+    || fields.length > 100 || fields.some((field) => typeof field !== "string" || !field.trim())) {
+    return {ok: false, error: "invalidDataset"};
+  }
+
+  try {
+    const saved = await updateDatasetExplorer(projectId, datasetId, enabled, fields);
+    const project = await getAdminProjectById(projectId, locale);
+    if (project) revalidateProjectSurfaces(locale, project.project.slug);
+    return {ok: true, data: saved};
+  } catch (error) {
+    return {ok: false, error: error instanceof RepositoryError && error.code === "invalid_data"
+      ? "invalidDataset" : actionError(error)};
   }
 }
 

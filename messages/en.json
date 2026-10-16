@@ -148,7 +148,8 @@
       "source": "Source",
       "records": "Records",
       "period": "Period",
-      "viewSource": "Open source"
+      "viewSource": "Open source",
+      "explore": "Explore dataset"
     },
     "missing": {
       "eyebrow": "Case study",
@@ -194,6 +195,42 @@
     "portfolioCta": "Open portfolio",
     "exitCta": "Back to site",
     "exitLink": "Exit Recruiter Mode and return Home"
+  },
+  "DatasetExplorer": {
+    "eyebrow": "Project data",
+    "title": "Dataset Explorer",
+    "metadataDescription": "Explore the approved dataset fields for {project}.",
+    "intro": "Browse the published data behind {project}. Only approved fields are shown.",
+    "breadcrumbLabel": "Breadcrumb",
+    "search": "Search approved fields",
+    "searchPlaceholder": "Search rows…",
+    "filterField": "Filter field",
+    "filterValue": "Exact value",
+    "filterPlaceholder": "Enter an exact value",
+    "allFields": "No field filter",
+    "sortField": "Sort field",
+    "originalOrder": "Original order",
+    "sortDirection": "Direction",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "apply": "Apply controls",
+    "reset": "Reset controls",
+    "results": "Rows",
+    "count": "{count, plural, =1 {# record} other {# records}}",
+    "tableLabel": "Dataset rows; scroll horizontally for more columns",
+    "yes": "Yes",
+    "no": "No",
+    "emptyTitle": "No rows available",
+    "emptyDescription": "This dataset has no published rows yet.",
+    "zeroTitle": "No matching rows",
+    "zeroDescription": "Try a different search or filter.",
+    "paginationLabel": "Dataset pages",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}",
+    "loading": "Loading dataset…",
+    "errorTitle": "Dataset unavailable",
+    "errorDescription": "We could not load the dataset. Please try again later."
   },
   "Dashboard": {
     "eyebrow": "Interactive dashboard",
@@ -439,6 +476,19 @@
       "configWarning": "The dashboard configuration contains {count} references that do not match this dataset's fields.",
       "feedback": {"uploaded": "Dataset uploaded and saved to Supabase.", "replaced": "Dataset replaced successfully.", "grainSaved": "Grain updated."},
       "errors": {"csvRequired": "Select a file with a .csv extension.", "confirmReplacement": "Explicitly confirm the replacement.", "invalidDataset": "Invalid CSV: check headers, rows and values.", "datasetExists": "A dataset already exists: confirm replacement and try again.", "datasetTooLarge": "The file exceeds the allowed size.", "tooManyRows": "The CSV exceeds the 10,000-row limit.", "datasetUploadFailed": "Storage upload failed.", "datasetProcessingFailed": "The dataset was not saved. The newly uploaded file was removed when possible.", "publishingBlocked": "Move the project to draft before replacing the published Dashboard dataset.", "projectNotFound": "The project no longer exists or is not accessible.", "databaseUnavailable": "The database is unavailable.", "unknown": "The operation failed. Please try again."}
+    },
+    "explorer": {
+      "title": "Dataset Explorer",
+      "description": "Publish only explicitly approved columns from this persisted dataset.",
+      "enable": "Enable public Dataset Explorer",
+      "fields": "Approved public fields",
+      "emptyWarning": "No fields selected: the Explorer remains private even when enabled.",
+      "selected": "{count, plural, =1 {# field selected} other {# fields selected}}",
+      "save": "Save Explorer settings",
+      "saving": "Saving…",
+      "saved": "Explorer settings saved.",
+      "invalidFields": "Select only valid fields from this dataset schema.",
+      "saveError": "Could not save Explorer settings. Try again."
     },
     "cover": {
       "title": "Project cover",

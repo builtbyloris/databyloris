@@ -148,7 +148,8 @@
       "source": "Fonte",
       "records": "Record",
       "period": "Periodo",
-      "viewSource": "Apri la fonte"
+      "viewSource": "Apri la fonte",
+      "explore": "Esplora dataset"
     },
     "missing": {
       "eyebrow": "Case study",
@@ -194,6 +195,42 @@
     "portfolioCta": "Apri il portfolio",
     "exitCta": "Torna al sito",
     "exitLink": "Esci da Recruiter Mode e torna alla Home"
+  },
+  "DatasetExplorer": {
+    "eyebrow": "Dati del progetto",
+    "title": "Dataset Explorer",
+    "metadataDescription": "Esplora i campi approvati del dataset di {project}.",
+    "intro": "Consulta i dati pubblicati di {project}. Sono visibili solo i campi approvati.",
+    "breadcrumbLabel": "Percorso di navigazione",
+    "search": "Cerca nei campi approvati",
+    "searchPlaceholder": "Cerca nelle righe…",
+    "filterField": "Campo filtro",
+    "filterValue": "Valore esatto",
+    "filterPlaceholder": "Inserisci un valore esatto",
+    "allFields": "Nessun filtro per campo",
+    "sortField": "Campo ordinamento",
+    "originalOrder": "Ordine originale",
+    "sortDirection": "Direzione",
+    "ascending": "Crescente",
+    "descending": "Decrescente",
+    "apply": "Applica controlli",
+    "reset": "Reimposta controlli",
+    "results": "Righe",
+    "count": "{count, plural, =1 {# record} other {# record}}",
+    "tableLabel": "Righe del dataset; scorri orizzontalmente per altre colonne",
+    "yes": "Sì",
+    "no": "No",
+    "emptyTitle": "Nessuna riga disponibile",
+    "emptyDescription": "Questo dataset non contiene ancora righe pubblicate.",
+    "zeroTitle": "Nessuna riga corrispondente",
+    "zeroDescription": "Prova una ricerca o un filtro diverso.",
+    "paginationLabel": "Pagine del dataset",
+    "previous": "Precedente",
+    "next": "Successiva",
+    "pageOf": "Pagina {page} di {pages}",
+    "loading": "Caricamento dataset…",
+    "errorTitle": "Dataset non disponibile",
+    "errorDescription": "Non è stato possibile caricare il dataset. Riprova più tardi."
   },
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
@@ -439,6 +476,19 @@
       "configWarning": "La configurazione dashboard contiene {count} riferimenti non compatibili con i campi di questo dataset.",
       "feedback": {"uploaded": "Dataset caricato e salvato su Supabase.", "replaced": "Dataset sostituito correttamente.", "grainSaved": "Granularità aggiornata."},
       "errors": {"csvRequired": "Seleziona un file con estensione .csv.", "confirmReplacement": "Conferma esplicitamente la sostituzione.", "invalidDataset": "CSV non valido: controlla intestazioni, righe e valori.", "datasetExists": "Esiste già un dataset: conferma la sostituzione e riprova.", "datasetTooLarge": "Il file supera il limite consentito.", "tooManyRows": "Il CSV supera il limite di 10.000 righe.", "datasetUploadFailed": "Upload su Storage non riuscito.", "datasetProcessingFailed": "Il dataset non è stato salvato. Il file appena caricato è stato rimosso quando possibile.", "publishingBlocked": "Riporta il progetto in bozza prima di sostituire il dataset della Dashboard pubblicata.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "databaseUnavailable": "Database non disponibile.", "unknown": "Operazione non riuscita. Riprova."}
+    },
+    "explorer": {
+      "title": "Dataset Explorer",
+      "description": "Pubblica solo le colonne esplicitamente approvate di questo dataset salvato.",
+      "enable": "Abilita il Dataset Explorer pubblico",
+      "fields": "Campi pubblici approvati",
+      "emptyWarning": "Nessun campo selezionato: l’Explorer resta privato anche se abilitato.",
+      "selected": "{count, plural, =1 {# campo selezionato} other {# campi selezionati}}",
+      "save": "Salva impostazioni Explorer",
+      "saving": "Salvataggio…",
+      "saved": "Impostazioni Explorer salvate.",
+      "invalidFields": "Seleziona solo campi validi dello schema del dataset.",
+      "saveError": "Impossibile salvare le impostazioni Explorer. Riprova."
     },
     "cover": {
       "title": "Cover progetto",
