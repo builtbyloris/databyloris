@@ -6,6 +6,7 @@ import {DatasetExplorer} from "@/components/projects/explorer/dataset-explorer";
 import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
+import {getPublishedDatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
 import {getPublishedProjectBySlug} from "@/lib/repositories/projects-repository";
 import {createLocalizedMetadata} from "@/lib/seo";
 
@@ -117,5 +118,11 @@ async function ExplorerResults({slug, datasetId, locale, project, pageNumber, co
     return errorState;
   }
   if (!result) notFound();
-  return <DatasetExplorer project={project} locale={locale} page={result} pageNumber={pageNumber} controls={controls} />;
+  let quality = null;
+  try {
+    quality = await getPublishedDatasetQuality(slug, result.columns);
+  } catch {
+    // Quality metrics are supplemental; the existing Explorer remains usable.
+  }
+  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} pageNumber={pageNumber} controls={controls} />;
 }

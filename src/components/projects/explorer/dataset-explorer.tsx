@@ -2,6 +2,7 @@ import {getTranslations} from "next-intl/server";
 import {buttonStyles, Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import type {ExplorerPage} from "@/lib/repositories/public-explorer-repository";
+import type {DatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
 import {getLocalizedPath} from "@/lib/seo";
 import type {DashboardValue, Project} from "@/types";
 
@@ -20,16 +21,19 @@ function cellText(value: DashboardValue | undefined, locale: AppLocale, yes: str
   return value;
 }
 
-export async function DatasetExplorer({project, locale, page, pageNumber, controls}: {
+export async function DatasetExplorer({project, locale, page, quality, pageNumber, controls}: {
   project: Project;
   locale: AppLocale;
   page: ExplorerPage;
+  quality: DatasetQuality | null;
   pageNumber: number;
   controls: Controls;
 }) {
   const t = await getTranslations("DatasetExplorer");
   const basePath = getLocalizedPath(locale, `/projects/${project.slug}/dataset`);
   const projectPath = getLocalizedPath(locale, `/projects/${project.slug}`);
+  const formatCount = (value: number) => new Intl.NumberFormat(locale).format(value);
+  const formatPercent = (value: number) => `${new Intl.NumberFormat(locale, {maximumFractionDigits: 2}).format(value)}%`;
   const active = Boolean(controls.search || controls.filterField || controls.filterValue || controls.sortField || controls.sortDirection === "desc");
   const hrefForPage = (number: number) => {
     const params = new URLSearchParams();
@@ -138,6 +142,39 @@ export async function DatasetExplorer({project, locale, page, pageNumber, contro
             );
           })}
         </dl>
+      </section>
+      <section aria-labelledby="data-quality-title" className="mt-12 border-t border-border pt-8">
+        <h2 id="data-quality-title" className="text-xl font-bold">{t("quality.title")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("quality.intro")}</p>
+        {quality ? (
+          <>
+            <dl className="mt-5 flex flex-wrap gap-x-10 gap-y-4 border-y border-border py-5">
+              <div><dt className="text-sm text-muted">{t("quality.totalRows")}</dt><dd className="mt-1 text-2xl font-bold">{formatCount(quality.totalRows)}</dd></div>
+              <div><dt className="text-sm text-muted">{t("quality.publicFields")}</dt><dd className="mt-1 text-2xl font-bold">{formatCount(quality.publicFieldCount)}</dd></div>
+            </dl>
+            <div className="divide-y divide-border">
+              {quality.fields.map((field) => {
+                const label = page.dictionary[field.name]?.label[locale]?.trim();
+                return (
+                  <article key={field.name} className="grid min-w-0 gap-3 py-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] sm:gap-6">
+                    <div className="min-w-0">
+                      {label ? <h3 className="font-semibold">{label}</h3> : null}
+                      <code className="break-all text-sm text-muted">{field.name}</code>
+                      <p className="mt-1 text-sm text-muted">{t("dictionary.type")}: {t(`dictionary.types.${field.type}`)}</p>
+                    </div>
+                    <dl className="grid min-w-0 grid-cols-2 gap-x-4 gap-y-3 text-sm sm:grid-cols-3">
+                      <div><dt className="text-muted">{t("quality.nonNull")}</dt><dd className="mt-0.5 font-semibold">{formatCount(field.nonNullCount)}</dd></div>
+                      <div><dt className="text-muted">{t("quality.missing")}</dt><dd className="mt-0.5 font-semibold">{formatCount(field.missingCount)}</dd></div>
+                      {field.completenessPercent !== null ? <div><dt className="text-muted">{t("quality.completeness")}</dt><dd className="mt-0.5 font-semibold">{formatPercent(field.completenessPercent)}</dd></div> : null}
+                      {field.invalidTypeCount !== null ? <div><dt className="text-muted">{t("quality.invalidType")}</dt><dd className="mt-0.5 font-semibold">{formatCount(field.invalidTypeCount)}</dd></div> : null}
+                      {field.validityPercent !== null ? <div><dt className="text-muted">{t("quality.validity")}</dt><dd className="mt-0.5 font-semibold">{formatPercent(field.validityPercent)}</dd></div> : null}
+                    </dl>
+                  </article>
+                );
+              })}
+            </div>
+          </>
+        ) : <p role="status" className="mt-5 text-sm text-muted">{t("quality.unavailable")}</p>}
       </section>
     </Container>
   );

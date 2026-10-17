@@ -238,6 +238,18 @@
       "unit": "Unità",
       "format": "Formato",
       "types": {"string": "Testo", "number": "Numero", "boolean": "Booleano", "date": "Data"}
+    },
+    "quality": {
+      "title": "Qualità dei dati",
+      "intro": "I conteggi considerano tutte le righe. La validità, quando mostrata, è calcolata sui valori non nulli rispetto al tipo dello schema.",
+      "totalRows": "Righe totali",
+      "publicFields": "Campi pubblici analizzati",
+      "nonNull": "Non nulli",
+      "missing": "Nulli / mancanti",
+      "completeness": "Completezza",
+      "invalidType": "Tipo non valido",
+      "validity": "Validità",
+      "unavailable": "Le metriche di qualità sono temporaneamente non disponibili. Le righe del dataset restano accessibili."
     }
   },
   "Dashboard": {
