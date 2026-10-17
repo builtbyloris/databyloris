@@ -28,6 +28,7 @@ import {
   listProjectDatasets,
   removeDatasetFile,
   updateDatasetGrain,
+  updateDatasetName,
   updateDatasetExplorer,
   updateDatasetDictionary,
 } from "@/lib/repositories/datasets-repository";
@@ -432,6 +433,29 @@ export async function updateDatasetGrainAction(
     return {ok: true, data: saved};
   } catch {
     return {ok: false, error: "datasetProcessingFailed"};
+  }
+}
+
+export async function updateDatasetNameAction(
+  locale: AppLocale,
+  projectId: string,
+  datasetId: string,
+  name: string,
+): Promise<AdminActionResult<AdminDatasetDraft>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isValidProjectId(datasetId)
+    || typeof name !== "string" || !name.trim()
+    || name.trim().length > DATASET_MAX_NAME_LENGTH) {
+    return {ok: false, error: "invalidDataset"};
+  }
+
+  try {
+    const saved = await updateDatasetName(projectId, datasetId, name.trim());
+    const project = await getAdminProjectById(projectId, locale);
+    if (project) revalidateProjectSurfaces(locale, project.project.slug);
+    return {ok: true, data: saved};
+  } catch (error) {
+    return {ok: false, error: actionError(error)};
   }
 }
 

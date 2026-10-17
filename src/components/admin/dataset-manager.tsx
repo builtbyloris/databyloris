@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {useTranslations} from "next-intl";
-import {registerDatasetAction, updateDatasetGrainAction} from "@/app/[locale]/admin/actions";
+import {registerDatasetAction, updateDatasetGrainAction, updateDatasetNameAction} from "@/app/[locale]/admin/actions";
 import {Badge, Button, Card} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {validateDashboardConfig} from "@/lib/admin";
@@ -41,7 +41,7 @@ export function DatasetManager({
   const [name, setName] = useState(dataset?.name ?? projectTitle);
   const [grain, setGrain] = useState(dataset?.grain ?? "");
   const [confirmed, setConfirmed] = useState(false);
-  const [pending, setPending] = useState<"upload" | "grain" | null>(null);
+  const [pending, setPending] = useState<"upload" | "grain" | "name" | null>(null);
   const [message, setMessage] = useState<{kind: "success" | "error"; value: string} | null>(null);
 
   const dbDataset = dataset?.source === "database" ? dataset : null;
@@ -120,6 +120,21 @@ export function DatasetManager({
     setMessage({kind: "success", value: t("feedback.grainSaved")});
   };
 
+  const saveName = async () => {
+    if (!dbDataset || !name.trim() || name.trim().length > DATASET_MAX_NAME_LENGTH) return;
+    setPending("name");
+    setMessage(null);
+    const result = await updateDatasetNameAction(locale, projectId, dbDataset.id, name);
+    setPending(null);
+    if (!result.ok) {
+      setMessage({kind: "error", value: errorMessage(result.error, t)});
+      return;
+    }
+    onDatasetChange(result.data);
+    setName(result.data.name);
+    setMessage({kind: "success", value: t("feedback.nameSaved")});
+  };
+
   return (
     <Card className="p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -188,6 +203,7 @@ export function DatasetManager({
             {pending === "upload" ? t("processing") : t(dbDataset ? "replace" : "upload")}
           </Button>
           {dbDataset ? <Button variant="secondary" onClick={saveGrain} disabled={pending !== null || grain === dbDataset.grain}>{pending === "grain" ? t("savingGrain") : t("saveGrain")}</Button> : null}
+          {dbDataset ? <Button variant="secondary" onClick={saveName} disabled={pending !== null || !name.trim() || name.trim() === dbDataset.name}>{pending === "name" ? t("savingName") : t("saveName")}</Button> : null}
         </div>
         {message ? <p role={message.kind === "error" ? "alert" : "status"} className={`mt-3 text-sm font-semibold ${message.kind === "error" ? "text-red-600 dark:text-red-300" : "text-cyan"}`}>{message.value}</p> : null}
       </div>

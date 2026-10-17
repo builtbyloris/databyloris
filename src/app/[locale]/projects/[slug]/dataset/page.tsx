@@ -7,8 +7,10 @@ import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import {getPublishedDatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
-import {getPublishedProjectBySlug} from "@/lib/repositories/projects-repository";
+import {getPublishedExplorerTrustMetadata} from "@/lib/repositories/public-dataset-trust-repository";
+import {getPublishedProjectBySlug, getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
 import {createLocalizedMetadata} from "@/lib/seo";
+import type {DatasetSummary} from "@/types";
 
 interface DatasetPageProps {
   params: Promise<{locale: AppLocale; slug: string}>;
@@ -68,17 +70,17 @@ export default async function DatasetPage({params, searchParams}: DatasetPagePro
     </Container>
   );
 
-  let project;
+  let projectResult;
   let datasetId;
   try {
-    [project, datasetId] = await Promise.all([
-      getPublishedProjectBySlug(slug, locale),
+    [projectResult, datasetId] = await Promise.all([
+      getPublishedProjectWithDetailBySlug(slug, locale),
       getPublishedExplorerDatasetId(slug),
     ]);
   } catch {
     return errorState;
   }
-  if (!project || !datasetId) notFound();
+  if (!projectResult || !datasetId) notFound();
 
   return (
     <Suspense fallback={<Container className="py-section"><div role="status" className="h-72 animate-pulse rounded-card border border-border bg-surface-raised p-6"><span className="sr-only">{t("loading")}</span></div></Container>}>
@@ -86,7 +88,8 @@ export default async function DatasetPage({params, searchParams}: DatasetPagePro
         slug={slug}
         datasetId={datasetId}
         locale={locale}
-        project={project}
+        project={projectResult.project}
+        source={projectResult.detail?.dataset ?? null}
         pageNumber={pageNumber}
         controls={controls}
         errorState={errorState}
@@ -95,11 +98,12 @@ export default async function DatasetPage({params, searchParams}: DatasetPagePro
   );
 }
 
-async function ExplorerResults({slug, datasetId, locale, project, pageNumber, controls, errorState}: {
+async function ExplorerResults({slug, datasetId, locale, project, source, pageNumber, controls, errorState}: {
   slug: string;
   datasetId: string;
   locale: AppLocale;
   project: NonNullable<Awaited<ReturnType<typeof getPublishedProjectBySlug>>>;
+  source: DatasetSummary | null;
   pageNumber: number;
   controls: {search: string; filterField: string; filterValue: string; sortField: string; sortDirection: "asc" | "desc"};
   errorState: React.ReactNode;
@@ -118,11 +122,12 @@ async function ExplorerResults({slug, datasetId, locale, project, pageNumber, co
     return errorState;
   }
   if (!result) notFound();
-  let quality = null;
-  try {
-    quality = await getPublishedDatasetQuality(slug, result.columns);
-  } catch {
-    // Quality metrics are supplemental; the existing Explorer remains usable.
-  }
-  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} pageNumber={pageNumber} controls={controls} />;
+  const [qualityResult, trustResult] = await Promise.allSettled([
+    getPublishedDatasetQuality(slug, result.columns),
+    getPublishedExplorerTrustMetadata(slug, datasetId, result.columns.length),
+  ]);
+  // Supplemental evidence must not make the existing Explorer unavailable.
+  const quality = qualityResult.status === "fulfilled" ? qualityResult.value : null;
+  const trust = trustResult.status === "fulfilled" ? trustResult.value : null;
+  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} trust={trust} source={source} pageNumber={pageNumber} controls={controls} />;
 }
