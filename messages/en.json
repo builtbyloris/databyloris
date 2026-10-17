@@ -250,6 +250,32 @@
       "invalidType": "Invalid type",
       "validity": "Validity",
       "unavailable": "Quality metrics are temporarily unavailable. Dataset rows remain accessible."
+    },
+    "trust": {
+      "title": "Trust & provenance",
+      "intro": "Source, public exposure and measured quality evidence for this published dataset. These facts are not a quality rating.",
+      "provenance": "Provenance",
+      "datasetName": "Dataset name",
+      "caseStudySource": "Source cited in the Case Study",
+      "originalFilename": "Original uploaded filename",
+      "datasetUpdated": "Dataset last updated in databyloris",
+      "methodology": "Analysis methodology",
+      "viewMethodology": "View methodology",
+      "publicExposure": "Public exposure",
+      "schemaFields": "Total schema fields",
+      "publicFields": "Explorer fields",
+      "exposure": "Published field coverage",
+      "exposureValue": "{publicCount} of {totalCount} fields publicly exposed",
+      "explorerStatus": "Explorer publication",
+      "published": "Enabled",
+      "qualityEvidence": "Quality evidence",
+      "rowsAnalyzed": "Rows analysed",
+      "fieldsAnalyzed": "Public fields analysed",
+      "completeFields": "Fields with 100% completeness",
+      "fieldsWithMissing": "Fields with missing values",
+      "invalidTypes": "Invalid types detected",
+      "typeScope": "Type checks apply only where the schema type can be validated safely.",
+      "qualityUnavailable": "Quality evidence is temporarily unavailable."
     }
   },
   "Dashboard": {
@@ -493,8 +519,10 @@
       "processing": "Uploading and parsing…",
       "saveGrain": "Save grain",
       "savingGrain": "Saving…",
+      "saveName": "Save dataset name",
+      "savingName": "Saving…",
       "configWarning": "The dashboard configuration contains {count} references that do not match this dataset's fields.",
-      "feedback": {"uploaded": "Dataset uploaded and saved to Supabase.", "replaced": "Dataset replaced successfully.", "grainSaved": "Grain updated."},
+      "feedback": {"uploaded": "Dataset uploaded and saved to Supabase.", "replaced": "Dataset replaced successfully.", "grainSaved": "Grain updated.", "nameSaved": "Dataset name updated."},
       "errors": {"csvRequired": "Select a file with a .csv extension.", "confirmReplacement": "Explicitly confirm the replacement.", "invalidDataset": "Invalid CSV: check headers, rows and values.", "datasetExists": "A dataset already exists: confirm replacement and try again.", "datasetTooLarge": "The file exceeds the allowed size.", "tooManyRows": "The CSV exceeds the 10,000-row limit.", "datasetUploadFailed": "Storage upload failed.", "datasetProcessingFailed": "The dataset was not saved. The newly uploaded file was removed when possible.", "publishingBlocked": "Move the project to draft before replacing the published Dashboard dataset.", "projectNotFound": "The project no longer exists or is not accessible.", "databaseUnavailable": "The database is unavailable.", "unknown": "The operation failed. Please try again."}
     },
     "explorer": {

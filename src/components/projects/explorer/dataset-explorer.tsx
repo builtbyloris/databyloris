@@ -3,8 +3,10 @@ import {buttonStyles, Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import type {ExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import type {DatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
+import type {DatasetTrustMetadata} from "@/lib/repositories/public-dataset-trust-repository";
 import {getLocalizedPath} from "@/lib/seo";
-import type {DashboardValue, Project} from "@/types";
+import type {DashboardValue, DatasetSummary, Project} from "@/types";
+import {DatasetTrust} from "./dataset-trust";
 
 interface Controls {
   search: string;
@@ -21,11 +23,13 @@ function cellText(value: DashboardValue | undefined, locale: AppLocale, yes: str
   return value;
 }
 
-export async function DatasetExplorer({project, locale, page, quality, pageNumber, controls}: {
+export async function DatasetExplorer({project, locale, page, quality, trust, source, pageNumber, controls}: {
   project: Project;
   locale: AppLocale;
   page: ExplorerPage;
   quality: DatasetQuality | null;
+  trust: DatasetTrustMetadata | null;
+  source: DatasetSummary | null;
   pageNumber: number;
   controls: Controls;
 }) {
@@ -176,6 +180,7 @@ export async function DatasetExplorer({project, locale, page, quality, pageNumbe
           </>
         ) : <p role="status" className="mt-5 text-sm text-muted">{t("quality.unavailable")}</p>}
       </section>
+      <DatasetTrust locale={locale} slug={project.slug} source={source} metadata={trust} quality={quality} publicFieldCount={page.columns.length} />
     </Container>
   );
 }

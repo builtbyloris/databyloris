@@ -145,6 +145,23 @@ export async function updateDatasetGrain(datasetId: string, grain: string): Prom
   }
 }
 
+export async function updateDatasetName(
+  projectId: string,
+  datasetId: string,
+  name: string,
+): Promise<AdminDatasetDraft> {
+  const supabase = await createClient();
+  const {data: row, error} = await supabase.from("datasets")
+    .update({name})
+    .eq("id", datasetId)
+    .eq("project_id", projectId)
+    .select("*")
+    .maybeSingle();
+  if (error) throw new RepositoryError("database");
+  if (!row) throw new RepositoryError("not_found");
+  return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));
+}
+
 export async function updateDatasetExplorer(
   projectId: string,
   datasetId: string,
