@@ -238,6 +238,18 @@
       "unit": "Unit",
       "format": "Format",
       "types": {"string": "Text", "number": "Number", "boolean": "Boolean", "date": "Date"}
+    },
+    "quality": {
+      "title": "Data Quality",
+      "intro": "Counts use all dataset rows. Validity, where shown, is measured among non-null values against the schema type.",
+      "totalRows": "Total rows",
+      "publicFields": "Public fields analysed",
+      "nonNull": "Non-null",
+      "missing": "Null / missing",
+      "completeness": "Completeness",
+      "invalidType": "Invalid type",
+      "validity": "Validity",
+      "unavailable": "Quality metrics are temporarily unavailable. Dataset rows remain accessible."
     }
   },
   "Dashboard": {
