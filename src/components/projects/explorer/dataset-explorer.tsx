@@ -47,7 +47,10 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
           <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{t("title")}</h1>
           <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
         </div>
-        <ShareButton projectTitle={project.title} context="datasetExplorer" />
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href={getLocalizedPath(locale, `/projects/${project.slug}/compare`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("compare")}</Link>
+          <ShareButton projectTitle={project.title} context="datasetExplorer" />
+        </div>
       </div>
 
       <ExplorerControls key={explorerHref(basePath, controls, pageNumber)} basePath={basePath} columns={page.columns} controls={controls} page={pageNumber} />
