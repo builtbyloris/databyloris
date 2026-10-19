@@ -1,7 +1,8 @@
 import type {Metadata} from "next";
 import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
-import {DashboardShell, DashboardState} from "@/components/dashboard";
+import {DashboardState} from "@/components/dashboard";
+import {DashboardUrlState} from "@/components/dashboard/dashboard-url-state";
 import type {AppLocale} from "@/i18n/routing";
 import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
 import {getPublishedDashboardBySlug} from "@/lib/repositories/public-dashboards-repository";
@@ -51,7 +52,7 @@ export default async function DashboardPage({params}: DashboardPageProps) {
   }
 
   return (
-    <DashboardShell
+    <DashboardUrlState
       project={{slug: result.project.slug, title: result.project.title}}
       config={result.config}
       records={result.records}

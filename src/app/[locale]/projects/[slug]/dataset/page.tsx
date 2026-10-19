@@ -3,6 +3,7 @@ import {Suspense} from "react";
 import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {DatasetExplorer} from "@/components/projects/explorer/dataset-explorer";
+import type {ExplorerControlsState} from "@/components/projects/explorer/explorer-url";
 import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
@@ -54,8 +55,8 @@ export default async function DatasetPage({params, searchParams}: DatasetPagePro
   const pageNumber = Number.isSafeInteger(requestedPage) && requestedPage >= 1
     ? Math.min(requestedPage, 401) : 1;
   const controls = {
-    search: scalar(raw.q).trim().slice(0, 100),
-    filterField: scalar(raw.field),
+    search: scalar(raw.search ?? raw.q).trim().slice(0, 100),
+    filterField: scalar(raw.filter ?? raw.field),
     filterValue: scalar(raw.value).slice(0, 200),
     sortField: scalar(raw.sort),
     sortDirection: scalar(raw.dir) === "desc" ? "desc" as const : "asc" as const,
@@ -105,23 +106,51 @@ async function ExplorerResults({slug, datasetId, locale, project, source, pageNu
   project: NonNullable<Awaited<ReturnType<typeof getPublishedProjectBySlug>>>;
   source: DatasetSummary | null;
   pageNumber: number;
-  controls: {search: string; filterField: string; filterValue: string; sortField: string; sortDirection: "asc" | "desc"};
+  controls: ExplorerControlsState;
   errorState: React.ReactNode;
 }) {
   let result;
+  let safeControls = controls;
+  let safePageNumber = pageNumber;
   try {
-    result = await getPublishedExplorerPage(slug, datasetId, {
-      offset: (pageNumber - 1) * 25,
-      search: controls.search || null,
-      filterField: controls.filterField || null,
-      filterValue: controls.filterField && controls.filterValue ? controls.filterValue : null,
-      sortField: controls.sortField || null,
-      sortDirection: controls.sortDirection,
+    const query = (input: ExplorerControlsState, number = pageNumber) => ({
+      offset: (number - 1) * 25,
+      search: input.search || null,
+      filterField: input.filterField || null,
+      filterValue: input.filterField && input.filterValue ? input.filterValue : null,
+      sortField: input.sortField || null,
+      sortDirection: input.sortDirection,
     });
+    result = await getPublishedExplorerPage(slug, datasetId, query(controls));
+    if (!result) {
+      // The RPC denies invalid field names. Retry only after discovering the approved columns.
+      const baseline = await getPublishedExplorerPage(slug, datasetId, {
+        offset: 0, search: null, filterField: null, filterValue: null,
+        sortField: null, sortDirection: "asc",
+      });
+      if (!baseline) notFound();
+      const allowed = new Set(baseline.columns.map((column) => column.name));
+      safeControls = {
+        ...controls,
+        filterField: allowed.has(controls.filterField) ? controls.filterField : "",
+        filterValue: allowed.has(controls.filterField) ? controls.filterValue : "",
+        sortField: allowed.has(controls.sortField) ? controls.sortField : "",
+      };
+      if (!safeControls.sortField) safeControls.sortDirection = "asc";
+      result = await getPublishedExplorerPage(slug, datasetId, query(safeControls));
+    }
+    if (result) {
+      safePageNumber = Math.min(pageNumber, Math.max(1, Math.ceil(result.totalCount / 25)));
+      if (safePageNumber !== pageNumber) {
+        result = await getPublishedExplorerPage(slug, datasetId, query(safeControls, safePageNumber));
+      }
+    }
   } catch {
     return errorState;
   }
   if (!result) notFound();
+  if (!safeControls.filterField) safeControls = {...safeControls, filterValue: ""};
+  if (!safeControls.sortField) safeControls = {...safeControls, sortDirection: "asc"};
   const [qualityResult, trustResult] = await Promise.allSettled([
     getPublishedDatasetQuality(slug, result.columns),
     getPublishedExplorerTrustMetadata(slug, datasetId, result.columns.length),
@@ -129,5 +158,5 @@ async function ExplorerResults({slug, datasetId, locale, project, source, pageNu
   // Supplemental evidence must not make the existing Explorer unavailable.
   const quality = qualityResult.status === "fulfilled" ? qualityResult.value : null;
   const trust = trustResult.status === "fulfilled" ? trustResult.value : null;
-  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} trust={trust} source={source} pageNumber={pageNumber} controls={controls} />;
+  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} trust={trust} source={source} pageNumber={safePageNumber} controls={safeControls} />;
 }
