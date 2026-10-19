@@ -25,7 +25,8 @@ export function PublishingChecklist({quality, loading, hasUnsavedChanges, onChec
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 id="publishing-quality-title" className="text-base font-bold">{t("title")}</h3>
-          <p id="publishing-quality-status" role="status" className={`mt-1 text-sm font-semibold ${quality ? "text-foreground" : "text-muted"}`}>{loading ? t("checking") : !quality ? t("unavailable") : quality.ready ? t("ready") : t("incomplete", {count: quality.issues.length})}</p>
+          <p id="publishing-quality-status" role="status" className={`mt-1 text-sm font-semibold ${quality ? "text-foreground" : "text-muted"}`}>{loading ? t("checking") : !quality ? t(hasUnsavedChanges ? "pending" : "unavailable") : quality.ready ? t("ready") : t("incomplete", {count: quality.issues.length})}</p>
+          {quality?.totalRequirements !== undefined ? <p className="mt-1 text-xs text-muted">{t("progress", {passed: quality.totalRequirements - quality.issues.length, total: quality.totalRequirements})}</p> : null}
         </div>
         <Button type="button" variant="secondary" size="sm" onClick={onCheck} disabled={loading}>{t("check")}</Button>
       </div>

@@ -22,6 +22,7 @@ export interface PublishingQualityResult {
   ready: boolean;
   issues: PublishingIssue[];
   featuredDraftWarning: boolean;
+  totalRequirements?: number;
 }
 
 export interface PublishingQualityInput {
@@ -38,55 +39,64 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function evaluatePublishingQuality({project, imagePath, detail, dataset, datasetCount, config}: PublishingQualityInput): PublishingQualityResult {
   const issues: PublishingIssue[] = [];
+  let totalRequirements = 0;
   const add = (code: PublishingIssueCode, area: PublishingArea) => issues.push({code, area});
+  const check = (valid: boolean, code: PublishingIssueCode, area: PublishingArea) => {
+    totalRequirements += 1;
+    if (!valid) add(code, area);
+  };
 
-  if (!filled(project.title.it)) add("titleIt", "metadata");
-  if (!filled(project.title.en)) add("titleEn", "metadata");
-  if (!filled(project.description.it)) add("descriptionIt", "metadata");
-  if (!filled(project.description.en)) add("descriptionEn", "metadata");
-  if (!slugPattern.test(project.slug)) add("slug", "metadata");
-  if (!filled(project.category)) add("category", "metadata");
-  if (!isProjectCoverStoragePath(imagePath, project.id)) add("cover", "cover");
-  if (project.repositoryUrl && !isSafeExternalUrl(project.repositoryUrl)) add("repositoryUrl", "metadata");
+  check(filled(project.title.it), "titleIt", "metadata");
+  check(filled(project.title.en), "titleEn", "metadata");
+  check(filled(project.description.it), "descriptionIt", "metadata");
+  check(filled(project.description.en), "descriptionEn", "metadata");
+  check(slugPattern.test(project.slug), "slug", "metadata");
+  check(filled(project.category), "category", "metadata");
+  check(isProjectCoverStoragePath(imagePath, project.id), "cover", "cover");
+  if (project.repositoryUrl) check(isSafeExternalUrl(project.repositoryUrl), "repositoryUrl", "metadata");
 
-  if (!detail) {
-    add("caseStudy", "case-study");
-  } else {
-    if (!filled(detail.context.it)) add("contextIt", "case-study");
-    if (!filled(detail.context.en)) add("contextEn", "case-study");
-    if (!filled(detail.objective.it)) add("objectiveIt", "case-study");
-    if (!filled(detail.objective.en)) add("objectiveEn", "case-study");
-    if (!filled(detail.dataset.name)) add("datasetName", "case-study");
-    if (!filled(detail.dataset.source.it)) add("datasetSourceIt", "case-study");
-    if (!filled(detail.dataset.source.en)) add("datasetSourceEn", "case-study");
-    if (!filled(detail.dataset.description.it)) add("datasetDescriptionIt", "case-study");
-    if (!filled(detail.dataset.description.en)) add("datasetDescriptionEn", "case-study");
-    if (detail.dataset.sourceUrl && !isSafeExternalUrl(detail.dataset.sourceUrl)) add("sourceUrl", "case-study");
-    if (!detail.methodology.length || !detail.methodology.every((step) => filled(step.title.it) && filled(step.title.en) && filled(step.description.it) && filled(step.description.en))) add("methodology", "case-study");
-    if (!detail.insights.length || !detail.insights.every((insight) => filled(insight.description.it) && filled(insight.description.en) && (!insight.title || (filled(insight.title.it) && filled(insight.title.en))))) add("insights", "case-study");
+  check(Boolean(detail), "caseStudy", "case-study");
+  if (detail) {
+    check(filled(detail.context.it), "contextIt", "case-study");
+    check(filled(detail.context.en), "contextEn", "case-study");
+    check(filled(detail.objective.it), "objectiveIt", "case-study");
+    check(filled(detail.objective.en), "objectiveEn", "case-study");
+    check(filled(detail.dataset.name), "datasetName", "case-study");
+    check(filled(detail.dataset.source.it), "datasetSourceIt", "case-study");
+    check(filled(detail.dataset.source.en), "datasetSourceEn", "case-study");
+    check(filled(detail.dataset.description.it), "datasetDescriptionIt", "case-study");
+    check(filled(detail.dataset.description.en), "datasetDescriptionEn", "case-study");
+    if (detail.dataset.sourceUrl) check(isSafeExternalUrl(detail.dataset.sourceUrl), "sourceUrl", "case-study");
+    check(Boolean(detail.methodology.length && detail.methodology.every((step) => filled(step.title.it) && filled(step.title.en) && filled(step.description.it) && filled(step.description.en))), "methodology", "case-study");
+    check(Boolean(detail.insights.length && detail.insights.every((insight) => filled(insight.description.it) && filled(insight.description.en) && (!insight.title || (filled(insight.title.it) && filled(insight.title.en))))), "insights", "case-study");
   }
 
   if (project.dashboardAvailable) {
     if (datasetCount !== 1 || (dataset && (dataset.source !== "database" || dataset.projectId !== project.id))) {
-      add("dashboardDataset", "dataset");
+      check(false, "dashboardDataset", "dataset");
     } else if (!dataset) {
-      add("dashboardSchema", "dataset");
+      check(true, "dashboardDataset", "dataset");
+      check(false, "dashboardSchema", "dataset");
     } else {
+      check(true, "dashboardDataset", "dataset");
       const names = dataset.columns.map((column) => column.name);
-      if (!names.length || names.some((name) => !filled(name)) || new Set(names.map(normalizeDatasetFieldName)).size !== names.length) add("dashboardSchema", "dataset");
-      if (!dataset.records.some((record) => names.some((name) => {
+      check(Boolean(names.length && !names.some((name) => !filled(name)) && new Set(names.map(normalizeDatasetFieldName)).size === names.length), "dashboardSchema", "dataset");
+      check(dataset.records.some((record) => names.some((name) => {
         const field = resolveDatasetFieldName(name, Object.keys(record));
         return field !== null && record[field] != null;
-      }))) add("dashboardRows", "dataset");
+      })), "dashboardRows", "dataset");
     }
     if (!config) {
-      add("dashboardConfig", "dashboard");
+      check(false, "dashboardConfig", "dashboard");
     } else if (dataset) {
-      if (config.datasetId !== dataset.id && config.datasetId !== project.slug) add("dashboardDatasetId", "dashboard");
-      if (validateDashboardConfig(config, dataset.fields).length > 0 || dataset.fields.length === 0) add("dashboardFields", "dashboard");
-      if (config.kpis.length + config.charts.length + config.rankings.length === 0) add("dashboardContent", "dashboard");
+      check(true, "dashboardConfig", "dashboard");
+      check(config.datasetId === dataset.id || config.datasetId === project.slug, "dashboardDatasetId", "dashboard");
+      check(validateDashboardConfig(config, dataset.fields).length === 0 && dataset.fields.length > 0, "dashboardFields", "dashboard");
+      check(config.kpis.length + config.charts.length + config.rankings.length > 0, "dashboardContent", "dashboard");
+    } else {
+      check(true, "dashboardConfig", "dashboard");
     }
   }
 
-  return {ready: issues.length === 0, issues, featuredDraftWarning: project.status === "draft" && project.featured};
+  return {ready: issues.length === 0, issues, featuredDraftWarning: project.status === "draft" && project.featured, totalRequirements};
 }
