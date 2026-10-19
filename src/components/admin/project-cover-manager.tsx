@@ -16,6 +16,7 @@ import {
 } from "@/lib/project-media";
 import {createClient} from "@/lib/supabase/client";
 import type {AdminActionError, ProjectCoverResult} from "@/types";
+import {AdminSaveStatus} from "./admin-save-status";
 
 export function ProjectCoverManager({
   projectId,
@@ -24,6 +25,7 @@ export function ProjectCoverManager({
   imageUrl,
   locale,
   onChange,
+  onDirtyChange,
 }: {
   projectId: string;
   projectTitle: string;
@@ -31,6 +33,7 @@ export function ProjectCoverManager({
   imageUrl: string;
   locale: AppLocale;
   onChange: (cover: Pick<ProjectCoverResult, "imagePath" | "imageUrl">) => void;
+  onDirtyChange: (dirty: boolean) => void;
 }) {
   const t = useTranslations("Admin.cover");
   const [file, setFile] = useState<File | null>(null);
@@ -45,6 +48,7 @@ export function ProjectCoverManager({
   useEffect(() => () => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
   }, []);
+  useEffect(() => onDirtyChange(Boolean(file)), [file, onDirtyChange]);
 
   const clearPreview = () => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
@@ -177,11 +181,7 @@ export function ProjectCoverManager({
             </div>
           ) : null}
 
-          {message ? (
-            <p role={message.kind === "error" ? "alert" : "status"} className={`text-sm font-semibold ${message.kind === "error" ? "text-red-600 dark:text-red-300" : message.kind === "warning" ? "text-amber-700 dark:text-amber-300" : "text-cyan"}`}>
-              {message.value}
-            </p>
-          ) : null}
+          {(pending || file || message) ? <AdminSaveStatus phase={pending ? "saving" : message?.kind === "error" ? "error" : message?.kind === "warning" ? "warning" : file ? "dirty" : "saved"} detail={message?.value} /> : null}
         </div>
       </div>
     </Card>

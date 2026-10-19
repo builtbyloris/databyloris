@@ -4,15 +4,17 @@ import {useLocale, useTranslations} from "next-intl";
 import {Button, Card} from "@/components/ui";
 import {isValidProjectDetail} from "@/lib/admin";
 import type {ProjectDetail} from "@/types";
+import {AdminSaveStatus} from "./admin-save-status";
 import {DatasetSummaryEditor} from "./dataset-summary-editor";
 import {InsightsEditor} from "./insights-editor";
 import {LocalizedTextEditor} from "./localized-text-editor";
 import {MethodologyEditor} from "./methodology-editor";
 
-export function ProjectDetailEditor({detail, dirty, saving, onChange, onSave}: {
+export function ProjectDetailEditor({detail, dirty, saving, saveError, onChange, onSave}: {
   detail: ProjectDetail;
   dirty: boolean;
   saving: boolean;
+  saveError?: string;
   onChange: (detail: ProjectDetail) => void;
   onSave: () => void;
 }) {
@@ -27,9 +29,7 @@ export function ProjectDetailEditor({detail, dirty, saving, onChange, onSave}: {
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
           <h2 className="mt-2 text-xl font-bold">{t("title")}</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{t("description")}</p>
-          <p aria-live="polite" className={`mt-2 text-sm font-semibold ${dirty ? "text-violet" : "text-muted"}`}>
-            {dirty ? t("unsaved") : t("saved")}
-          </p>
+          <AdminSaveStatus className="mt-2" phase={saving ? "saving" : saveError ? "error" : dirty ? "dirty" : "saved"} detail={saveError} />
         </div>
         <Button type="button" onClick={onSave} disabled={!dirty || saving || !valid}>
           {saving ? t("saving") : t("save")}

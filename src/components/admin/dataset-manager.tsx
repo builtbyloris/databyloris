@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslations} from "next-intl";
 import {registerDatasetAction, updateDatasetGrainAction, updateDatasetNameAction} from "@/app/[locale]/admin/actions";
 import {Badge, Button, Card} from "@/components/ui";
@@ -18,6 +18,7 @@ import {createClient} from "@/lib/supabase/client";
 import type {AdminActionError, AdminDatasetDraft, DashboardConfig} from "@/types";
 import {DatasetExplorerSettings} from "./dataset-explorer-settings";
 import {DataDictionaryEditor} from "./data-dictionary-editor";
+import {AdminSaveStatus} from "./admin-save-status";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 
@@ -28,6 +29,7 @@ export function DatasetManager({
   dataset,
   dashboardConfig,
   onDatasetChange,
+  onDirtyChange,
 }: {
   projectId: string;
   projectTitle: string;
@@ -35,6 +37,7 @@ export function DatasetManager({
   dataset: AdminDatasetDraft | null;
   dashboardConfig: DashboardConfig;
   onDatasetChange: (dataset: AdminDatasetDraft) => void;
+  onDirtyChange: (dirty: boolean) => void;
 }) {
   const t = useTranslations("Admin.dataset");
   const [file, setFile] = useState<File | null>(null);
@@ -43,9 +46,14 @@ export function DatasetManager({
   const [confirmed, setConfirmed] = useState(false);
   const [pending, setPending] = useState<"upload" | "grain" | "name" | null>(null);
   const [message, setMessage] = useState<{kind: "success" | "error"; value: string} | null>(null);
+  const [explorerDirty, setExplorerDirty] = useState(false);
+  const [dictionaryDirty, setDictionaryDirty] = useState(false);
 
   const dbDataset = dataset?.source === "database" ? dataset : null;
   const configIssues = dataset ? validateDashboardConfig(dashboardConfig, dataset.fields) : [];
+  const localDirty = Boolean(file) || Boolean(dbDataset && (name !== dbDataset.name || grain !== dbDataset.grain));
+
+  useEffect(() => onDirtyChange(localDirty || explorerDirty || dictionaryDirty), [localDirty, explorerDirty, dictionaryDirty, onDirtyChange]);
 
   const upload = async () => {
     setMessage(null);
@@ -160,6 +168,7 @@ export function DatasetManager({
             projectId={projectId}
             dataset={dbDataset}
             onDatasetChange={onDatasetChange}
+            onDirtyChange={setExplorerDirty}
           />
           <DataDictionaryEditor
             key={`dictionary-${dbDataset.id}`}
@@ -167,6 +176,7 @@ export function DatasetManager({
             projectId={projectId}
             dataset={dbDataset}
             onDatasetChange={onDatasetChange}
+            onDirtyChange={setDictionaryDirty}
           />
         </>
       ) : null}
@@ -205,7 +215,7 @@ export function DatasetManager({
           {dbDataset ? <Button variant="secondary" onClick={saveGrain} disabled={pending !== null || grain === dbDataset.grain}>{pending === "grain" ? t("savingGrain") : t("saveGrain")}</Button> : null}
           {dbDataset ? <Button variant="secondary" onClick={saveName} disabled={pending !== null || !name.trim() || name.trim() === dbDataset.name}>{pending === "name" ? t("savingName") : t("saveName")}</Button> : null}
         </div>
-        {message ? <p role={message.kind === "error" ? "alert" : "status"} className={`mt-3 text-sm font-semibold ${message.kind === "error" ? "text-red-600 dark:text-red-300" : "text-cyan"}`}>{message.value}</p> : null}
+        {(pending || message || localDirty) ? <AdminSaveStatus className="mt-3" phase={pending ? "saving" : message?.kind === "error" ? "error" : localDirty ? "dirty" : "saved"} detail={message?.value} /> : null}
       </div>
     </Card>
   );
@@ -214,6 +224,12 @@ export function DatasetManager({
 function DatasetSummary({dataset, locale}: {dataset: AdminDatasetDraft; locale: AppLocale}) {
   const t = useTranslations("Admin.dataset");
   const preview = dataset.records.slice(0, DATASET_PREVIEW_ROWS);
+  const publicFields = dataset.explorerFields.filter((field) => dataset.columns.some((column) => column.name === field));
+  const completedDictionary = publicFields.filter((field) => {
+    const entry = dataset.dictionary[field];
+    return entry && entry.label.it.trim() && entry.label.en.trim()
+      && entry.description.it.trim() && entry.description.en.trim();
+  }).length;
   return (
     <div className="mt-5 space-y-5">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -221,13 +237,16 @@ function DatasetSummary({dataset, locale}: {dataset: AdminDatasetDraft; locale: 
         <DatasetFact label={t("originalFile")} value={dataset.originalFilename ?? dataset.storagePath?.split("/").at(-1) ?? "—"} />
         <DatasetFact label={t("records")} value={String(dataset.recordCount)} />
         <DatasetFact label={t("fields")} value={String(dataset.fields.length)} />
+        <DatasetFact label={t("explorerState")} value={t(dataset.explorerEnabled && publicFields.length > 0 ? "enabled" : "disabled")} />
+        <DatasetFact label={t("publicFields")} value={String(publicFields.length)} />
+        <DatasetFact label={t("dictionaryCoverage")} value={t("dictionaryProgress", {completed: completedDictionary, total: publicFields.length})} />
         <DatasetFact label={t("grain")} value={dataset.grain || "—"} />
         <DatasetFact label={t("updatedAt")} value={dataset.updatedAt ? new Intl.DateTimeFormat(locale, {dateStyle: "medium", timeStyle: "short"}).format(new Date(dataset.updatedAt)) : "—"} />
       </div>
       <div>
         <h3 className="text-sm font-bold">{t("schema")}</h3>
         <div className="mt-2 flex flex-wrap gap-2">
-          {dataset.columns.map((column) => <span key={column.name} className="rounded-control border border-border bg-surface-raised px-3 py-2 text-xs"><strong>{column.name}</strong> · {column.type}{column.nullable ? " · nullable" : ""}</span>)}
+          {dataset.columns.map((column) => <span key={column.name} className={`rounded-control border px-3 py-2 text-xs ${publicFields.includes(column.name) ? "border-primary/50 bg-primary/10" : "border-border bg-surface-raised"}`}><strong>{column.name}</strong> · {column.type}{column.nullable ? " · nullable" : ""}{publicFields.includes(column.name) ? ` · ${t("publicField")}` : ""}</span>)}
         </div>
       </div>
       <div>

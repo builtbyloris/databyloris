@@ -1,11 +1,12 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslations} from "next-intl";
 import {updateDatasetDictionaryAction} from "@/app/[locale]/admin/actions";
 import {Button} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import type {AdminDatasetDraft, DatasetDictionary, DatasetFieldMetadata} from "@/types";
+import {AdminSaveStatus} from "./admin-save-status";
 
 const inputClass = "mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary";
 const emptyMetadata: DatasetFieldMetadata = {
@@ -13,11 +14,12 @@ const emptyMetadata: DatasetFieldMetadata = {
   description: {it: "", en: ""},
 };
 
-export function DataDictionaryEditor({locale, projectId, dataset, onDatasetChange}: {
+export function DataDictionaryEditor({locale, projectId, dataset, onDatasetChange, onDirtyChange}: {
   locale: AppLocale;
   projectId: string;
   dataset: AdminDatasetDraft;
   onDatasetChange: (dataset: AdminDatasetDraft) => void;
+  onDirtyChange: (dirty: boolean) => void;
 }) {
   const t = useTranslations("Admin.dictionary");
   const [entries, setEntries] = useState<DatasetDictionary>(dataset.dictionary);
@@ -27,6 +29,12 @@ export function DataDictionaryEditor({locale, projectId, dataset, onDatasetChang
   const column = dataset.columns.find((item) => item.name === selected);
   const entry = entries[selected] ?? emptyMetadata;
   const dirty = JSON.stringify(entries) !== JSON.stringify(dataset.dictionary);
+  const publicColumns = dataset.columns.filter((item) => dataset.explorerFields.includes(item.name));
+  const privateColumns = dataset.columns.filter((item) => !dataset.explorerFields.includes(item.name));
+  const isApproved = dataset.explorerFields.includes(selected);
+  const isPublic = dataset.explorerEnabled && isApproved;
+
+  useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange]);
 
   const update = (change: Partial<DatasetFieldMetadata>) => {
     setEntries((current) => ({...current, [selected]: {...emptyMetadata, ...current[selected], ...change}}));
@@ -48,18 +56,19 @@ export function DataDictionaryEditor({locale, projectId, dataset, onDatasetChang
 
   return (
     <section aria-labelledby="data-dictionary-heading" className="mt-6 border-t border-border pt-5">
-      <h3 id="data-dictionary-heading" className="font-bold">{t("title")}</h3>
+      <h3 id="data-dictionary-heading" tabIndex={-1} className="scroll-mt-24 font-bold">{t("title")}</h3>
       <p className="mt-1 text-sm text-muted">{t("description")}</p>
       <label className="mt-4 block max-w-xl text-sm font-semibold">{t("field")}
         <select value={selected} onChange={(event) => setSelected(event.target.value)} className={`${inputClass} h-11`}>
-          {dataset.columns.map((item) => <option key={item.name} value={item.name}>{item.name}</option>)}
+          {publicColumns.length > 0 ? <optgroup label={t("publicFields")}>{publicColumns.map((item) => <option key={item.name} value={item.name}>{item.name}</option>)}</optgroup> : null}
+          {privateColumns.length > 0 ? <optgroup label={t("privateFields")}>{privateColumns.map((item) => <option key={item.name} value={item.name}>{item.name}</option>)}</optgroup> : null}
         </select>
       </label>
       {column ? (
         <div className="mt-4 rounded-control border border-border bg-surface p-4 sm:p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h4 className="break-all font-semibold">{column.name}</h4>
-            <p className="text-xs text-muted">{t("schemaType", {type: t(`types.${column.type}`)})}</p>
+            <p className="text-xs text-muted">{t(isPublic ? "publicField" : isApproved ? "approvedField" : "privateField")} · {t("schemaType", {type: t(`types.${column.type}`)})}</p>
           </div>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {(["it", "en"] as const).map((language) => (
@@ -93,7 +102,7 @@ export function DataDictionaryEditor({locale, projectId, dataset, onDatasetChang
       ) : null}
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button variant="secondary" onClick={save} disabled={!dirty || pending}>{pending ? t("saving") : t("save")}</Button>
-        {feedback ? <p role={feedback.error ? "alert" : "status"} className={`text-sm ${feedback.error ? "text-red-600 dark:text-red-300" : "text-muted"}`}>{feedback.text}</p> : null}
+        {(dirty || pending || feedback) ? <AdminSaveStatus phase={pending ? "saving" : feedback?.error ? "error" : dirty ? "dirty" : "saved"} detail={feedback?.text} /> : null}
       </div>
     </section>
   );

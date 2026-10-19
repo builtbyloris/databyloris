@@ -13,7 +13,7 @@ const items: {id: AdminView; icon: string}[] = [
 export function AdminSidebar({view, onChange}: {view: AdminView; onChange: (view: AdminView) => void}) {
   const t = useTranslations("Admin.nav");
   return (
-    <aside className="rounded-card border border-border bg-admin-sidebar p-3 text-white shadow-card lg:sticky lg:top-24 lg:min-h-[34rem] lg:p-4">
+    <aside className="min-w-0 rounded-card border border-border bg-admin-sidebar p-3 text-white shadow-card lg:sticky lg:top-24 lg:min-h-[34rem] lg:p-4">
       <div className="mb-4 hidden border-b border-white/10 px-3 pb-5 lg:block">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan">databyloris</p>
         <p className="mt-2 text-sm text-white/60">{t("workspace")}</p>

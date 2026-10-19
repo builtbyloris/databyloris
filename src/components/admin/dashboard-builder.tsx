@@ -6,6 +6,7 @@ import {Button, Card} from "@/components/ui";
 import {validateDashboardConfig} from "@/lib/admin";
 import type {AggregationType, ChartConfig, ChartSort, ChartType, DashboardConfig, DashboardText, FilterConfig, FilterType, KPIConfig, KPIFormat, LocalizedText, ProjectDraft, RankingConfig} from "@/types";
 import {AdminPreview} from "./admin-preview";
+import {AdminSaveStatus} from "./admin-save-status";
 import {JsonPreview} from "./json-preview";
 import {LocalizedTextEditor} from "./localized-text-editor";
 
@@ -15,10 +16,11 @@ const formats: KPIFormat[] = ["number", "sales", "currency", "percentage", "dura
 const chartTypes: ChartType[] = ["line", "bar", "pie", "donut"];
 const chartSorts: ChartSort[] = ["category-asc", "category-desc", "value-asc", "value-desc"];
 
-export function DashboardBuilder({draft, dirty, saving, onChange, onSave, onBack}: {
+export function DashboardBuilder({draft, dirty, saving, saveError, onChange, onSave, onBack}: {
   draft: ProjectDraft;
   dirty: boolean;
   saving: boolean;
+  saveError?: string;
   onChange: (config: DashboardConfig) => void;
   onSave: () => void;
   onBack: () => void;
@@ -36,7 +38,8 @@ export function DashboardBuilder({draft, dirty, saving, onChange, onSave, onBack
         <div>
           <button type="button" onClick={onBack} className="text-sm font-semibold text-muted hover:text-foreground">← {t("actions.backToEditor")}</button>
           <h1 className="mt-3 text-3xl font-black tracking-tight">{t("builder.title")}</h1>
-          <p className="mt-2 text-sm text-muted">{draft.project.title || t("projects.untitled")} · {dirty ? t("common.unsaved") : t("common.saved")}</p>
+          <p className="mt-2 text-sm text-muted">{draft.project.title || t("projects.untitled")}</p>
+          <AdminSaveStatus className="mt-2" phase={saving ? "saving" : saveError ? "error" : dirty ? "dirty" : "saved"} detail={saveError} />
         </div>
         <div className="flex flex-wrap gap-2">
           <div className="flex rounded-control border border-border bg-surface p-1">
