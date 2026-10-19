@@ -1,6 +1,6 @@
 import {getTranslations} from "next-intl/server";
 import Link from "next/link";
-import {buttonStyles, Container} from "@/components/ui";
+import {buttonStyles, Container, ShareButton} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import type {ExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import type {DatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
@@ -41,10 +41,13 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
         <a href={projectPath} className="font-semibold hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary">{project.title}</a>
         <span className="mx-2" aria-hidden="true">/</span>{t("title")}
       </nav>
-      <div className="mt-8 max-w-3xl">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary-strong">{t("eyebrow")}</p>
-        <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{t("title")}</h1>
-        <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
+      <div className="mt-8 flex flex-wrap items-start justify-between gap-4">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary-strong">{t("eyebrow")}</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{t("title")}</h1>
+          <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
+        </div>
+        <ShareButton projectTitle={project.title} context="datasetExplorer" />
       </div>
 
       <ExplorerControls key={explorerHref(basePath, controls, pageNumber)} basePath={basePath} columns={page.columns} controls={controls} page={pageNumber} />

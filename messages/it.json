@@ -28,6 +28,18 @@
     "it": "IT",
     "en": "EN"
   },
+  "Share": {
+    "action": "Condividi",
+    "ariaLabel": "Condividi {context} di {project}",
+    "title": "{project} — {context}",
+    "copied": "Link copiato",
+    "error": "Impossibile condividere il link. Riprova.",
+    "contexts": {
+      "caseStudy": "Case Study",
+      "datasetExplorer": "Dataset Explorer",
+      "dashboard": "Dashboard"
+    }
+  },
   "Home": {
     "Hero": {
       "eyebrow": "Data Analysis • Insights • Real Projects",

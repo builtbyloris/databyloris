@@ -2,7 +2,7 @@
 
 import {useMemo, useState} from "react";
 import {useTranslations} from "next-intl";
-import {buttonStyles, Container} from "@/components/ui";
+import {buttonStyles, Container, ShareButton} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 import {ALL_FILTER_VALUE, applyDashboardFilters, calculateKpis, type DashboardFilterState} from "@/lib/dashboard";
 import type {DashboardConfig, DashboardRecord} from "@/types";
@@ -90,10 +90,13 @@ export function DashboardShell({project, config, records, embedded = false, urlF
           <span aria-hidden="true">/</span>
           <span className="font-semibold text-foreground">{t("breadcrumb.dashboard")}</span>
         </nav>
-        <div className="mt-6 max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
-          <h1 className="mt-3 break-words text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{dashboardTitle}</h1>
-          {dashboardDescription ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{dashboardDescription}</p> : null}
+        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-3xl min-w-0">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
+            <h1 className="mt-3 break-words text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{dashboardTitle}</h1>
+            {dashboardDescription ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{dashboardDescription}</p> : null}
+          </div>
+          <ShareButton projectTitle={project.title} context="dashboard" />
         </div>
 
         <div className="mt-8 grid min-w-0 gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
