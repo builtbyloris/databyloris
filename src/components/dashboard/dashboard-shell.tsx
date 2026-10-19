@@ -11,45 +11,37 @@ import {DashboardFilters} from "./dashboard-filters";
 import {DashboardKpiGrid} from "./dashboard-kpi-grid";
 import {DashboardRanking} from "./dashboard-ranking";
 import {DashboardSidebar} from "./dashboard-sidebar";
+import {createInitialDashboardFilters, equalDashboardFilterValues} from "./dashboard-filter-state";
 import {useDashboardText} from "./use-dashboard-text";
-
-function createInitialState(config: DashboardConfig): DashboardFilterState {
-  return Object.fromEntries(config.filters.map((filter) => {
-    const fallback = filter.type === "multi-select" ? [] : ALL_FILTER_VALUE;
-    const value = filter.defaultValue ?? fallback;
-    return [filter.id, Array.isArray(value) ? [...value] : value];
-  }));
-}
-
-function equalFilterValues(left: string | string[] | undefined, right: string | string[] | undefined) {
-  if (Array.isArray(left) || Array.isArray(right)) {
-    if (!Array.isArray(left) || !Array.isArray(right)) return false;
-    const sortedLeft = [...left].sort();
-    const sortedRight = [...right].sort();
-    return sortedLeft.length === sortedRight.length && sortedLeft.every((value, index) => value === sortedRight[index]);
-  }
-  return left === right;
-}
 
 function isFilterActive(value: string | string[] | undefined) {
   return Array.isArray(value) ? value.length > 0 : Boolean(value && value !== ALL_FILTER_VALUE);
 }
 
-export function DashboardShell({project, config, records, embedded = false}: {
+export function DashboardShell({project, config, records, embedded = false, urlFilters}: {
   project?: {slug: string; title: string};
   config: DashboardConfig;
   records: DashboardRecord[];
   embedded?: boolean;
+  urlFilters?: {
+    state: DashboardFilterState;
+    onChange: (id: string, value: string | string[]) => void;
+    onReset: () => void;
+  };
 }) {
   const t = useTranslations("Dashboard");
   const dashboardText = useDashboardText();
-  const initialFilters = useMemo(() => createInitialState(config), [config]);
-  const [filters, setFilters] = useState<DashboardFilterState>(() => initialFilters);
+  const initialFilters = useMemo(() => createInitialDashboardFilters(config), [config]);
+  const [localFilters, setLocalFilters] = useState<DashboardFilterState>(() => initialFilters);
+  const filters = urlFilters?.state ?? localFilters;
   const filteredRecords = useMemo(() => applyDashboardFilters(records, config.filters, filters), [config.filters, filters, records]);
   const kpis = useMemo(() => calculateKpis(filteredRecords, config.kpis), [config.kpis, filteredRecords]);
   const activeFilterCount = config.filters.filter((filter) => isFilterActive(filters[filter.id])).length;
-  const canReset = config.filters.some((filter) => !equalFilterValues(filters[filter.id], initialFilters[filter.id]));
-  const resetFilters = () => setFilters(createInitialState(config));
+  const canReset = config.filters.some((filter) => !equalDashboardFilterValues(filters[filter.id], initialFilters[filter.id]));
+  const resetFilters = () => urlFilters ? urlFilters.onReset() : setLocalFilters(createInitialDashboardFilters(config));
+  const changeFilter = (id: string, value: string | string[]) => urlFilters
+    ? urlFilters.onChange(id, value)
+    : setLocalFilters((current) => ({...current, [id]: value}));
   const dashboardTitle = dashboardText(config.title).trim() || t("breadcrumb.dashboard");
   const dashboardDescription = dashboardText(config.description).trim();
 
@@ -62,7 +54,7 @@ export function DashboardShell({project, config, records, embedded = false}: {
         activeFilterCount={activeFilterCount}
         canReset={canReset && filteredRecords.length > 0}
         state={filters}
-        onChange={(id, value) => setFilters((current) => ({...current, [id]: value}))}
+        onChange={changeFilter}
         onReset={resetFilters}
       />
 
