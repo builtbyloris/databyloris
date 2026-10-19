@@ -3,3 +3,4 @@ export {Button, buttonStyles} from "./button";
 export {Card} from "./card";
 export {Container} from "./container";
 export {Section} from "./section";
+export {ShareButton} from "./share-button";

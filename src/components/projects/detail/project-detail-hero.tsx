@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {getTranslations} from "next-intl/server";
-import {Badge, buttonStyles} from "@/components/ui";
+import {Badge, buttonStyles, ShareButton} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {Link} from "@/i18n/navigation";
 import type {Project} from "@/types";
@@ -30,9 +30,12 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
 
   return (
     <div>
-      <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-foreground">
-        <span aria-hidden="true">←</span> {t("back")}
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-foreground">
+          <span aria-hidden="true">←</span> {t("back")}
+        </Link>
+        <ShareButton projectTitle={project.title} context="caseStudy" />
+      </div>
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:gap-14">
         <div>
           <div className="flex flex-wrap items-center gap-3">
