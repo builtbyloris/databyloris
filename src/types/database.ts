@@ -243,6 +243,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_published_dataset_compare: {
+        Args: {
+          p_slug: string
+          p_dimension_field: string
+          p_value_a: string
+          p_value_b: string
+          p_metric_field: string
+        }
+        Returns: Json
+      }
+      get_published_dataset_compare_options: {
+        Args: {p_slug: string; p_dimension_field: string}
+        Returns: Json
+      }
       get_published_explorer_dataset_id: {
         Args: {p_slug: string}
         Returns: string | null

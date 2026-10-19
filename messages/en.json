@@ -37,8 +37,46 @@
     "contexts": {
       "caseStudy": "Case Study",
       "datasetExplorer": "Dataset Explorer",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "compare": "Dataset Compare"
     }
+  },
+  "Compare": {
+    "title": "Compare segments",
+    "eyebrow": "Dataset analysis",
+    "intro": "Compare two groups from the published fields of {project}.",
+    "metadataDescription": "Compare two public dataset segments for {project} using approved fields.",
+    "breadcrumbLabel": "Breadcrumb",
+    "backToExplorer": "Dataset Explorer",
+    "configure": "Configure comparison",
+    "dimension": "Group by",
+    "segmentA": "Segment A",
+    "segmentB": "Segment B",
+    "metric": "Numeric metric",
+    "selectValue": "Select a value",
+    "noDimensions": "No categorical fields",
+    "noMetrics": "No numeric fields",
+    "loading": "Updating comparison…",
+    "unavailableTitle": "Comparison unavailable",
+    "unavailableDescription": "This dataset has no public fields suitable for comparison.",
+    "incompleteTitle": "Choose two segments",
+    "incompleteDescription": "Select two different values to see their aggregated metrics.",
+    "sameTitle": "Choose different values",
+    "sameDescription": "Segment A and Segment B must be different.",
+    "emptySegment": "No records match this segment.",
+    "missingMetric": "This metric has no usable numeric values for this segment.",
+    "records": "Records",
+    "average": "Average",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "missing": "Missing metric values",
+    "deltaTitle": "Average difference (B − A)",
+    "deltaAbsolute": "Absolute difference",
+    "deltaPercent": "Percentage difference",
+    "notAvailable": "Not available",
+    "format": "Format: {format}",
+    "errorTitle": "Comparison temporarily unavailable",
+    "errorDescription": "We could not load this comparison. Please try again shortly."
   },
   "Home": {
     "Hero": {
@@ -211,6 +249,7 @@
   "DatasetExplorer": {
     "eyebrow": "Project data",
     "title": "Dataset Explorer",
+    "compare": "Compare",
     "metadataDescription": "Explore the approved dataset fields for {project}.",
     "intro": "Browse the published data behind {project}. Only approved fields are shown.",
     "breadcrumbLabel": "Breadcrumb",

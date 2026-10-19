@@ -37,8 +37,46 @@
     "contexts": {
       "caseStudy": "Case Study",
       "datasetExplorer": "Dataset Explorer",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "compare": "Confronto dataset"
     }
+  },
+  "Compare": {
+    "title": "Confronta segmenti",
+    "eyebrow": "Analisi del dataset",
+    "intro": "Confronta due gruppi usando i campi pubblicati di {project}.",
+    "metadataDescription": "Confronta due segmenti pubblici del dataset di {project} usando i campi approvati.",
+    "breadcrumbLabel": "Percorso di navigazione",
+    "backToExplorer": "Dataset Explorer",
+    "configure": "Configura il confronto",
+    "dimension": "Raggruppa per",
+    "segmentA": "Segmento A",
+    "segmentB": "Segmento B",
+    "metric": "Metrica numerica",
+    "selectValue": "Seleziona un valore",
+    "noDimensions": "Nessun campo categoriale",
+    "noMetrics": "Nessun campo numerico",
+    "loading": "Aggiornamento confronto…",
+    "unavailableTitle": "Confronto non disponibile",
+    "unavailableDescription": "Il dataset non ha campi pubblici adatti al confronto.",
+    "incompleteTitle": "Scegli due segmenti",
+    "incompleteDescription": "Seleziona due valori diversi per vedere le metriche aggregate.",
+    "sameTitle": "Scegli valori diversi",
+    "sameDescription": "Il segmento A e il segmento B devono essere diversi.",
+    "emptySegment": "Nessun record corrisponde a questo segmento.",
+    "missingMetric": "Questa metrica non ha valori numerici utilizzabili per il segmento.",
+    "records": "Record",
+    "average": "Media",
+    "minimum": "Minimo",
+    "maximum": "Massimo",
+    "missing": "Valori mancanti della metrica",
+    "deltaTitle": "Differenza della media (B − A)",
+    "deltaAbsolute": "Differenza assoluta",
+    "deltaPercent": "Differenza percentuale",
+    "notAvailable": "Non disponibile",
+    "format": "Formato: {format}",
+    "errorTitle": "Confronto temporaneamente non disponibile",
+    "errorDescription": "Non è stato possibile caricare il confronto. Riprova tra poco."
   },
   "Home": {
     "Hero": {
@@ -211,6 +249,7 @@
   "DatasetExplorer": {
     "eyebrow": "Dati del progetto",
     "title": "Dataset Explorer",
+    "compare": "Confronta",
     "metadataDescription": "Esplora i campi approvati del dataset di {project}.",
     "intro": "Consulta i dati pubblicati di {project}. Sono visibili solo i campi approvati.",
     "breadcrumbLabel": "Percorso di navigazione",
