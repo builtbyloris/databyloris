@@ -1,10 +1,9 @@
 import {getTranslations} from "next-intl/server";
 import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
-import {getLocalizedPath} from "@/lib/seo";
 import type {DatasetSummary} from "@/types";
 
-export async function DatasetSummaryCard({dataset, locale, slug, explorerAvailable}: {dataset: DatasetSummary; locale: AppLocale; slug: string; explorerAvailable: boolean}) {
+export async function DatasetSummaryCard({dataset, locale}: {dataset: DatasetSummary; locale: AppLocale}) {
   const t = await getTranslations("ProjectDetail.dataset");
   const recordCount = dataset.records !== undefined
     ? new Intl.NumberFormat(locale).format(dataset.records)
@@ -42,11 +41,6 @@ export async function DatasetSummaryCard({dataset, locale, slug, explorerAvailab
             </div>
           ) : null}
         </dl>
-        {explorerAvailable ? (
-          <a href={getLocalizedPath(locale, `/projects/${slug}/dataset`)} className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-primary-strong underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary">
-            {t("explore")} <span className="ml-2" aria-hidden="true">→</span>
-          </a>
-        ) : null}
     </div>
   );
 }

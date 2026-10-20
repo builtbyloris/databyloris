@@ -3,6 +3,7 @@
 import {useLocale, useTranslations} from "next-intl";
 import {useEffect, useRef, useState} from "react";
 import {LanguageSwitcher} from "@/components/language-switcher";
+import {MotionToggle} from "@/components/layout/motion-toggle";
 import {ThemeToggle} from "@/components/theme-toggle";
 import {buttonStyles} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
@@ -49,7 +50,7 @@ export function MobileMenu() {
       <button
         ref={buttonRef}
         type="button"
-        className="grid size-10 place-items-center rounded-control border border-border bg-surface text-foreground transition-colors hover:bg-surface-raised"
+        className="grid size-10 place-items-center rounded-control border border-border bg-surface text-foreground transition-colors hover:border-primary/40 hover:bg-surface-raised"
         aria-label={isOpen ? t("closeMenu") : t("openMenu")}
         aria-expanded={isOpen}
         aria-controls="mobile-navigation"
@@ -66,7 +67,7 @@ export function MobileMenu() {
         <div
           ref={menuRef}
           id="mobile-navigation"
-          className="absolute inset-x-0 top-full border-b border-border bg-background/96 px-gutter pb-6 pt-3 shadow-card backdrop-blur-md"
+          className="absolute inset-x-0 top-full border-b border-border bg-background px-gutter pb-6 pt-3 shadow-card motion-safe:animate-[editorial-arrive_180ms_ease-out_both]"
         >
           <nav className="flex flex-col" aria-label={t("menu")}>
             {links.map((link) => (
@@ -74,7 +75,7 @@ export function MobileMenu() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="border-b border-border py-3.5 text-base font-semibold text-muted transition-colors hover:text-foreground"
+                className="border-b border-border py-3.5 font-editorial text-xl text-foreground transition-colors hover:text-primary-strong"
               >
                 {link.label}
               </Link>
@@ -91,6 +92,7 @@ export function MobileMenu() {
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
+          <div className="mt-3"><MotionToggle /></div>
         </div>
       )}
     </div>

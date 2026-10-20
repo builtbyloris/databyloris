@@ -15,13 +15,13 @@ export async function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/92 backdrop-blur-md">
-      <Container className="flex h-[4.5rem] items-center justify-between gap-5">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
+      <Container className="flex h-[4.75rem] items-center justify-between gap-5">
         <Link href="/" className="group inline-flex items-center gap-2.5" aria-label={t("logoLabel")}>
-          <span className="brand-gradient grid size-8 place-items-center rounded-[0.65rem]">
-            <span className="size-2 rounded-full bg-white" />
+          <span className="grid size-9 grid-cols-3 items-end gap-0.5 rounded-control border border-border bg-surface p-2 shadow-soft transition-transform duration-200 group-hover:-translate-y-0.5 motion-reduce:transform-none" aria-hidden="true">
+            <span className="h-2 rounded-[1px] bg-primary" /><span className="h-4 rounded-[1px] bg-primary" /><span className="h-3 rounded-[1px] bg-primary" />
           </span>
-          <span className="text-sm font-extrabold tracking-[-0.02em]">
+          <span className="text-sm font-bold tracking-[-0.035em]">
             data<span className="text-primary">by</span>loris
           </span>
         </Link>
@@ -31,7 +31,7 @@ export async function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-foreground"
+              className="relative py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none"
             >
               {link.label}
             </Link>

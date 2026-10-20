@@ -64,13 +64,13 @@ export default async function ComparePage({params, searchParams}: ComparePagePro
   return (
     <Container className="py-10 sm:py-14">
       <nav aria-label={t("breadcrumbLabel")} className="text-sm text-muted">
-        <Link href={getLocalizedPath(locale, `/projects/${slug}/dataset`)} className="font-semibold hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary">{t("backToExplorer")}</Link>
+        <Link href={getLocalizedPath(locale, `/projects/${slug}`)} className="font-semibold hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary">{t("backToCaseStudy")}</Link>
         <span className="mx-2" aria-hidden="true">/</span>{t("title")}
       </nav>
       <div className="mt-8 flex flex-wrap items-start justify-between gap-4">
         <div className="max-w-3xl min-w-0">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary-strong">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{t("title")}</h1>
+          <p className="site-overline text-primary-strong">{t("eyebrow")}</p>
+          <h1 className="font-editorial mt-3 text-4xl sm:text-6xl">{t("title")}</h1>
           <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
         </div>
         <ShareButton projectTitle={project.title} context="compare" />

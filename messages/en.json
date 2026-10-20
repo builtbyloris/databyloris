@@ -22,6 +22,13 @@
     "light": "Switch to light theme",
     "dark": "Switch to dark theme"
   },
+  "Motion": {
+    "label": "Motion",
+    "full": "full",
+    "reduced": "reduced",
+    "hint": "Toggle reduced motion",
+    "system": "Reduced motion is enabled in your device settings"
+  },
   "Language": {
     "label": "Change language",
     "it": "IT",
@@ -38,8 +45,7 @@
       "datasetExplorer": "Dataset Explorer",
       "dashboard": "Dashboard",
       "compare": "Dataset Compare",
-      "story": "Story",
-      "sqlLab": "SQL Lab"
+      "story": "Story"
     }
   },
   "Export": {
@@ -66,45 +72,6 @@
       "deltaAbsolute": "Average delta B - A",
       "deltaPercent": "Average delta % B - A"
     }
-  },
-  "SqlLab": {
-    "title": "SQL Lab",
-    "eyebrow": "Explore with SQL",
-    "intro": "Query the public fields of {project} in an isolated, in-memory database in your browser.",
-    "dialectNote": "Queries run locally in your browser using SQLite.",
-    "metadataDescription": "Run read-only SQL on the public dataset for {project}, locally in your browser.",
-    "breadcrumbLabel": "Breadcrumb",
-    "backToExplorer": "Dataset Explorer",
-    "schema": "Schema",
-    "schemaIntro": "Only fields published in Dataset Explorer are available.",
-    "tableName": "Table: dataset",
-    "editor": "SQL query",
-    "run": "Run query",
-    "running": "Running…",
-    "reset": "Reset query",
-    "clear": "Clear",
-    "shortcut": "Cmd/Ctrl + Enter to run",
-    "examples": "Examples",
-    "exampleAverage": "Average by category",
-    "exampleCount": "Top categories",
-    "exampleRows": "Preview rows",
-    "loading": "Loading public data and starting the local SQL engine…",
-    "ready": "{count} public rows loaded locally",
-    "tooLarge": "This dataset exceeds the 10,000-row SQL Lab limit. No partial dataset was loaded.",
-    "unavailable": "SQL Lab is temporarily unavailable. Please try again.",
-    "queryRequired": "Enter a SELECT query to run.",
-    "readOnly": "Only a single read-only SELECT or WITH … SELECT query is allowed.",
-    "multiple": "Run one SQL statement at a time.",
-    "sqlError": "The SQL query could not be run. Check its syntax and field names.",
-    "missingColumn": "Column {field} does not exist in the public dataset.",
-    "results": "Results",
-    "resultCount": "{count} rows returned",
-    "resultLimit": "More than 500 rows returned; showing the first 500 only.",
-    "noResults": "This query returned no rows.",
-    "empty": "Run a query to see results.",
-    "executionTime": "{milliseconds} ms",
-    "resultTable": "SQL query results",
-    "type": "Type"
   },
   "Story": {
     "title": "Story",
@@ -136,7 +103,7 @@
     "intro": "Compare two groups from the published fields of {project}.",
     "metadataDescription": "Compare two public dataset segments for {project} using approved fields.",
     "breadcrumbLabel": "Breadcrumb",
-    "backToExplorer": "Dataset Explorer",
+    "backToCaseStudy": "Case Study",
     "configure": "Configure comparison",
     "dimension": "Group by",
     "segmentA": "Segment A",
@@ -168,6 +135,13 @@
     "errorDescription": "We could not load this comparison. Please try again shortly."
   },
   "Home": {
+    "Map": {
+      "label": "On this page",
+      "top": "Start",
+      "featured": "Projects",
+      "method": "Method",
+      "start": "Explore"
+    },
     "Hero": {
       "eyebrow": "Data Analysis • Insights • Real Projects",
       "titleLead": "Real data,",
@@ -258,7 +232,6 @@
   },
   "ProjectDetail": {
     "back": "Back to projects",
-    "openStory": "Read the Story",
     "openDashboard": "Open dashboard",
     "viewRepository": "View repository",
     "updated": "Updated",
@@ -288,8 +261,7 @@
       "source": "Source",
       "records": "Records",
       "period": "Period",
-      "viewSource": "Open source",
-      "explore": "Explore dataset"
+      "viewSource": "Open source"
     },
     "missing": {
       "eyebrow": "Case study",
@@ -322,8 +294,6 @@
   "DatasetExplorer": {
     "eyebrow": "Project data",
     "title": "Dataset Explorer",
-    "compare": "Compare",
-    "sqlLab": "SQL Lab",
     "metadataDescription": "Explore the approved dataset fields for {project}.",
     "intro": "Browse the published data behind {project}. Only approved fields are shown.",
     "breadcrumbLabel": "Breadcrumb",

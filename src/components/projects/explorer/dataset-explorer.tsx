@@ -45,13 +45,11 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
       </nav>
       <div className="mt-8 flex flex-wrap items-start justify-between gap-4">
         <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary-strong">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{t("title")}</h1>
+          <p className="site-overline text-primary-strong">{t("eyebrow")}</p>
+          <h1 className="font-editorial mt-3 text-4xl sm:text-6xl">{t("title")}</h1>
           <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Link href={getLocalizedPath(locale, `/projects/${project.slug}/compare`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("compare")}</Link>
-          <Link href={getLocalizedPath(locale, `/projects/${project.slug}/sql`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("sqlLab")}</Link>
           <ExportButton key={exportHref} href={exportHref} fileName={`${project.slug}-dataset.csv`} />
           <ShareButton projectTitle={project.title} context="datasetExplorer" />
         </div>

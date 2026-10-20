@@ -9,12 +9,13 @@ import {useDashboardText} from "./use-dashboard-text";
 
 const SEARCHABLE_FILTER_THRESHOLD = 50;
 
-export function DashboardFilters({filters, records, filteredCount, activeFilterCount, canReset, state, onChange, onReset}: {
+export function DashboardFilters({filters, records, filteredCount, activeFilterCount, canReset, animateFeedback = false, state, onChange, onReset}: {
   filters: FilterConfig[];
   records: DashboardRecord[];
   filteredCount: number;
   activeFilterCount: number;
   canReset: boolean;
+  animateFeedback?: boolean;
   state: DashboardFilterState;
   onChange: (id: string, value: string | string[]) => void;
   onReset: () => void;
@@ -69,7 +70,9 @@ export function DashboardFilters({filters, records, filteredCount, activeFilterC
         </button> : null}
       </div>
       <div aria-live="polite" className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-muted">
-        <span>{t("filters.recordCount", {filtered: filteredCount, total: records.length})}</span>
+        <span key={animateFeedback ? filteredCount : "record-count"} className={animateFeedback ? "dashboard-count-update inline-block" : undefined}>
+          {t("filters.recordCount", {filtered: filteredCount, total: records.length})}
+        </span>
         {activeFilterCount > 0 ? <span className="text-primary-strong">{t("filters.activeCount", {count: activeFilterCount})}</span> : null}
       </div>
     </section>

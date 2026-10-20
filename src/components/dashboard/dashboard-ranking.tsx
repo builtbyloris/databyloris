@@ -7,7 +7,7 @@ import {calculateRanking, formatCompactDashboardValue, formatDashboardValue} fro
 import type {DashboardRecord, RankingConfig} from "@/types";
 import {useDashboardText} from "./use-dashboard-text";
 
-export function DashboardRanking({config, records, className}: {config: RankingConfig; records: DashboardRecord[]; className?: string}) {
+export function DashboardRanking({config, records, animateChanges = false, className}: {config: RankingConfig; records: DashboardRecord[]; animateChanges?: boolean; className?: string}) {
   const locale = useLocale();
   const t = useTranslations("Dashboard.ranking");
   const dashboardText = useDashboardText();
@@ -36,7 +36,11 @@ export function DashboardRanking({config, records, className}: {config: RankingC
             {rows.map((row, index) => {
               const format = config.valueFormat ?? "number";
               const fullValue = formatDashboardValue(row.value, format, locale);
-              return <tr key={row.dimension} className="border-t border-border first:border-0">
+              return <tr
+                key={animateChanges ? `${index}:${row.dimension}:${fullValue}` : row.dimension}
+                className={cn("border-t border-border first:border-0", animateChanges && "dashboard-ranking-row")}
+                style={animateChanges ? {animationDelay: `${Math.min(index, 8) * 55}ms`} : undefined}
+              >
                 <td className="px-5 py-3 font-bold text-primary-strong">{String(index + 1).padStart(2, "0")}</td>
                 <th scope="row" className="px-3 py-3 font-semibold">{row.dimension}</th>
                 {config.detailColumns.map((column) => <td key={column.field} className="px-3 py-3 text-muted">{row.details[column.field]}</td>)}

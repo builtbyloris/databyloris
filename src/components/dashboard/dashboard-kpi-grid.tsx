@@ -5,7 +5,7 @@ import {formatCompactDashboardValue, formatDashboardValue} from "@/lib/dashboard
 import type {KPIConfig} from "@/types";
 import {useDashboardText} from "./use-dashboard-text";
 
-export function DashboardKpiGrid({items}: {items: {config: KPIConfig; value: number}[]}) {
+export function DashboardKpiGrid({items, animateValues = false}: {items: {config: KPIConfig; value: number}[]; animateValues?: boolean}) {
   const locale = useLocale();
   const dashboardText = useDashboardText();
 
@@ -24,7 +24,7 @@ export function DashboardKpiGrid({items}: {items: {config: KPIConfig; value: num
               title={fullValue}
               className="mt-3 break-words text-[clamp(1.375rem,6vw,1.875rem)] font-black leading-none tracking-[-0.04em] sm:text-3xl"
             >
-              <span aria-hidden="true">{compactValue}</span>
+              <span key={fullValue} aria-hidden="true" className={animateValues ? "dashboard-kpi-value inline-block" : undefined}>{compactValue}</span>
               <span className="sr-only">{fullValue}</span>
             </p>
           </article>

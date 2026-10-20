@@ -4,6 +4,7 @@ import {FeaturedProjects} from "@/components/home/featured-projects";
 import {Hero} from "@/components/home/hero";
 import {HomeCta} from "@/components/home/home-cta";
 import {HowItWorks} from "@/components/home/how-it-works";
+import {SectionMap} from "@/components/home/section-map";
 import {StatsStrip} from "@/components/home/stats-strip";
 import {ProjectsDataError} from "@/components/projects/projects-data-error";
 import {Container, Section} from "@/components/ui";
@@ -29,6 +30,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: AppLo
 export default async function HomePage({params}: {params: Promise<{locale: AppLocale}>}) {
   const {locale} = await params;
   const t = await getTranslations({locale, namespace: "Metadata"});
+  const map = await getTranslations({locale, namespace: "Home.Map"});
   let projects: Project[] = [];
   let dataError = false;
 
@@ -54,6 +56,12 @@ export default async function HomePage({params}: {params: Promise<{locale: AppLo
           }),
         }}
       />
+      <SectionMap label={map("label")} sections={[
+        {id: "top", label: map("top")},
+        ...(!dataError ? [{id: "featured", label: map("featured")}] : []),
+        {id: "how-it-works", label: map("method")},
+        {id: "start", label: map("start")},
+      ]} />
       <Hero />
       {dataError ? (
         <Section className="relative z-10 -mt-7 pb-6 pt-0 sm:-mt-9">

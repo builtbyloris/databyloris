@@ -42,7 +42,7 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
             <Badge>{project.category}</Badge>
             {date ? <span className="text-xs font-semibold uppercase tracking-[0.13em] text-muted">{t("updated")} · {date}</span> : null}
           </div>
-          <h1 className="mt-6 max-w-4xl text-4xl font-black tracking-[-0.05em] sm:text-5xl lg:text-6xl">
+          <h1 className="font-editorial mt-6 max-w-4xl text-5xl leading-[1.02] sm:text-6xl lg:text-7xl">
             {project.title}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg sm:leading-8">
@@ -67,9 +67,6 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
               </a>
             ) : null}
           </div>
-          <Link href={`/projects/${project.slug}/story`} className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary-strong underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary">
-            {t("openStory")} <ArrowIcon />
-          </Link>
         </div>
 
         <div className="relative isolate aspect-[16/9] min-w-0 overflow-hidden rounded-card bg-surface-raised">
