@@ -51,6 +51,7 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link href={getLocalizedPath(locale, `/projects/${project.slug}/compare`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("compare")}</Link>
+          <Link href={getLocalizedPath(locale, `/projects/${project.slug}/sql`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("sqlLab")}</Link>
           <ExportButton key={exportHref} href={exportHref} fileName={`${project.slug}-dataset.csv`} />
           <ShareButton projectTitle={project.title} context="datasetExplorer" />
         </div>

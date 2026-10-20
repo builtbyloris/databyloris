@@ -38,7 +38,8 @@
       "datasetExplorer": "Dataset Explorer",
       "dashboard": "Dashboard",
       "compare": "Confronto dataset",
-      "story": "Storia"
+      "story": "Storia",
+      "sqlLab": "SQL Lab"
     }
   },
   "Export": {
@@ -65,6 +66,45 @@
       "deltaAbsolute": "Differenza media B - A",
       "deltaPercent": "Differenza media % B - A"
     }
+  },
+  "SqlLab": {
+    "title": "SQL Lab",
+    "eyebrow": "Esplora con SQL",
+    "intro": "Interroga i campi pubblici di {project} in un database isolato e temporaneo nel browser.",
+    "dialectNote": "Le query vengono eseguite localmente nel browser con SQLite.",
+    "metadataDescription": "Esegui SQL in sola lettura sul dataset pubblico di {project}, localmente nel browser.",
+    "breadcrumbLabel": "Percorso di navigazione",
+    "backToExplorer": "Dataset Explorer",
+    "schema": "Schema",
+    "schemaIntro": "Sono disponibili solo i campi pubblicati nel Dataset Explorer.",
+    "tableName": "Tabella: dataset",
+    "editor": "Query SQL",
+    "run": "Esegui query",
+    "running": "Esecuzione…",
+    "reset": "Reimposta query",
+    "clear": "Svuota",
+    "shortcut": "Cmd/Ctrl + Invio per eseguire",
+    "examples": "Esempi",
+    "exampleAverage": "Media per categoria",
+    "exampleCount": "Categorie principali",
+    "exampleRows": "Anteprima righe",
+    "loading": "Caricamento dei dati pubblici e avvio del motore SQL locale…",
+    "ready": "{count} righe pubbliche caricate localmente",
+    "tooLarge": "Il dataset supera il limite SQL Lab di 10.000 righe. Non sono stati caricati dati parziali.",
+    "unavailable": "SQL Lab temporaneamente non disponibile. Riprova.",
+    "queryRequired": "Inserisci una query SELECT da eseguire.",
+    "readOnly": "È consentita una sola query SELECT o WITH … SELECT in sola lettura.",
+    "multiple": "Esegui un'istruzione SQL alla volta.",
+    "sqlError": "Impossibile eseguire la query SQL. Controlla sintassi e nomi dei campi.",
+    "missingColumn": "La colonna {field} non esiste nel dataset pubblico.",
+    "results": "Risultati",
+    "resultCount": "{count} righe restituite",
+    "resultLimit": "Sono state restituite più di 500 righe; vengono mostrate solo le prime 500.",
+    "noResults": "Questa query non ha restituito righe.",
+    "empty": "Esegui una query per vedere i risultati.",
+    "executionTime": "{milliseconds} ms",
+    "resultTable": "Risultati della query SQL",
+    "type": "Tipo"
   },
   "Story": {
     "title": "Storia",
@@ -283,6 +323,7 @@
     "eyebrow": "Dati del progetto",
     "title": "Dataset Explorer",
     "compare": "Confronta",
+    "sqlLab": "SQL Lab",
     "metadataDescription": "Esplora i campi approvati del dataset di {project}.",
     "intro": "Consulta i dati pubblicati di {project}. Sono visibili solo i campi approvati.",
     "breadcrumbLabel": "Percorso di navigazione",

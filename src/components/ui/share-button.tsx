@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useTranslations} from "next-intl";
 import {buttonStyles} from "./button";
 
-type ShareContext = "caseStudy" | "datasetExplorer" | "dashboard" | "compare" | "story";
+type ShareContext = "caseStudy" | "datasetExplorer" | "dashboard" | "compare" | "story" | "sqlLab";
 
 export function ShareButton({projectTitle, context}: {projectTitle: string; context: ShareContext}) {
   const t = useTranslations("Share");
