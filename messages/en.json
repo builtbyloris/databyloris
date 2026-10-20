@@ -38,7 +38,8 @@
       "datasetExplorer": "Dataset Explorer",
       "dashboard": "Dashboard",
       "compare": "Dataset Compare",
-      "story": "Story"
+      "story": "Story",
+      "sqlLab": "SQL Lab"
     }
   },
   "Export": {
@@ -65,6 +66,45 @@
       "deltaAbsolute": "Average delta B - A",
       "deltaPercent": "Average delta % B - A"
     }
+  },
+  "SqlLab": {
+    "title": "SQL Lab",
+    "eyebrow": "Explore with SQL",
+    "intro": "Query the public fields of {project} in an isolated, in-memory database in your browser.",
+    "dialectNote": "Queries run locally in your browser using SQLite.",
+    "metadataDescription": "Run read-only SQL on the public dataset for {project}, locally in your browser.",
+    "breadcrumbLabel": "Breadcrumb",
+    "backToExplorer": "Dataset Explorer",
+    "schema": "Schema",
+    "schemaIntro": "Only fields published in Dataset Explorer are available.",
+    "tableName": "Table: dataset",
+    "editor": "SQL query",
+    "run": "Run query",
+    "running": "Running…",
+    "reset": "Reset query",
+    "clear": "Clear",
+    "shortcut": "Cmd/Ctrl + Enter to run",
+    "examples": "Examples",
+    "exampleAverage": "Average by category",
+    "exampleCount": "Top categories",
+    "exampleRows": "Preview rows",
+    "loading": "Loading public data and starting the local SQL engine…",
+    "ready": "{count} public rows loaded locally",
+    "tooLarge": "This dataset exceeds the 10,000-row SQL Lab limit. No partial dataset was loaded.",
+    "unavailable": "SQL Lab is temporarily unavailable. Please try again.",
+    "queryRequired": "Enter a SELECT query to run.",
+    "readOnly": "Only a single read-only SELECT or WITH … SELECT query is allowed.",
+    "multiple": "Run one SQL statement at a time.",
+    "sqlError": "The SQL query could not be run. Check its syntax and field names.",
+    "missingColumn": "Column {field} does not exist in the public dataset.",
+    "results": "Results",
+    "resultCount": "{count} rows returned",
+    "resultLimit": "More than 500 rows returned; showing the first 500 only.",
+    "noResults": "This query returned no rows.",
+    "empty": "Run a query to see results.",
+    "executionTime": "{milliseconds} ms",
+    "resultTable": "SQL query results",
+    "type": "Type"
   },
   "Story": {
     "title": "Story",
@@ -283,6 +323,7 @@
     "eyebrow": "Project data",
     "title": "Dataset Explorer",
     "compare": "Compare",
+    "sqlLab": "SQL Lab",
     "metadataDescription": "Explore the approved dataset fields for {project}.",
     "intro": "Browse the published data behind {project}. Only approved fields are shown.",
     "breadcrumbLabel": "Breadcrumb",
