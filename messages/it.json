@@ -37,8 +37,33 @@
       "caseStudy": "Case Study",
       "datasetExplorer": "Dataset Explorer",
       "dashboard": "Dashboard",
-      "compare": "Confronto dataset"
+      "compare": "Confronto dataset",
+      "story": "Storia"
     }
+  },
+  "Story": {
+    "title": "Storia",
+    "metadataDescription": "Un percorso guidato tra contesto, metodo e insight reali di {project}.",
+    "back": "Torna al Case Study",
+    "progress": "Passo {current} di {total}",
+    "progressLabel": "Avanzamento della storia",
+    "jumpLabel": "Vai a una sezione",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "context": "Contesto",
+    "objective": "Obiettivo",
+    "data": "Dati",
+    "method": "Metodo",
+    "insights": "Insight principali",
+    "explore": "Esplora l'analisi",
+    "source": "Fonte",
+    "records": "Record",
+    "period": "Periodo",
+    "openSource": "Apri la fonte",
+    "dashboard": "Apri Dashboard",
+    "explorer": "Esplora Dataset",
+    "compare": "Confronta segmenti",
+    "error": "Questa storia è temporaneamente non disponibile. Riprova tra poco."
   },
   "Compare": {
     "title": "Confronta segmenti",
@@ -168,6 +193,7 @@
   },
   "ProjectDetail": {
     "back": "Torna ai progetti",
+    "openStory": "Leggi la Storia",
     "openDashboard": "Apri dashboard",
     "viewRepository": "Vedi repository",
     "updated": "Aggiornato",

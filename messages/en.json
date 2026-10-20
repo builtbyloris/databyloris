@@ -37,8 +37,33 @@
       "caseStudy": "Case Study",
       "datasetExplorer": "Dataset Explorer",
       "dashboard": "Dashboard",
-      "compare": "Dataset Compare"
+      "compare": "Dataset Compare",
+      "story": "Story"
     }
+  },
+  "Story": {
+    "title": "Story",
+    "metadataDescription": "A guided account of the real context, method and insights behind {project}.",
+    "back": "Back to Case Study",
+    "progress": "Step {current} of {total}",
+    "progressLabel": "Story progress",
+    "jumpLabel": "Jump to a section",
+    "previous": "Previous",
+    "next": "Next",
+    "context": "Context",
+    "objective": "Objective",
+    "data": "Data",
+    "method": "Method",
+    "insights": "Key insights",
+    "explore": "Explore the analysis",
+    "source": "Source",
+    "records": "Records",
+    "period": "Period",
+    "openSource": "Open source",
+    "dashboard": "Open Dashboard",
+    "explorer": "Explore Dataset",
+    "compare": "Compare segments",
+    "error": "This story is temporarily unavailable. Please try again shortly."
   },
   "Compare": {
     "title": "Compare segments",
@@ -168,6 +193,7 @@
   },
   "ProjectDetail": {
     "back": "Back to projects",
+    "openStory": "Read the Story",
     "openDashboard": "Open dashboard",
     "viewRepository": "View repository",
     "updated": "Updated",
