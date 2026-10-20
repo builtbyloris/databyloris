@@ -4,11 +4,13 @@ import type {Project} from "@/types";
 
 export function ProjectsGrid({projects}: {projects: Project[]}) {
   return (
-    <div className="mt-6 sm:mt-8">
+    <div className="portfolio-results mt-6 sm:mt-8">
       {projects.length > 0 ? (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} imagePriority={index === 0} variant="portfolio" />
+            <div key={project.id} className="portfolio-grid-item min-w-0" style={{animationDelay: `${Math.min(index, 8) * 85}ms`}}>
+              <ProjectCard project={project} imagePriority={index === 0} variant="portfolio" />
+            </div>
           ))}
         </div>
       ) : (

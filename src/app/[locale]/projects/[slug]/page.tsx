@@ -16,7 +16,6 @@ import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
 import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
-import {getPublishedExplorerDatasetId} from "@/lib/repositories/public-explorer-repository";
 import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
 import {createLocalizedMetadata, getAbsoluteUrl, getSiteUrl, serializeJsonLd} from "@/lib/seo";
 import type {Project, ProjectDetail} from "@/types";
@@ -115,13 +114,6 @@ async function ProjectCaseStudy({
   locale: AppLocale;
 }) {
   const t = await getTranslations("ProjectDetail.sections");
-  let explorerAvailable = false;
-  try {
-    explorerAvailable = Boolean(await getPublishedExplorerDatasetId(project.slug));
-  } catch {
-    // The Case Study remains available if Explorer discovery is unavailable.
-  }
-
   return (
     <>
       <ProjectDetailNav />
@@ -139,7 +131,7 @@ async function ProjectCaseStudy({
           </div>
         </ProjectDetailSection>
         <ProjectDetailSection id="dataset" title={t("dataset.title")}>
-          <DatasetSummaryCard dataset={detail.dataset} locale={locale} slug={project.slug} explorerAvailable={explorerAvailable} />
+          <DatasetSummaryCard dataset={detail.dataset} locale={locale} />
         </ProjectDetailSection>
         <ProjectDetailSection id="methodology" title={t("methodology.title")}>
           <MethodologySteps steps={detail.methodology} locale={locale} />

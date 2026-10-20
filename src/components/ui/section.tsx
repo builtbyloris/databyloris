@@ -3,6 +3,6 @@ import {cn} from "@/lib/cn";
 
 export function Section({className, ...props}: HTMLAttributes<HTMLElement>) {
   return (
-    <section className={cn("py-section", className)} {...props} />
+    <section className={cn("site-reveal py-section", className)} {...props} />
   );
 }

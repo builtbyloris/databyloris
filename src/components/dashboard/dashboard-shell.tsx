@@ -18,11 +18,12 @@ function isFilterActive(value: string | string[] | undefined) {
   return Array.isArray(value) ? value.length > 0 : Boolean(value && value !== ALL_FILTER_VALUE);
 }
 
-export function DashboardShell({project, config, records, embedded = false, urlFilters}: {
+export function DashboardShell({project, config, records, embedded = false, animateKpis = false, urlFilters}: {
   project?: {slug: string; title: string};
   config: DashboardConfig;
   records: DashboardRecord[];
   embedded?: boolean;
+  animateKpis?: boolean;
   urlFilters?: {
     state: DashboardFilterState;
     onChange: (id: string, value: string | string[]) => void;
@@ -44,6 +45,7 @@ export function DashboardShell({project, config, records, embedded = false, urlF
     : setLocalFilters((current) => ({...current, [id]: value}));
   const dashboardTitle = dashboardText(config.title).trim() || t("breadcrumb.dashboard");
   const dashboardDescription = dashboardText(config.description).trim();
+  const animateResults = !embedded || animateKpis;
 
   const dashboardContent = (
     <div className="w-full min-w-0 max-w-full space-y-5">
@@ -53,23 +55,24 @@ export function DashboardShell({project, config, records, embedded = false, urlF
         filteredCount={filteredRecords.length}
         activeFilterCount={activeFilterCount}
         canReset={canReset && filteredRecords.length > 0}
+        animateFeedback={animateResults}
         state={filters}
         onChange={changeFilter}
         onReset={resetFilters}
       />
 
       {filteredRecords.length === 0 ? (
-        <div className="rounded-card border border-border bg-card px-6 py-14 text-center sm:py-16">
+        <div className="dashboard-empty-state rounded-card border border-border bg-card px-6 py-14 text-center sm:py-16">
           <h2 className="text-xl font-bold">{t("empty.title")}</h2>
           <p className="mt-2 text-sm text-muted">{t("empty.description")}</p>
           <button type="button" onClick={resetFilters} className={buttonStyles({variant: "secondary", className: "mt-6"})}>{t("filters.reset")}</button>
         </div>
       ) : (
         <>
-          <DashboardKpiGrid items={kpis} />
+          <DashboardKpiGrid items={kpis} animateValues={animateResults} />
           <div className="grid min-w-0 gap-5 xl:grid-cols-3">
             {config.charts.map((chart) => <DashboardChart key={chart.id} config={chart} records={filteredRecords} featured={chart.id === config.layout.featuredChartId} />)}
-            {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} className="xl:col-span-2" />)}
+            {config.rankings.map((ranking) => <DashboardRanking key={ranking.id} config={ranking} records={filteredRecords} animateChanges={animateResults} className="xl:col-span-2" />)}
           </div>
         </>
       )}
@@ -80,7 +83,7 @@ export function DashboardShell({project, config, records, embedded = false, urlF
   if (!project) return null;
 
   return (
-    <section className="relative min-h-[75vh] overflow-hidden py-8 sm:py-10 lg:py-12">
+    <section className="dashboard-public relative min-h-[75vh] overflow-hidden py-8 sm:py-10 lg:py-12">
       <div className="data-grid pointer-events-none absolute inset-x-0 top-0 h-[26rem]" />
       <Container className="relative">
         <nav aria-label={t("breadcrumb.label")} className="flex flex-wrap items-center gap-2 text-sm text-muted">
@@ -90,10 +93,10 @@ export function DashboardShell({project, config, records, embedded = false, urlF
           <span aria-hidden="true">/</span>
           <span className="font-semibold text-foreground">{t("breadcrumb.dashboard")}</span>
         </nav>
-        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+        <div className="dashboard-intro mt-6 flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-strong">{t("eyebrow")}</p>
-            <h1 className="mt-3 break-words text-3xl font-black tracking-[-0.045em] sm:text-4xl lg:text-5xl">{dashboardTitle}</h1>
+            <p className="site-overline text-primary-strong">{t("eyebrow")}</p>
+            <h1 className="font-editorial mt-3 break-words text-4xl sm:text-5xl lg:text-6xl">{dashboardTitle}</h1>
             {dashboardDescription ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{dashboardDescription}</p> : null}
           </div>
           <ShareButton projectTitle={project.title} context="dashboard" />

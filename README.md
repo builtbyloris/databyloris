@@ -25,8 +25,6 @@ Next.js (App Router), TypeScript, Tailwind CSS, Supabase, Apache ECharts, next-i
 
 Public CSV export is available for filtered Dataset Explorer views (up to 10,000 rows) and aggregated Compare results. Dashboard export is intentionally not included: its KPI and chart calculations remain in the Dashboard Engine.
 
-SQL Lab uses `sql.js` (SQLite compiled to WebAssembly) in a browser Web Worker. Its WASM asset is shipped locally in `public/sql-lab/`. Only approved Dataset Explorer fields, up to 10,000 rows, are loaded through the controlled public RPC path; user SQL runs solely against an ephemeral, read-only in-memory table. `sql.js` was chosen over PGlite because the current Next.js webpack build cannot bundle PGlite's `node:` imports for a browser worker.
-
 ## Local development
 
 ```bash

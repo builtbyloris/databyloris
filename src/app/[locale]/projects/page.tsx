@@ -121,7 +121,7 @@ export default async function ProjectsPage({params, searchParams}: ProjectsPageP
               selectedCategory={selectedCategory}
               sort={sort}
             />
-            <ProjectsGrid projects={filteredProjects} />
+            <ProjectsGrid key={JSON.stringify([query, selectedCategory, sort])} projects={filteredProjects} />
           </div>
         )}
       </Container>

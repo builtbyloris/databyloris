@@ -7,7 +7,6 @@ import {StoryReader, type StoryStep} from "@/components/projects/story/story-rea
 import {Container, ShareButton} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
-import {getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
 import {createLocalizedMetadata, getLocalizedPath} from "@/lib/seo";
 
@@ -100,22 +99,6 @@ export default async function StoryPage({params}: StoryPageProps) {
 
   const links: {href: string; label: string}[] = [];
   if (project.dashboardAvailable) links.push({href: getLocalizedPath(locale, `/projects/${slug}/dashboard`), label: t("dashboard")});
-  try {
-    const datasetId = await getPublishedExplorerDatasetId(slug);
-    if (datasetId) {
-      links.push({href: getLocalizedPath(locale, `/projects/${slug}/dataset`), label: t("explorer")});
-      const page = await getPublishedExplorerPage(slug, datasetId, {
-        offset: 0, search: null, filterField: null, filterValue: null,
-        sortField: null, sortDirection: "asc",
-      });
-      if (page?.columns.some((column) => column.type === "number")
-        && page.columns.some((column) => column.type === "string" || column.type === "boolean")) {
-        links.push({href: getLocalizedPath(locale, `/projects/${slug}/compare`), label: t("compare")});
-      }
-    }
-  } catch {
-    // Optional exploration links must not prevent the Story from rendering.
-  }
   if (links.length) steps.push({id: "explore", title: t("explore"), kind: "links", links});
 
   return <Container className="max-w-5xl py-10 sm:py-14">
@@ -127,7 +110,7 @@ export default async function StoryPage({params}: StoryPageProps) {
     </div>
     <header className="mt-9 max-w-3xl">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary-strong">{t("title")}</p>
-      <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">{project.title}</h1>
+      <h1 className="font-editorial mt-3 text-4xl sm:text-6xl">{project.title}</h1>
       {context ? <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">{project.description}</p> : null}
     </header>
     {steps.length ? <Suspense fallback={null}>

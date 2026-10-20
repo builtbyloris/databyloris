@@ -9,21 +9,21 @@ export async function FeaturedProjects({projects}: {projects: Project[]}) {
   const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
 
   return (
-    <Section>
+    <Section id="featured" className="scroll-mt-24">
       <Container>
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">{t("eyebrow")}</p>
-            <h2 className="mt-4 text-3xl font-black tracking-[-0.045em] sm:text-5xl">{t("title")}</h2>
+            <p className="site-overline text-primary-strong">{t("eyebrow")}</p>
+            <h2 className="font-editorial mt-4 text-4xl sm:text-6xl">{t("title")}</h2>
             <p className="mt-4 text-base leading-7 text-muted">{t("description")}</p>
           </div>
-          <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong transition-colors hover:text-primary">
+          <Link href="/projects" className="inline-flex items-center gap-2 border-b border-primary/35 pb-1 text-sm font-semibold text-primary-strong transition-[color,border-color] hover:border-primary hover:text-primary">
             {t("viewAll")} <span aria-hidden="true">→</span>
           </Link>
         </div>
         {featuredProjects.length > 0 ? (
           <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {featuredProjects.map((project, index) => <ProjectCard key={project.id} project={project} ordinal={index + 1} />)}
+            {featuredProjects.map((project, index) => <div key={project.id} className="site-reveal-item"><ProjectCard project={project} ordinal={index + 1} /></div>)}
           </div>
         ) : (
           <Card className="mt-10 p-8 text-center sm:p-10">

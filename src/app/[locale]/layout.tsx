@@ -44,7 +44,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
     <html lang={locale} suppressHydrationWarning data-scroll-behavior="smooth">
       <body>
         <NextIntlClientProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <a
               href="#main-content"
               className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-control bg-foreground px-4 py-2 text-sm font-semibold text-background focus:translate-y-0"

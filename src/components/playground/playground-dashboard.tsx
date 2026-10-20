@@ -18,7 +18,8 @@ export function PlaygroundDashboard({config, records}: {config: DashboardConfig;
     if (!target) return;
     target.tabIndex = -1;
     target.focus({preventScroll: true});
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      || document.documentElement.dataset.motion === "reduced";
     window.scrollTo({top: target.getBoundingClientRect().top + window.scrollY - 96, behavior: reducedMotion ? "instant" : "smooth"});
   };
 
@@ -32,9 +33,10 @@ export function PlaygroundDashboard({config, records}: {config: DashboardConfig;
           onExit={() => setStep(null)}
           onRestart={() => setStep(0)}
           onViewSection={viewSection}
+          onSelectStep={setStep}
         />
       </div>
-      <DashboardShell embedded config={config} records={records} />
+      <DashboardShell embedded animateKpis config={config} records={records} />
     </section>
   );
 }

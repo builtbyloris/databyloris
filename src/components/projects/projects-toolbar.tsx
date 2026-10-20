@@ -75,16 +75,16 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
     <div
       aria-busy={isPending}
       className={cn(
-        "rounded-card border border-border bg-card p-4 shadow-card transition-opacity sm:p-5",
+        "border-y border-border py-5 transition-opacity sm:py-6",
         isPending && "opacity-70",
       )}
     >
       <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
         <form onSubmit={submitSearch} role="search">
-          <label htmlFor="projects-search" className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-muted">
+          <label htmlFor="projects-search" className="site-overline mb-2 block text-muted">
             {t("searchLabel")}
           </label>
-          <div className="flex min-h-13 items-center gap-3 rounded-control border border-control-border bg-surface-raised px-4 transition-colors focus-within:border-primary focus-within:bg-surface">
+          <div className="portfolio-search relative flex min-h-13 items-center gap-3 overflow-hidden rounded-control border border-control-border bg-surface px-4 transition-colors focus-within:border-primary">
             <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5 shrink-0 text-muted" fill="none" stroke="currentColor" strokeWidth="1.8">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m16 16 4 4" />
@@ -112,7 +112,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
         </form>
 
         <div className="lg:min-w-52">
-          <label htmlFor="projects-sort" className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-muted">
+          <label htmlFor="projects-sort" className="site-overline mb-2 block text-muted">
             {t("sortLabel")}
           </label>
           <div className="relative">
@@ -120,7 +120,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
               id="projects-sort"
               value={sort}
               onChange={(event) => navigate({sort: event.currentTarget.value as ProjectsSort})}
-              className="h-13 w-full appearance-none rounded-control border border-control-border bg-surface-raised px-4 pr-10 text-sm font-semibold text-foreground outline-none transition-colors focus:border-primary"
+              className="h-13 w-full appearance-none rounded-control border border-control-border bg-surface px-4 pr-10 text-sm font-semibold text-foreground outline-none transition-colors focus:border-primary"
             >
               <option value="recent">{t("sortRecent")}</option>
               <option value="name-asc">{t("sortNameAsc")}</option>
@@ -134,7 +134,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
       </div>
 
       <div className="mt-4 border-t border-border pt-4">
-        <p id="category-filter-label" className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
+        <p id="category-filter-label" className="site-overline mb-3 text-muted">
           {t("categoryLabel")}
         </p>
         <div
@@ -147,10 +147,10 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
             aria-pressed={selectedCategory === "all"}
             onClick={() => navigate({category: "all"})}
             className={cn(
-              "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+              "portfolio-filter shrink-0 rounded-control border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color,transform]",
               selectedCategory === "all"
                 ? "border-primary bg-primary text-primary-contrast"
-                : "border-border bg-surface-raised text-muted hover:border-primary/30 hover:text-foreground",
+                : "border-border bg-surface text-muted hover:border-primary/40 hover:text-foreground",
             )}
           >
             {t("categoryAll")}
@@ -162,10 +162,10 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
               aria-pressed={selectedCategory === category.value}
               onClick={() => navigate({category: category.value})}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+                "portfolio-filter shrink-0 rounded-control border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color,transform]",
                 selectedCategory === category.value
                   ? "border-primary bg-primary text-primary-contrast"
-                  : "border-border bg-surface-raised text-muted hover:border-primary/30 hover:text-foreground",
+                  : "border-border bg-surface text-muted hover:border-primary/40 hover:text-foreground",
               )}
             >
               {category.label}
