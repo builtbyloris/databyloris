@@ -67,6 +67,9 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
               </a>
             ) : null}
           </div>
+          <Link href={`/projects/${project.slug}/story`} className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary-strong underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary">
+            {t("openStory")} <ArrowIcon />
+          </Link>
         </div>
 
         <div className="relative isolate aspect-[16/9] min-w-0 overflow-hidden rounded-card bg-surface-raised">
