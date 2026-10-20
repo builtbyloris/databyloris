@@ -41,6 +41,31 @@
       "story": "Storia"
     }
   },
+  "Export": {
+    "action": "Esporta CSV",
+    "preparing": "Preparazione…",
+    "ready": "Download pronto",
+    "limit": "Questa vista supera il limite di 10.000 righe. Restringi ricerca o filtro.",
+    "error": "Impossibile preparare l'export. Riprova.",
+    "compare": {
+      "dimension": "Campo dimensione",
+      "valueA": "Valore segmento A",
+      "valueB": "Valore segmento B",
+      "metric": "Campo metrica",
+      "aRecords": "Record A",
+      "aAverage": "Media A",
+      "aMin": "Minimo A",
+      "aMax": "Massimo A",
+      "aMissing": "Valori metrica mancanti A",
+      "bRecords": "Record B",
+      "bAverage": "Media B",
+      "bMin": "Minimo B",
+      "bMax": "Massimo B",
+      "bMissing": "Valori metrica mancanti B",
+      "deltaAbsolute": "Differenza media B - A",
+      "deltaPercent": "Differenza media % B - A"
+    }
+  },
   "Story": {
     "title": "Storia",
     "metadataDescription": "Un percorso guidato tra contesto, metodo e insight reali di {project}.",

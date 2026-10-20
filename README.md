@@ -23,6 +23,8 @@ Next.js (App Router), TypeScript, Tailwind CSS, Supabase, Apache ECharts, next-i
 - **Playground:** Explore the preloaded Retail Pulse demo through a guided, interactive dashboard.
 - **Admin:** Manage project content, datasets, and dashboard configurations. The server-side Publishing Quality Gate prevents incomplete projects or projects with invalid dashboard dependencies from being published.
 
+Public CSV export is available for filtered Dataset Explorer views (up to 10,000 rows) and aggregated Compare results. Dashboard export is intentionally not included: its KPI and chart calculations remain in the Dashboard Engine.
+
 ## Local development
 
 ```bash

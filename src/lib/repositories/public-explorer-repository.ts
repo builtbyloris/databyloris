@@ -1,5 +1,6 @@
 import "server-only";
 
+import {assertExplorerExportLimit} from "@/lib/export/explorer-limit";
 import {datasetRecordFromJson} from "@/lib/mappers/dataset-mapper";
 import {createClient} from "@/lib/supabase/server";
 import type {DashboardRecord, DatasetColumn, DatasetDictionary, DatasetFieldMetadata} from "@/types";
@@ -22,6 +23,9 @@ export interface ExplorerQuery {
   sortField: string | null;
   sortDirection: "asc" | "desc";
 }
+
+const EXPORT_PAGE_SIZE = 100;
+const EXPORT_BATCH_SIZE = 8;
 
 function isObject(value: Json | undefined): value is {[key: string]: Json | undefined} {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -84,13 +88,14 @@ export async function getPublishedExplorerPage(
   slug: string,
   datasetId: string,
   query: ExplorerQuery,
+  pageSize = 25,
 ): Promise<ExplorerPage | null> {
   const supabase = await createClient();
   const [pageResult, dictionaryResult] = await Promise.all([supabase.rpc("get_published_explorer_page", {
     p_slug: slug,
     p_dataset_id: datasetId,
     p_offset: query.offset,
-    p_page_size: 25,
+    p_page_size: pageSize,
     p_sort_field: query.sortField,
     p_sort_direction: query.sortDirection,
     p_search: query.search,
@@ -105,4 +110,50 @@ export async function getPublishedExplorerPage(
   if (dictionaryResult.error) throw new RepositoryError("database");
   const dictionary = parseDictionary(dictionaryResult.data, page.columns);
   return dictionary ? {...page, dictionary} : null;
+}
+
+export async function getPublishedExplorerExport(
+  slug: string,
+  datasetId: string,
+  query: Omit<ExplorerQuery, "offset">,
+): Promise<ExplorerPage | null> {
+  const firstPage = await getPublishedExplorerPage(slug, datasetId, {...query, offset: 0}, EXPORT_PAGE_SIZE);
+  if (!firstPage) return null;
+  assertExplorerExportLimit(firstPage.totalCount);
+
+  const supabase = await createClient();
+  const rows = [...firstPage.rows];
+  const offsets = Array.from(
+    {length: Math.max(0, Math.ceil(firstPage.totalCount / EXPORT_PAGE_SIZE) - 1)},
+    (_, index) => (index + 1) * EXPORT_PAGE_SIZE,
+  );
+  for (let index = 0; index < offsets.length; index += EXPORT_BATCH_SIZE) {
+    const batch = await Promise.all(offsets.slice(index, index + EXPORT_BATCH_SIZE).map(async (offset) => {
+      const {data, error} = await supabase.rpc("get_published_explorer_page", {
+        p_slug: slug,
+        p_dataset_id: datasetId,
+        p_offset: offset,
+        p_page_size: EXPORT_PAGE_SIZE,
+        p_sort_field: query.sortField,
+        p_sort_direction: query.sortDirection,
+        p_search: query.search,
+        p_filter_field: query.filterField,
+        p_filter_value: query.filterValue,
+      });
+      if (error) throw new RepositoryError("database");
+      return parseExplorerPage(data);
+    }));
+    for (const page of batch) {
+      if (!page || page.totalCount !== firstPage.totalCount
+        || JSON.stringify(page.columns) !== JSON.stringify(firstPage.columns)) {
+        throw new RepositoryError("invalid_data");
+      }
+      rows.push(...page.rows);
+    }
+  }
+  if (rows.length !== firstPage.totalCount
+    || new Set(rows.map((row) => row.rowIndex)).size !== rows.length) {
+    throw new RepositoryError("invalid_data");
+  }
+  return {...firstPage, rows, hasMore: false};
 }

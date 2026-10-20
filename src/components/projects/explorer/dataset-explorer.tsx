@@ -1,6 +1,7 @@
 import {getTranslations} from "next-intl/server";
 import Link from "next/link";
 import {buttonStyles, Container, ShareButton} from "@/components/ui";
+import {ExportButton} from "@/components/ui/export-button";
 import type {AppLocale} from "@/i18n/routing";
 import type {ExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import type {DatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
@@ -30,6 +31,7 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
 }) {
   const t = await getTranslations("DatasetExplorer");
   const basePath = getLocalizedPath(locale, `/projects/${project.slug}/dataset`);
+  const exportHref = explorerHref(`${basePath}/export`, controls, 1);
   const projectPath = getLocalizedPath(locale, `/projects/${project.slug}`);
   const formatCount = (value: number) => new Intl.NumberFormat(locale).format(value);
   const formatPercent = (value: number) => `${new Intl.NumberFormat(locale, {maximumFractionDigits: 2}).format(value)}%`;
@@ -49,6 +51,7 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link href={getLocalizedPath(locale, `/projects/${project.slug}/compare`)} className={buttonStyles({variant: "secondary", size: "sm"})}>{t("compare")}</Link>
+          <ExportButton key={exportHref} href={exportHref} fileName={`${project.slug}-dataset.csv`} />
           <ShareButton projectTitle={project.title} context="datasetExplorer" />
         </div>
       </div>
