@@ -20,7 +20,6 @@ export function MobileMenu() {
     {href: "/projects" as const, label: t("portfolio")},
     {href: "/playground" as const, label: t("playground")},
     {href: "/#how-it-works" as const, label: t("about")},
-    {href: "/recruiter" as const, label: t("recruiter")},
   ];
 
   useEffect(() => {
