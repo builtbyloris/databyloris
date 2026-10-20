@@ -5,7 +5,8 @@ import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {CompareControls} from "@/components/projects/compare/compare-controls";
 import {CompareResults} from "@/components/projects/compare/compare-results";
-import type {CompareState} from "@/components/projects/compare/compare-url";
+import {compareHref, type CompareState} from "@/components/projects/compare/compare-url";
+import {ExportButton} from "@/components/ui/export-button";
 import {Container, ShareButton} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
 import {getPublishedDatasetComparison, getPublishedCompareOptions} from "@/lib/repositories/public-dataset-compare-repository";
@@ -141,13 +142,19 @@ async function Comparison({slug, datasetId, locale, raw}: {
   if (readyToCompare && !comparison) return <CompareError />;
 
   const metricMetadata = baseline.dictionary[state.metric];
+  const exportHref = compareHref(`${basePath}/export`, state);
   return (
     <>
       <CompareControls basePath={basePath} dimensions={dimensions} metrics={metrics} dictionary={baseline.dictionary} options={options} state={state} locale={locale} />
       {!dimension || !metric ? <CompareMessage title={t("unavailableTitle")} description={t("unavailableDescription")} />
         : state.a && state.b && state.a === state.b ? <CompareMessage title={t("sameTitle")} description={t("sameDescription")} />
           : !comparison ? <CompareMessage title={t("incompleteTitle")} description={t("incompleteDescription")} />
-            : <CompareResults comparison={comparison} valueA={state.a} valueB={state.b} locale={locale} unit={metricMetadata?.unit} format={metricMetadata?.format} />}
+            : <>
+              <div className="mt-6 flex justify-end">
+                <ExportButton key={exportHref} href={exportHref} fileName={`${slug}-compare.csv`} />
+              </div>
+              <CompareResults comparison={comparison} valueA={state.a} valueB={state.b} locale={locale} unit={metricMetadata?.unit} format={metricMetadata?.format} />
+            </>}
     </>
   );
 }

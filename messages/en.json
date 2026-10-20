@@ -41,6 +41,31 @@
       "story": "Story"
     }
   },
+  "Export": {
+    "action": "Export CSV",
+    "preparing": "Preparing…",
+    "ready": "Download ready",
+    "limit": "This view exceeds the 10,000-row export limit. Narrow your search or filter.",
+    "error": "Could not prepare the export. Please try again.",
+    "compare": {
+      "dimension": "Dimension field",
+      "valueA": "Segment A value",
+      "valueB": "Segment B value",
+      "metric": "Metric field",
+      "aRecords": "A record count",
+      "aAverage": "A average",
+      "aMin": "A minimum",
+      "aMax": "A maximum",
+      "aMissing": "A missing metric count",
+      "bRecords": "B record count",
+      "bAverage": "B average",
+      "bMin": "B minimum",
+      "bMax": "B maximum",
+      "bMissing": "B missing metric count",
+      "deltaAbsolute": "Average delta B - A",
+      "deltaPercent": "Average delta % B - A"
+    }
+  },
   "Story": {
     "title": "Story",
     "metadataDescription": "A guided account of the real context, method and insights behind {project}.",
