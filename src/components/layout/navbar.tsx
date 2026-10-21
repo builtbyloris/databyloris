@@ -2,7 +2,7 @@ import {getTranslations} from "next-intl/server";
 import {LanguageSwitcher} from "@/components/language-switcher";
 import {MobileMenu} from "@/components/layout/mobile-menu";
 import {ThemeToggle} from "@/components/theme-toggle";
-import {Container, buttonStyles} from "@/components/ui";
+import {Container} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 
 export async function Navbar() {
@@ -41,8 +41,8 @@ export async function Navbar() {
         <div className="hidden items-center gap-1.5 lg:flex">
           <LanguageSwitcher />
           <ThemeToggle />
-          <Link href="/projects" className={buttonStyles({size: "sm", className: "ml-1"})}>
-            {t("cta")}
+          <Link href="/projects" className="editorial-action editorial-action-compact ml-1">
+            {t("cta")} <span aria-hidden="true" className="editorial-action-icon">↗</span>
           </Link>
         </div>
         <MobileMenu />

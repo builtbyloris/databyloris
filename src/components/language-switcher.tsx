@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
 
   return (
     <div
-      className="flex rounded-control border border-border bg-surface p-0.5"
+      className="language-switcher flex items-center gap-1"
       aria-label={t("label")}
       role="group"
     >
@@ -35,10 +35,8 @@ export function LanguageSwitcher() {
           aria-pressed={locale === item}
           onClick={() => changeLocale(item)}
           className={cn(
-            "h-7 rounded-lg px-2 text-[0.68rem] font-bold tracking-wider transition-colors",
-            locale === item
-              ? "bg-foreground text-background"
-              : "text-muted hover:text-foreground",
+            "language-switcher-option relative min-h-9 min-w-9 rounded-md px-2 text-[0.68rem] font-bold tracking-[0.12em] transition-colors",
+            locale === item ? "text-foreground" : "text-muted hover:text-foreground",
           )}
         >
           {t(item)}

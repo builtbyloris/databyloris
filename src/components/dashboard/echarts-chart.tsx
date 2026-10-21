@@ -55,7 +55,7 @@ export function EChartsChart({option, label, className = "h-80"}: {option: EChar
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const styles = getComputedStyle(document.documentElement);
+    const styles = getComputedStyle(containerRef.current);
     const foreground = cssToken(styles, "--foreground");
     const muted = cssToken(styles, "--muted");
     const border = cssToken(styles, "--border");

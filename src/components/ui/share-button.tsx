@@ -6,7 +6,7 @@ import {buttonStyles} from "./button";
 
 type ShareContext = "caseStudy" | "datasetExplorer" | "dashboard" | "compare" | "story";
 
-export function ShareButton({projectTitle, context}: {projectTitle: string; context: ShareContext}) {
+export function ShareButton({projectTitle, context, appearance = "default"}: {projectTitle: string; context: ShareContext; appearance?: "default" | "editorial"}) {
   const t = useTranslations("Share");
   const [feedback, setFeedback] = useState<"copied" | "error" | null>(null);
   const contextLabel = t(`contexts.${context}`);
@@ -41,11 +41,13 @@ export function ShareButton({projectTitle, context}: {projectTitle: string; cont
         type="button"
         onClick={share}
         aria-label={t("ariaLabel", {project: projectTitle, context: contextLabel})}
-        className={buttonStyles({variant: "secondary", size: "sm", className: "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"})}
+        className={appearance === "editorial" ? "editorial-action editorial-action-secondary editorial-action-compact" : buttonStyles({variant: "secondary", size: "sm", className: "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"})}
       >
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true" className="size-4">
-          <path d="M10 13V2m0 0L6.5 5.5M10 2l3.5 3.5M4 11.5v4A2.5 2.5 0 0 0 6.5 18h7a2.5 2.5 0 0 0 2.5-2.5v-4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <span className={appearance === "editorial" ? "editorial-action-icon" : undefined}>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true" className="size-4">
+            <path d="M10 13V2m0 0L6.5 5.5M10 2l3.5 3.5M4 11.5v4A2.5 2.5 0 0 0 6.5 18h7a2.5 2.5 0 0 0 2.5-2.5v-4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
         {t("action")}
       </button>
       {feedback ? (

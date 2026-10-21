@@ -3,6 +3,7 @@
 import {useMemo, useState} from "react";
 import {useTranslations} from "next-intl";
 import {buttonStyles, Container, ShareButton} from "@/components/ui";
+import {MotionReveal} from "@/components/ui/motion-reveal";
 import {Link} from "@/i18n/navigation";
 import {ALL_FILTER_VALUE, applyDashboardFilters, calculateKpis, type DashboardFilterState} from "@/lib/dashboard";
 import type {DashboardConfig, DashboardRecord} from "@/types";
@@ -93,18 +94,32 @@ export function DashboardShell({project, config, records, embedded = false, anim
           <span aria-hidden="true">/</span>
           <span className="font-semibold text-foreground">{t("breadcrumb.dashboard")}</span>
         </nav>
-        <div className="dashboard-intro mt-6 flex flex-wrap items-start justify-between gap-4">
+        <MotionReveal className="mt-6 flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl min-w-0">
             <p className="site-overline text-primary-strong">{t("eyebrow")}</p>
             <h1 className="font-editorial mt-3 break-words text-4xl sm:text-5xl lg:text-6xl">{dashboardTitle}</h1>
             {dashboardDescription ? <p className="mt-4 text-base leading-7 text-muted sm:text-lg">{dashboardDescription}</p> : null}
           </div>
           <ShareButton projectTitle={project.title} context="dashboard" />
-        </div>
+        </MotionReveal>
 
-        <div className="mt-8 grid min-w-0 gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
-          <DashboardSidebar slug={project.slug} />
-          {dashboardContent}
+        <div className="dashboard-workspace mt-8 min-w-0 overflow-hidden rounded-panel border">
+          <div className="dashboard-workspace-toolbar flex min-h-12 items-center justify-between gap-3 border-b px-4 py-2 sm:px-6">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span className="preview-console-mark flex size-6 shrink-0 items-end gap-0.5 rounded-md p-1.5" aria-hidden="true">
+                <span className="h-1.5 flex-1 rounded-[1px]" /><span className="h-3 flex-1 rounded-[1px]" /><span className="h-2 flex-1 rounded-[1px]" />
+              </span>
+              <span className="truncate font-mono text-[10px] font-semibold uppercase tracking-[0.13em]">databyloris / {t("workspace.label")}</span>
+            </div>
+            <span className="dashboard-workspace-status inline-flex shrink-0 items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider">
+              <span className="preview-console-status size-1.5 rounded-full" aria-hidden="true" />
+              {t("workspace.projectData")}
+            </span>
+          </div>
+          <div className="grid min-w-0 gap-5 p-4 sm:p-6 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-6">
+            <DashboardSidebar slug={project.slug} />
+            {dashboardContent}
+          </div>
         </div>
       </Container>
     </section>

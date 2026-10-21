@@ -14,7 +14,7 @@ export async function Footer() {
   ];
 
   return (
-    <footer className="border-t border-border bg-surface py-12 sm:py-16">
+    <footer className="relative z-10 border-t border-border bg-surface py-12 sm:py-16">
       <Container className="flex flex-col justify-between gap-10 sm:flex-row sm:items-end">
         <div>
           <Link href="/" className="font-editorial text-3xl leading-none sm:text-4xl">

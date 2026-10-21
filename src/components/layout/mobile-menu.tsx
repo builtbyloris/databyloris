@@ -1,6 +1,8 @@
 "use client";
 
 import {useLocale, useTranslations} from "next-intl";
+import {AnimatePresence, LazyMotion, domAnimation} from "motion/react";
+import * as m from "motion/react-m";
 import {useEffect, useRef, useState} from "react";
 import {LanguageSwitcher} from "@/components/language-switcher";
 import {MotionToggle} from "@/components/layout/motion-toggle";
@@ -8,11 +10,13 @@ import {ThemeToggle} from "@/components/theme-toggle";
 import {buttonStyles} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 import {cn} from "@/lib/cn";
+import {useMotionPreference} from "@/lib/use-motion-preference";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations("Navigation");
+  const motionEnabled = useMotionPreference() === "full";
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const previousLocaleRef = useRef(locale);
@@ -63,38 +67,47 @@ export function MobileMenu() {
         </span>
       </button>
 
-      {isOpen && (
-        <div
-          ref={menuRef}
-          id="mobile-navigation"
-          className="absolute inset-x-0 top-full border-b border-border bg-background px-gutter pb-6 pt-3 shadow-card motion-safe:animate-[editorial-arrive_180ms_ease-out_both]"
-        >
-          <nav className="flex flex-col" aria-label={t("menu")}>
-            {links.map((link) => (
+      <LazyMotion features={domAnimation} strict>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <m.div
+              ref={menuRef}
+              id="mobile-navigation"
+              initial={motionEnabled ? {opacity: 0, y: -8} : false}
+              animate={{opacity: 1, y: 0}}
+              exit={{opacity: 0, y: motionEnabled ? -8 : 0}}
+              transition={{duration: motionEnabled ? 0.2 : 0}}
+              inert={!isOpen}
+              className="absolute inset-x-0 top-full border-b border-border bg-background px-gutter pb-6 pt-3 shadow-card"
+            >
+              <nav className="flex flex-col" aria-label={t("menu")}>
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="border-b border-border py-3.5 font-editorial text-xl text-foreground transition-colors hover:text-primary-strong"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
               <Link
-                key={link.href}
-                href={link.href}
+                href="/projects"
                 onClick={() => setIsOpen(false)}
-                className="border-b border-border py-3.5 font-editorial text-xl text-foreground transition-colors hover:text-primary-strong"
+                className={buttonStyles({className: "mt-5 w-full"})}
               >
-                {link.label}
+                {t("cta")}
               </Link>
-            ))}
-          </nav>
-          <Link
-            href="/projects"
-            onClick={() => setIsOpen(false)}
-            className={buttonStyles({className: "mt-5 w-full"})}
-          >
-            {t("cta")}
-          </Link>
-          <div className="mt-4 flex items-center justify-between">
-            <LanguageSwitcher />
-            <ThemeToggle />
-          </div>
-          <div className="mt-3"><MotionToggle /></div>
-        </div>
-      )}
+              <div className="mt-4 flex items-center justify-between">
+                <LanguageSwitcher />
+                <ThemeToggle />
+              </div>
+              <div className="mt-3"><MotionToggle /></div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </LazyMotion>
     </div>
   );
 }

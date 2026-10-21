@@ -3,7 +3,6 @@
 import {useTranslations} from "next-intl";
 import {usePathname, useRouter} from "next/navigation";
 import {FormEvent, useEffect, useRef, useTransition} from "react";
-import {buttonStyles} from "@/components/ui";
 import {cn} from "@/lib/cn";
 
 export type ProjectsSort = "recent" | "name-asc" | "name-desc";
@@ -84,7 +83,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
           <label htmlFor="projects-search" className="site-overline mb-2 block text-muted">
             {t("searchLabel")}
           </label>
-          <div className="portfolio-search relative flex min-h-13 items-center gap-3 overflow-hidden rounded-control border border-control-border bg-surface px-4 transition-colors focus-within:border-primary">
+          <div className="portfolio-search relative flex min-h-13 items-center gap-3 overflow-hidden rounded-full border border-control-border bg-surface px-3 pl-4 transition-colors focus-within:border-primary">
             <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5 shrink-0 text-muted" fill="none" stroke="currentColor" strokeWidth="1.8">
               <circle cx="11" cy="11" r="6.5" />
               <path d="m16 16 4 4" />
@@ -100,7 +99,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
               onChange={(event) => scheduleSearch(event.currentTarget.value)}
               className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted"
             />
-            <button type="submit" className={buttonStyles({size: "sm", className: "shrink-0"})}>
+            <button type="submit" className="editorial-action editorial-action-compact shrink-0">
               <span className="hidden sm:inline">{t("searchAction")}</span>
               <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4 sm:hidden" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <circle cx="9" cy="9" r="5" />
@@ -120,7 +119,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
               id="projects-sort"
               value={sort}
               onChange={(event) => navigate({sort: event.currentTarget.value as ProjectsSort})}
-              className="h-13 w-full appearance-none rounded-control border border-control-border bg-surface px-4 pr-10 text-sm font-semibold text-foreground outline-none transition-colors focus:border-primary"
+              className="h-13 w-full appearance-none rounded-full border border-control-border bg-surface px-5 pr-10 text-sm font-semibold text-foreground outline-none transition-colors hover:border-primary/50 focus:border-primary"
             >
               <option value="recent">{t("sortRecent")}</option>
               <option value="name-asc">{t("sortNameAsc")}</option>
@@ -146,12 +145,8 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
             type="button"
             aria-pressed={selectedCategory === "all"}
             onClick={() => navigate({category: "all"})}
-            className={cn(
-              "portfolio-filter shrink-0 rounded-control border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color,transform]",
-              selectedCategory === "all"
-                ? "border-primary bg-primary text-primary-contrast"
-                : "border-border bg-surface text-muted hover:border-primary/40 hover:text-foreground",
-            )}
+            data-active={selectedCategory === "all"}
+            className="portfolio-filter portfolio-category-chip shrink-0"
           >
             {t("categoryAll")}
           </button>
@@ -161,12 +156,8 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
               type="button"
               aria-pressed={selectedCategory === category.value}
               onClick={() => navigate({category: category.value})}
-              className={cn(
-                "portfolio-filter shrink-0 rounded-control border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color,transform]",
-                selectedCategory === category.value
-                  ? "border-primary bg-primary text-primary-contrast"
-                  : "border-border bg-surface text-muted hover:border-primary/40 hover:text-foreground",
-              )}
+              data-active={selectedCategory === category.value}
+              className="portfolio-filter portfolio-category-chip shrink-0"
             >
               {category.label}
             </button>
@@ -182,7 +173,7 @@ export function ProjectsToolbar({categories, query, resultCount, selectedCategor
           <button
             type="button"
             onClick={resetControls}
-            className="rounded-control px-3 py-2 text-sm font-semibold text-primary-strong transition-colors hover:bg-surface-raised hover:text-primary"
+            className="editorial-action editorial-action-secondary editorial-action-compact"
           >
             {t("resetFilters")}
           </button>

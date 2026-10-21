@@ -7,7 +7,7 @@
     "home": "Home",
     "projects": "Progetti",
     "portfolio": "Portfolio",
-    "playground": "Data Playground",
+    "playground": "Demo",
     "about": "About",
     "admin": "Admin",
     "openProjects": "Esplora i progetti",
@@ -153,22 +153,27 @@
       "proofTwo": "Processo trasparente"
     },
     "Preview": {
-      "eyebrow": "Preview analytics",
-      "title": "Performance del dataset",
-      "live": "Aggiornato",
-      "records": "Record analizzati",
-      "quality": "Qualità dati",
-      "trend": "Andamento degli insight",
-      "period": "Ultimi 6 periodi",
-      "actual": "Attuale",
-      "baseline": "Baseline",
-      "chartLabel": "Grafico dimostrativo dell'andamento dei dati"
-    },
-    "Stats": {
-      "projects": "Progetti pubblicati",
-      "dashboards": "Dashboard interattive",
-      "technologies": "Tecnologie utilizzate",
-      "featured": "Progetti in evidenza"
+      "workspace": "studio dati",
+      "demo": "demo interattiva",
+      "eyebrow": "Signal studio / dati di esempio",
+      "title": "Esplora i segnali.",
+      "description": "Scegli una metrica e osserva come cambia l'analisi.",
+      "metricChooser": "Scegli la metrica da esplorare",
+      "metrics": {
+        "revenue": "Ricavi",
+        "orders": "Ordini",
+        "units": "Unità vendute"
+      },
+      "comparison": "rispetto al periodo precedente",
+      "selectionSummary": "{metric}: {value}, variazione {change} rispetto al periodo precedente.",
+      "analysis": "Andamento esemplificativo",
+      "trend": "Trend della metrica",
+      "periods": "7 periodi",
+      "firstPeriod": "P1",
+      "lastPeriod": "P7",
+      "channelMix": "Mix per canale",
+      "channels": {"web": "Web", "store": "Negozio", "marketplace": "Marketplace"},
+      "sampleNote": "Valori dimostrativi, non collegati ai progetti pubblicati."
     },
     "Featured": {
       "eyebrow": "Analisi selezionate",
@@ -244,10 +249,14 @@
     "navigation": {
       "label": "Navigazione del progetto",
       "overview": "Panoramica",
+      "overviewDescription": "Contesto e obiettivo dell'analisi.",
       "dataset": "Dataset",
+      "datasetDescription": "Fonte e caratteristiche dei dati analizzati.",
       "objective": "Obiettivo",
       "methodology": "Metodologia",
-      "insights": "Insight"
+      "methodologyDescription": "Come i dati sono stati preparati e analizzati.",
+      "insights": "Insight",
+      "insightsDescription": "Le principali evidenze emerse dall'analisi."
     },
     "sections": {
       "overview": {"title": "Il progetto", "contextLabel": "Contesto", "objectiveLabel": "Obiettivo"},
@@ -376,6 +385,7 @@
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
     "metadataDescription": "Dashboard interattiva di analisi dati.",
+    "workspace": {"label": "workspace analitico", "projectData": "dati del progetto"},
     "states": {
       "preparing": {"title": "Dashboard in preparazione"},
       "missing-config": {"description": "La configurazione della dashboard non è ancora disponibile."},
@@ -483,13 +493,13 @@
   },
   "Playground": {
     "eyebrow": "Impara esplorando",
-    "title": "Data Playground",
+    "title": "Demo interattiva",
     "description": "Retail Pulse è già caricato. Segui la guida in quattro passi oppure esplora la dashboard liberamente.",
     "demoBadge": "Dati demo",
     "demoNotice": "Retail Pulse utilizza esclusivamente dati dimostrativi e non fa parte del Portfolio.",
     "start": "Inizia la guida",
     "tutorial": {
-      "guideLabel": "Guida al Playground",
+      "guideLabel": "Guida alla demo",
       "viewSection": "Vai alla sezione evidenziata",
       "filterIndependence": "I filtri cambiano i dati, non l'avanzamento della guida. Usa Avanti per passare al passo successivo.",
       "counter": "Step {current} di {total}",

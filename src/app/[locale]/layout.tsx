@@ -3,6 +3,7 @@ import {hasLocale, NextIntlClientProvider} from "next-intl";
 import {getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {Footer} from "@/components/layout/footer";
+import {AmbientBackground} from "@/components/layout/ambient-background";
 import {Navbar} from "@/components/layout/navbar";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import {routing} from "@/i18n/routing";
@@ -43,6 +44,7 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
   return (
     <html lang={locale} suppressHydrationWarning data-scroll-behavior="smooth">
       <body>
+        <noscript><style>{".motion-reveal{opacity:1!important;transform:none!important;filter:none!important}"}</style></noscript>
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <a
@@ -51,9 +53,10 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
             >
               {t("skipToContent")}
             </a>
-            <div className="page-aurora flex min-h-screen flex-col">
+            <div className="page-aurora relative isolate flex min-h-screen flex-col">
+              <AmbientBackground locale={locale} />
               <Navbar />
-              <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
+              <main id="main-content" tabIndex={-1} className="relative z-10 flex-1">{children}</main>
               <Footer />
             </div>
           </ThemeProvider>

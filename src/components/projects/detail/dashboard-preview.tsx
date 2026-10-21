@@ -1,5 +1,4 @@
 import {getTranslations} from "next-intl/server";
-import {buttonStyles} from "@/components/ui";
 import {Link} from "@/i18n/navigation";
 
 export async function DashboardPreview({slug}: {slug: string}) {
@@ -13,8 +12,8 @@ export async function DashboardPreview({slug}: {slug: string}) {
           <h2 className="font-editorial mt-3 text-3xl sm:text-4xl">{t("title")}</h2>
           <p className="mt-3 text-base leading-7 text-muted">{t("description")}</p>
         </div>
-        <Link href={`/projects/${slug}/dashboard`} className={buttonStyles({size: "lg", className: "w-full sm:w-auto"})}>
-          {t("action")} <span aria-hidden="true">→</span>
+        <Link href={`/projects/${slug}/dashboard`} className="editorial-action w-full sm:w-auto">
+          {t("action")} <span aria-hidden="true" className="editorial-action-icon">↗</span>
         </Link>
       </div>
     </section>

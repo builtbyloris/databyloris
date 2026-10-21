@@ -22,7 +22,7 @@ export function DashboardKpiGrid({items, animateValues = false}: {items: {config
             {description ? <p className="mt-1 break-words text-xs leading-5 text-muted">{description}</p> : null}
             <p
               title={fullValue}
-              className="mt-3 break-words text-[clamp(1.375rem,6vw,1.875rem)] font-black leading-none tracking-[-0.04em] sm:text-3xl"
+              className="dashboard-kpi-number mt-3 break-words text-[clamp(1.375rem,6vw,1.875rem)] font-black leading-none tracking-[-0.04em] sm:text-3xl"
             >
               <span key={fullValue} aria-hidden="true" className={animateValues ? "dashboard-kpi-value inline-block" : undefined}>{compactValue}</span>
               <span className="sr-only">{fullValue}</span>

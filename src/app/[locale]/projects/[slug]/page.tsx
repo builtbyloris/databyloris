@@ -119,14 +119,14 @@ async function ProjectCaseStudy({
       <ProjectDetailNav />
       <Container className="max-w-6xl">
         <ProjectDetailSection id="overview" title={t("overview.title")}>
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-            <div>
+          <div className="grid gap-9 md:grid-cols-2 md:gap-12">
+            <div className="border-l-2 border-primary/60 pl-5 sm:pl-6">
               <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-primary-strong">{t("overview.contextLabel")}</h3>
-              <p className="mt-3 text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.context, locale)}</p>
+              <p className="mt-4 max-w-prose text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.context, locale)}</p>
             </div>
-            <div>
+            <div className="border-l-2 border-border pl-5 sm:pl-6">
               <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-primary-strong">{t("overview.objectiveLabel")}</h3>
-              <p className="mt-3 text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.objective, locale)}</p>
+              <p className="mt-4 max-w-prose text-base leading-7 text-muted sm:text-lg sm:leading-8">{localize(detail.objective, locale)}</p>
             </div>
           </div>
         </ProjectDetailSection>

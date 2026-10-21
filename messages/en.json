@@ -7,7 +7,7 @@
     "home": "Home",
     "projects": "Projects",
     "portfolio": "Portfolio",
-    "playground": "Data Playground",
+    "playground": "Demo",
     "about": "About",
     "admin": "Admin",
     "openProjects": "Explore projects",
@@ -153,22 +153,27 @@
       "proofTwo": "Transparent process"
     },
     "Preview": {
-      "eyebrow": "Analytics preview",
-      "title": "Dataset performance",
-      "live": "Updated",
-      "records": "Records analyzed",
-      "quality": "Data quality",
-      "trend": "Insight trend",
-      "period": "Last 6 periods",
-      "actual": "Actual",
-      "baseline": "Baseline",
-      "chartLabel": "Illustrative chart showing the data trend"
-    },
-    "Stats": {
-      "projects": "Published projects",
-      "dashboards": "Interactive dashboards",
-      "technologies": "Technologies used",
-      "featured": "Featured projects"
+      "workspace": "data studio",
+      "demo": "interactive demo",
+      "eyebrow": "Signal studio / sample data",
+      "title": "Explore the signals.",
+      "description": "Choose a metric and watch the analysis change.",
+      "metricChooser": "Choose a metric to explore",
+      "metrics": {
+        "revenue": "Revenue",
+        "orders": "Orders",
+        "units": "Units sold"
+      },
+      "comparison": "vs. previous period",
+      "selectionSummary": "{metric}: {value}, change {change} versus the previous period.",
+      "analysis": "Illustrative movement",
+      "trend": "Metric trend",
+      "periods": "7 periods",
+      "firstPeriod": "P1",
+      "lastPeriod": "P7",
+      "channelMix": "Channel mix",
+      "channels": {"web": "Web", "store": "Store", "marketplace": "Marketplace"},
+      "sampleNote": "Illustrative values, not linked to published projects."
     },
     "Featured": {
       "eyebrow": "Selected analysis",
@@ -244,10 +249,14 @@
     "navigation": {
       "label": "Project navigation",
       "overview": "Overview",
+      "overviewDescription": "Context and objective of the analysis.",
       "dataset": "Dataset",
+      "datasetDescription": "Source and characteristics of the analyzed data.",
       "objective": "Objective",
       "methodology": "Methodology",
-      "insights": "Insights"
+      "methodologyDescription": "How the data was prepared and analyzed.",
+      "insights": "Insights",
+      "insightsDescription": "The main findings from the analysis."
     },
     "sections": {
       "overview": {"title": "The project", "contextLabel": "Context", "objectiveLabel": "Objective"},
@@ -376,6 +385,7 @@
   "Dashboard": {
     "eyebrow": "Interactive dashboard",
     "metadataDescription": "Interactive data analysis dashboard.",
+    "workspace": {"label": "analytics workspace", "projectData": "project data"},
     "states": {
       "preparing": {"title": "Dashboard in preparation"},
       "missing-config": {"description": "The dashboard configuration is not available yet."},
@@ -483,13 +493,13 @@
   },
   "Playground": {
     "eyebrow": "Learn by exploring",
-    "title": "Data Playground",
+    "title": "Interactive demo",
     "description": "Retail Pulse is already loaded. Follow the four-step guide or explore the dashboard freely.",
     "demoBadge": "Demo data",
     "demoNotice": "Retail Pulse uses demonstration data only and is not part of the Portfolio.",
     "start": "Start the guide",
     "tutorial": {
-      "guideLabel": "Playground guide",
+      "guideLabel": "Demo guide",
       "viewSection": "Go to the highlighted section",
       "filterIndependence": "Filters change the data, not your place in the guide. Use Next to move to the following step.",
       "counter": "Step {current} of {total}",

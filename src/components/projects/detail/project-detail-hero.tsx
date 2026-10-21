@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {getTranslations} from "next-intl/server";
-import {Badge, buttonStyles, ShareButton} from "@/components/ui";
+import {Badge, ShareButton} from "@/components/ui";
+import {MotionReveal} from "@/components/ui/motion-reveal";
 import type {AppLocale} from "@/i18n/routing";
 import {Link} from "@/i18n/navigation";
 import type {Project} from "@/types";
@@ -31,13 +32,13 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-foreground">
-          <span aria-hidden="true">←</span> {t("back")}
+        <Link href="/projects" className="editorial-action editorial-action-secondary editorial-action-compact">
+          <span aria-hidden="true" className="editorial-action-icon">←</span> {t("back")}
         </Link>
-        <ShareButton projectTitle={project.title} context="caseStudy" />
+        <ShareButton projectTitle={project.title} context="caseStudy" appearance="editorial" />
       </div>
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:gap-14">
-        <div>
+        <MotionReveal>
           <div className="flex flex-wrap items-center gap-3">
             <Badge>{project.category}</Badge>
             {date ? <span className="text-xs font-semibold uppercase tracking-[0.13em] text-muted">{t("updated")} · {date}</span> : null}
@@ -57,21 +58,21 @@ export async function ProjectDetailHero({project, locale, updatedAt}: {project: 
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {project.dashboardAvailable ? (
-              <Link href={`/projects/${project.slug}/dashboard`} className={buttonStyles({size: "lg", className: "w-full sm:w-auto"})}>
-                {t("openDashboard")} <ArrowIcon />
+              <Link href={`/projects/${project.slug}/dashboard`} className="editorial-action w-full sm:w-auto">
+                {t("openDashboard")} <span className="editorial-action-icon"><ArrowIcon /></span>
               </Link>
             ) : null}
             {project.repositoryUrl ? (
-              <a href={project.repositoryUrl} target="_blank" rel="noreferrer" className={buttonStyles({variant: "secondary", size: "lg", className: "w-full sm:w-auto"})}>
-                <GithubIcon /> {t("viewRepository")}
+              <a href={project.repositoryUrl} target="_blank" rel="noreferrer" className="editorial-action editorial-action-secondary w-full sm:w-auto">
+                <span className="editorial-action-icon"><GithubIcon /></span> {t("viewRepository")}
               </a>
             ) : null}
           </div>
-        </div>
+        </MotionReveal>
 
-        <div className="relative isolate aspect-[16/9] min-w-0 overflow-hidden rounded-card bg-surface-raised">
+        <MotionReveal delay={0.1} className="relative isolate aspect-[16/9] min-w-0 overflow-hidden rounded-card bg-surface-raised">
           <Image src={project.image} alt={t("coverAlt", {title: project.title})} fill priority sizes="(max-width: 1023px) 100vw, 42vw" className="object-cover object-center" />
-        </div>
+        </MotionReveal>
       </div>
     </div>
   );

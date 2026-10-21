@@ -5,7 +5,6 @@ import {Hero} from "@/components/home/hero";
 import {HomeCta} from "@/components/home/home-cta";
 import {HowItWorks} from "@/components/home/how-it-works";
 import {SectionMap} from "@/components/home/section-map";
-import {StatsStrip} from "@/components/home/stats-strip";
 import {ProjectsDataError} from "@/components/projects/projects-data-error";
 import {Container, Section} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
@@ -31,6 +30,10 @@ export default async function HomePage({params}: {params: Promise<{locale: AppLo
   const {locale} = await params;
   const t = await getTranslations({locale, namespace: "Metadata"});
   const map = await getTranslations({locale, namespace: "Home.Map"});
+  const hero = await getTranslations({locale, namespace: "Home.Hero"});
+  const featured = await getTranslations({locale, namespace: "Home.Featured"});
+  const method = await getTranslations({locale, namespace: "Home.HowItWorks"});
+  const cta = await getTranslations({locale, namespace: "Home.Cta"});
   let projects: Project[] = [];
   let dataError = false;
 
@@ -57,10 +60,10 @@ export default async function HomePage({params}: {params: Promise<{locale: AppLo
         }}
       />
       <SectionMap label={map("label")} sections={[
-        {id: "top", label: map("top")},
-        ...(!dataError ? [{id: "featured", label: map("featured")}] : []),
-        {id: "how-it-works", label: map("method")},
-        {id: "start", label: map("start")},
+        {id: "top", label: map("top"), description: hero("description"), eyebrow: hero("proofOne")},
+        ...(!dataError ? [{id: "featured", label: map("featured"), description: featured("description"), eyebrow: featured("eyebrow")}] : []),
+        {id: "how-it-works", label: map("method"), description: method("description"), eyebrow: method("eyebrow")},
+        {id: "start", label: map("start"), description: cta("description"), eyebrow: cta("eyebrow")},
       ]} />
       <Hero />
       {dataError ? (
@@ -69,7 +72,6 @@ export default async function HomePage({params}: {params: Promise<{locale: AppLo
         </Section>
       ) : (
         <>
-          <StatsStrip projects={projects} />
           <FeaturedProjects projects={projects} />
         </>
       )}

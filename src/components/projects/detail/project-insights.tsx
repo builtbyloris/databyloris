@@ -4,12 +4,12 @@ import type {ProjectInsight} from "@/types";
 
 export function ProjectInsights({insights, locale}: {insights: ProjectInsight[]; locale: AppLocale}) {
   return (
-    <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+    <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
       {insights.map((insight, index) => (
-        <article key={insight.id} className="border-t border-border pt-5">
+        <article key={insight.id} className="border-t border-border pt-6">
           <p className="text-xs font-bold tabular-nums tracking-[0.14em] text-cyan">{String(index + 1).padStart(2, "0")}</p>
-          {insight.title ? <h3 className="mt-3 text-lg font-bold">{localize(insight.title, locale)}</h3> : null}
-          <p className="mt-2 text-sm leading-6 text-muted">{localize(insight.description, locale)}</p>
+          {insight.title ? <h3 className="mt-4 max-w-lg text-xl font-semibold leading-snug">{localize(insight.title, locale)}</h3> : null}
+          <p className="mt-3 max-w-prose text-sm leading-7 text-muted">{localize(insight.description, locale)}</p>
         </article>
       ))}
     </div>
