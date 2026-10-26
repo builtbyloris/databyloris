@@ -3,6 +3,7 @@ import {routing} from "@/i18n/routing";
 import {createCsv, csvDownloadResponse} from "@/lib/export/csv";
 import {EXPLORER_EXPORT_LIMIT, ExplorerExportLimitError} from "@/lib/export/explorer-limit";
 import {
+  canExportPublishedExplorer,
   getPublishedExplorerDatasetId,
   getPublishedExplorerExport,
   getPublishedExplorerPage,
@@ -17,6 +18,7 @@ export async function GET(request: Request, {params}: {params: Promise<{locale: 
   try {
     const datasetId = await getPublishedExplorerDatasetId(slug);
     if (!datasetId) return new Response(null, {status: 404});
+    if (!await canExportPublishedExplorer(slug, datasetId)) return new Response(null, {status: 404});
     const baseline = await getPublishedExplorerPage(slug, datasetId, {
       offset: 0, search: null, filterField: null, filterValue: null,
       sortField: null, sortDirection: "asc",

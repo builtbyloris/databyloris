@@ -3,15 +3,17 @@ import {normalizeDatasetFieldName, resolveDatasetFieldName} from "@/lib/datasets
 import {isProjectCoverStoragePath} from "@/lib/project-media";
 import {isSafeExternalUrl} from "@/lib/urls";
 import {validateDashboardConfig} from "./dashboard-validation";
+import {dashboardReferencedFields, isReviewedRights, potentiallyIdentifyingFields, validFieldAllowlist} from "@/lib/datasets/rights";
 
-export type PublishingArea = "metadata" | "cover" | "case-study" | "dataset" | "dashboard";
+export type PublishingArea = "metadata" | "cover" | "case-study" | "dataset" | "dashboard" | "rights";
 export type PublishingIssueCode =
   | "titleIt" | "titleEn" | "descriptionIt" | "descriptionEn" | "slug" | "category"
   | "cover" | "caseStudy" | "contextIt" | "contextEn" | "objectiveIt" | "objectiveEn"
   | "datasetName" | "datasetSourceIt" | "datasetSourceEn" | "datasetDescriptionIt" | "datasetDescriptionEn"
   | "methodology" | "insights" | "repositoryUrl" | "sourceUrl"
   | "dashboardDataset" | "dashboardSchema" | "dashboardRows" | "dashboardConfig"
-  | "dashboardDatasetId" | "dashboardFields" | "dashboardContent";
+  | "dashboardDatasetId" | "dashboardFields" | "dashboardContent"
+  | "rightsReview" | "rightsSource" | "rightsDashboard" | "rightsExplorer" | "rightsDictionary" | "rightsIdentifiers";
 
 export interface PublishingIssue {
   code: PublishingIssueCode;
@@ -21,12 +23,14 @@ export interface PublishingIssue {
 export interface PublishingQualityResult {
   ready: boolean;
   issues: PublishingIssue[];
+  warnings?: PublishingIssue[];
   featuredDraftWarning: boolean;
   totalRequirements?: number;
 }
 
 export interface PublishingQualityInput {
   project: AdminProjectInput;
+  previouslyPublished?: boolean;
   imagePath: string | null;
   detail: ProjectDetail | null;
   dataset: AdminDatasetDraft | null;
@@ -37,8 +41,9 @@ export interface PublishingQualityInput {
 const filled = (value: string | undefined) => Boolean(value?.trim());
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export function evaluatePublishingQuality({project, imagePath, detail, dataset, datasetCount, config}: PublishingQualityInput): PublishingQualityResult {
+export function evaluatePublishingQuality({project, previouslyPublished = false, imagePath, detail, dataset, datasetCount, config}: PublishingQualityInput): PublishingQualityResult {
   const issues: PublishingIssue[] = [];
+  const warnings: PublishingIssue[] = [];
   let totalRequirements = 0;
   const add = (code: PublishingIssueCode, area: PublishingArea) => issues.push({code, area});
   const check = (valid: boolean, code: PublishingIssueCode, area: PublishingArea) => {
@@ -98,5 +103,44 @@ export function evaluatePublishingQuality({project, imagePath, detail, dataset, 
     }
   }
 
-  return {ready: issues.length === 0, issues, featuredDraftWarning: project.status === "draft" && project.featured, totalRequirements};
+  if (dataset) {
+    const reviewed = isReviewedRights(dataset.rights);
+    const legacy = dataset.rightsLegacy && previouslyPublished && project.status === "published";
+    const anyPublicMode = project.dashboardAvailable || dataset.explorerEnabled || dataset.csvExportEnabled;
+    if (anyPublicMode && !reviewed) {
+      if (legacy) warnings.push({code: "rightsReview", area: "rights"});
+      else check(false, "rightsReview", "rights");
+    } else if (anyPublicMode) {
+      check(true, "rightsReview", "rights");
+    }
+    if (anyPublicMode && !dataset.rights.sourceUrl) {
+      if (legacy) warnings.push({code: "rightsSource", area: "rights"});
+      else check(false, "rightsSource", "rights");
+    }
+    if (project.dashboardAvailable) {
+      const referenced = config ? dashboardReferencedFields(config) : [];
+      check(dataset.dashboardPublicEnabled && validFieldAllowlist(dataset.dashboardFields, dataset.columns)
+        && referenced.every((field) => dataset.dashboardFields.includes(field)), "rightsDashboard", "rights");
+    }
+    if (dataset.explorerEnabled) {
+      check(validFieldAllowlist(dataset.explorerFields, dataset.columns) && dataset.explorerFields.length > 0,
+        "rightsExplorer", "rights");
+      const complete = dataset.explorerFields.every((field) => {
+        const entry = dataset.dictionary[field];
+        return entry?.label.it.trim() && entry.label.en.trim() && entry.description.it.trim() && entry.description.en.trim();
+      });
+      if (!complete) {
+        if (legacy) warnings.push({code: "rightsDictionary", area: "rights"});
+        else check(false, "rightsDictionary", "rights");
+      } else check(true, "rightsDictionary", "rights");
+    }
+    const identifying = potentiallyIdentifyingFields(dataset.columns)
+      .filter((field) => dataset.explorerFields.includes(field) || dataset.dashboardFields.includes(field));
+    if (identifying.length > 0) {
+      if (legacy || dataset.rights.reviewNotes) warnings.push({code: "rightsIdentifiers", area: "rights"});
+      else check(false, "rightsIdentifiers", "rights");
+    }
+  }
+
+  return {ready: issues.length === 0, issues, warnings, featuredDraftWarning: project.status === "draft" && project.featured, totalRequirements};
 }

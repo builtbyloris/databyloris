@@ -6,6 +6,7 @@ export type {
   DatasetColumnType,
   DatasetDictionary,
   DatasetFieldMetadata,
+  DatasetRights,
   AdminProjectInput,
   AdminProjectRecord,
   AdminValidationCode,

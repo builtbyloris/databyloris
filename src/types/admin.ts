@@ -17,8 +17,31 @@ export interface AdminDatasetDraft {
   explorerEnabled: boolean;
   explorerFields: string[];
   dictionary: DatasetDictionary;
+  rights: DatasetRights;
+  dashboardFields: string[];
+  dashboardPublicEnabled: boolean;
+  csvExportEnabled: boolean;
+  rightsLegacy: boolean;
   source: "database" | "registry";
   updatedAt: string | null;
+}
+
+export interface DatasetRights {
+  sourceAuthor: string;
+  sourceUrl: string;
+  platform: "kaggle" | "open-data" | "other";
+  dataPeriod: string;
+  snapshotDate: string;
+  transformations: LocalizedText;
+  licenseType: "cc0" | "cc-by" | "cc-by-sa" | "cc-by-nc" | "cc-by-nd" | "odbl" | "custom" | "competition-rules" | "unknown";
+  licenseUrl: string;
+  licenseVersion: string;
+  licenseCheckedAt: string;
+  reviewStatus: "unverified" | "verified" | "needs-review";
+  restrictions: LocalizedText;
+  reviewNotes: string;
+  privacy: {personalData: boolean; directIdentifiers: boolean; quasiIdentifiers: boolean; fieldReview: boolean};
+  confirmed: boolean;
 }
 
 export type DatasetColumnType = "string" | "number" | "boolean" | "date";

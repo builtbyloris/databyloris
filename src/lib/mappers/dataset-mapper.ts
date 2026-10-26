@@ -1,6 +1,7 @@
 import type {AdminDatasetDraft, DashboardRecord, DashboardValue, DatasetColumn, DatasetColumnType, DatasetDictionary} from "@/types";
 import type {Database, Json} from "@/types/database";
 import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
+import {parseDatasetRights} from "@/lib/datasets/rights";
 
 type DatasetRow = Database["public"]["Tables"]["datasets"]["Row"];
 
@@ -88,6 +89,11 @@ export function datasetRowToAdminDraft(
     explorerEnabled: row.explorer_enabled,
     explorerFields: row.explorer_fields,
     dictionary: datasetDictionaryFromJson(row.schema, columns),
+    rights: parseDatasetRights(row.rights_metadata),
+    dashboardFields: row.dashboard_fields ?? [],
+    dashboardPublicEnabled: row.dashboard_public_enabled ?? false,
+    csvExportEnabled: row.csv_export_enabled ?? false,
+    rightsLegacy: row.rights_legacy ?? false,
     source: "database",
     updatedAt: row.updated_at,
   };

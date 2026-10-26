@@ -8,8 +8,10 @@ import {
   datasetSchemaToJson,
 } from "@/lib/mappers/dataset-mapper";
 import {getAvailableDatasetFields} from "@/lib/datasets/field-names";
+import {dashboardReferencedFields, isReviewedRights, parseDatasetRights, validFieldAllowlist, validRightsInput} from "@/lib/datasets/rights";
+import {getDashboardConfig} from "./dashboard-configs-repository";
 import {createClient} from "@/lib/supabase/server";
-import type {AdminDatasetDraft, DashboardRecord, DatasetColumn, DatasetColumnType, DatasetDictionary} from "@/types";
+import type {AdminDatasetDraft, DashboardRecord, DatasetColumn, DatasetColumnType, DatasetDictionary, DatasetRights} from "@/types";
 import type {Json} from "@/types/database";
 import {DATASET_MAX_ROWS, DATASET_ROW_BATCH_SIZE, DATASET_STORAGE_BUCKET} from "@/lib/datasets";
 import {RepositoryError} from "./repository-error";
@@ -167,11 +169,12 @@ export async function updateDatasetExplorer(
   datasetId: string,
   enabled: boolean,
   fields: string[],
+  confirmedExposure: boolean,
 ): Promise<AdminDatasetDraft> {
   const supabase = await createClient();
   const {data: existing, error: readError} = await supabase
     .from("datasets")
-    .select("schema")
+    .select("schema, rights_metadata, rights_review_status, rights_confirmed_at, explorer_enabled, explorer_fields")
     .eq("id", datasetId)
     .eq("project_id", projectId)
     .maybeSingle();
@@ -189,14 +192,63 @@ export async function updateDatasetExplorer(
     || fields.some((field) => !schemaFields.includes(field))) {
     throw new RepositoryError("invalid_data");
   }
+  const newExposure = enabled && (!existing.explorer_enabled
+    || fields.some((field) => !existing.explorer_fields.includes(field)));
+  if (newExposure && (!isReviewedRights(parseDatasetRights(existing.rights_metadata))
+    || existing.rights_review_status !== "verified" || !existing.rights_confirmed_at
+    || !confirmedExposure)) {
+    throw new RepositoryError("invalid_data");
+  }
 
   const {data: row, error} = await supabase
     .from("datasets")
-    .update({explorer_enabled: enabled, explorer_fields: fields})
+    .update({explorer_enabled: enabled, explorer_fields: fields,
+      ...(newExposure ? {rights_confirmed_at: new Date().toISOString()} : {})})
     .eq("id", datasetId)
     .eq("project_id", projectId)
     .select("*")
     .maybeSingle();
+  if (error) throw new RepositoryError("database");
+  if (!row) throw new RepositoryError("not_found");
+  return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));
+}
+
+export async function updateDatasetRights(
+  projectId: string,
+  datasetId: string,
+  rights: DatasetRights,
+  dashboardFields: string[],
+  dashboardPublicEnabled: boolean,
+  csvExportEnabled: boolean,
+): Promise<AdminDatasetDraft> {
+  const supabase = await createClient();
+  const {data: existing, error: readError} = await supabase.from("datasets")
+    .select("*").eq("id", datasetId).eq("project_id", projectId).maybeSingle();
+  if (readError) throw new RepositoryError("database");
+  if (!existing) throw new RepositoryError("not_found");
+  let columns: DatasetColumn[];
+  try { columns = datasetSchemaFromJson(existing.schema); } catch { throw new RepositoryError("invalid_data"); }
+  if (!validRightsInput(rights) || !validFieldAllowlist(dashboardFields, columns)
+    || (csvExportEnabled && (!existing.explorer_enabled || existing.explorer_fields.length === 0))
+    || ((dashboardPublicEnabled || csvExportEnabled) && !isReviewedRights(rights))) {
+    throw new RepositoryError("invalid_data");
+  }
+  if (dashboardPublicEnabled) {
+    const config = await getDashboardConfig(projectId);
+    if (!config || config.datasetId !== datasetId
+      || !dashboardReferencedFields(config).every((field) => dashboardFields.includes(field))) {
+      throw new RepositoryError("invalid_data");
+    }
+  }
+  const {data: row, error} = await supabase.from("datasets").update({
+    rights_metadata: rights as unknown as Json,
+    rights_review_status: rights.reviewStatus,
+    rights_confirmed_at: rights.reviewStatus === "verified" && rights.confirmed ? new Date().toISOString() : null,
+    rights_legacy: existing.rights_legacy && !isReviewedRights(rights),
+    dashboard_fields: dashboardFields,
+    dashboard_public_enabled: dashboardPublicEnabled,
+    csv_export_enabled: csvExportEnabled,
+  }).eq("id", datasetId).eq("project_id", projectId).select("*").maybeSingle();
   if (error) throw new RepositoryError("database");
   if (!row) throw new RepositoryError("not_found");
   return datasetRowToAdminDraft(row, await getDatasetRows(datasetId));

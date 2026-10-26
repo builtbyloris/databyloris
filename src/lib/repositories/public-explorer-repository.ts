@@ -84,6 +84,13 @@ export async function getPublishedExplorerDatasetId(slug: string): Promise<strin
   return data;
 }
 
+export async function canExportPublishedExplorer(slug: string, datasetId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const {data, error} = await supabase.rpc("can_export_published_explorer", {p_slug: slug, p_dataset_id: datasetId});
+  if (error) throw new RepositoryError("database");
+  return data === true;
+}
+
 export async function getPublishedExplorerPage(
   slug: string,
   datasetId: string,
@@ -117,11 +124,22 @@ export async function getPublishedExplorerExport(
   datasetId: string,
   query: Omit<ExplorerQuery, "offset">,
 ): Promise<ExplorerPage | null> {
-  const firstPage = await getPublishedExplorerPage(slug, datasetId, {...query, offset: 0}, EXPORT_PAGE_SIZE);
+  const supabase = await createClient();
+  const [firstResult, dictionaryResult] = await Promise.all([
+    supabase.rpc("get_published_explorer_export_page", {
+      p_slug: slug, p_dataset_id: datasetId, p_offset: 0, p_page_size: EXPORT_PAGE_SIZE,
+      p_sort_field: query.sortField, p_sort_direction: query.sortDirection,
+      p_search: query.search, p_filter_field: query.filterField, p_filter_value: query.filterValue,
+    }),
+    supabase.rpc("get_published_explorer_dictionary", {p_slug: slug, p_dataset_id: datasetId}),
+  ]);
+  if (firstResult.error || dictionaryResult.error) throw new RepositoryError("database");
+  const rawFirstPage = parseExplorerPage(firstResult.data);
+  const dictionary = rawFirstPage ? parseDictionary(dictionaryResult.data, rawFirstPage.columns) : null;
+  const firstPage = rawFirstPage && dictionary ? {...rawFirstPage, dictionary} : null;
   if (!firstPage) return null;
   assertExplorerExportLimit(firstPage.totalCount);
 
-  const supabase = await createClient();
   const rows = [...firstPage.rows];
   const offsets = Array.from(
     {length: Math.max(0, Math.ceil(firstPage.totalCount / EXPORT_PAGE_SIZE) - 1)},
@@ -129,7 +147,7 @@ export async function getPublishedExplorerExport(
   );
   for (let index = 0; index < offsets.length; index += EXPORT_BATCH_SIZE) {
     const batch = await Promise.all(offsets.slice(index, index + EXPORT_BATCH_SIZE).map(async (offset) => {
-      const {data, error} = await supabase.rpc("get_published_explorer_page", {
+      const {data, error} = await supabase.rpc("get_published_explorer_export_page", {
         p_slug: slug,
         p_dataset_id: datasetId,
         p_offset: offset,

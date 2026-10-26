@@ -115,7 +115,7 @@ export function ProjectEditor({draft, allDrafts, locale: appLocale, persistedSlu
       </section>
 
       <nav aria-label={t("hub.sections")} className="flex gap-2 overflow-x-auto border-b border-border pb-3 text-sm">
-        {([ ["project-metadata", "project"], ["project-case-study", "caseStudy"], ["project-dataset", "dataset"], ["data-dictionary-heading", "dictionary"] ] as const).map(([id, label]) => (
+        {([ ["project-metadata", "project"], ["project-case-study", "caseStudy"], ["project-dataset", "dataset"], ["dataset-rights-heading", "rights"], ["data-dictionary-heading", "dictionary"] ] as const).map(([id, label]) => (
           <button key={id} type="button" onClick={() => jumpTo(id)} className="min-w-max rounded-control px-3 py-2 font-semibold text-muted hover:bg-surface-raised hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary">{t(`hub.sectionsNav.${label}`)}</button>
         ))}
         <button type="button" onClick={onBuilder} className="min-w-max rounded-control px-3 py-2 font-semibold text-muted hover:bg-surface-raised hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary">{t("hub.sectionsNav.dashboard")}</button>

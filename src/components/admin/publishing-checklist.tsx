@@ -9,6 +9,7 @@ const targets: Record<Exclude<PublishingArea, "dashboard">, string> = {
   cover: "project-cover",
   "case-study": "project-case-study",
   dataset: "project-dataset",
+  rights: "dataset-rights-heading",
 };
 
 export function PublishingChecklist({quality, loading, hasUnsavedChanges, onCheck, onBuilder}: {
@@ -33,6 +34,7 @@ export function PublishingChecklist({quality, loading, hasUnsavedChanges, onChec
       <p className="mt-3 text-xs text-muted">{t("draftAllowed")}</p>
       {hasUnsavedChanges ? <p className="mt-3 text-xs text-muted">{t("unsaved")}</p> : null}
       {quality?.featuredDraftWarning ? <p role="note" className="mt-3 border-l-2 border-amber-600 pl-3 text-sm text-amber-800 dark:border-amber-400 dark:text-amber-200">{t("featuredDraft")}</p> : null}
+      {quality?.warnings?.length ? <div className="mt-4 border-t border-border pt-3"><p className="text-sm font-semibold">{t("warningsTitle")}</p><ul className="mt-2 space-y-2 text-sm text-muted">{quality.warnings.map((warning) => <li key={warning.code}><a href={`#${targets[warning.area as Exclude<PublishingArea, "dashboard">]}`} className="hover:underline">{t(`issues.${warning.code}`)}</a></li>)}</ul></div> : null}
       {quality && !quality.ready ? (
         <ul className="mt-4 grid gap-2 text-sm">
           {quality.issues.map((issue) => (

@@ -95,7 +95,10 @@ export type Database = {
       }
       datasets: {
         Row: {
+          csv_export_enabled: boolean
           created_at: string
+          dashboard_fields: string[]
+          dashboard_public_enabled: boolean
           explorer_enabled: boolean
           explorer_fields: string[]
           grain: string | null
@@ -103,12 +106,19 @@ export type Database = {
           name: string
           project_id: string
           record_count: number
+          rights_confirmed_at: string | null
+          rights_legacy: boolean
+          rights_metadata: Json
+          rights_review_status: string
           schema: Json
           storage_path: string | null
           updated_at: string
         }
         Insert: {
+          csv_export_enabled?: boolean
           created_at?: string
+          dashboard_fields?: string[]
+          dashboard_public_enabled?: boolean
           explorer_enabled?: boolean
           explorer_fields?: string[]
           grain?: string | null
@@ -116,12 +126,19 @@ export type Database = {
           name: string
           project_id: string
           record_count?: number
+          rights_confirmed_at?: string | null
+          rights_legacy?: boolean
+          rights_metadata?: Json
+          rights_review_status?: string
           schema?: Json
           storage_path?: string | null
           updated_at?: string
         }
         Update: {
+          csv_export_enabled?: boolean
           created_at?: string
+          dashboard_fields?: string[]
+          dashboard_public_enabled?: boolean
           explorer_enabled?: boolean
           explorer_fields?: string[]
           grain?: string | null
@@ -129,6 +146,10 @@ export type Database = {
           name?: string
           project_id?: string
           record_count?: number
+          rights_confirmed_at?: string | null
+          rights_legacy?: boolean
+          rights_metadata?: Json
+          rights_review_status?: string
           schema?: Json
           storage_path?: string | null
           updated_at?: string
@@ -243,6 +264,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_export_published_explorer: {
+        Args: {p_slug: string; p_dataset_id: string}
+        Returns: boolean
+      }
+      get_published_dataset_rights: {
+        Args: {p_slug: string}
+        Returns: Json
+      }
+      get_published_explorer_export_page: {
+        Args: {
+          p_slug: string
+          p_dataset_id: string
+          p_offset?: number
+          p_page_size?: number
+          p_sort_field?: string | null
+          p_sort_direction?: string
+          p_search?: string | null
+          p_filter_field?: string | null
+          p_filter_value?: string | null
+        }
+        Returns: Json
+      }
       get_published_dataset_compare: {
         Args: {
           p_slug: string
