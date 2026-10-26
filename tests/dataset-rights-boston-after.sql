@@ -10,8 +10,8 @@ begin
   select config into v_config from public.dashboard_configs where project_id = v_dataset.project_id;
   if not v_dataset.dashboard_public_enabled or not v_dataset.rights_legacy
     or v_dataset.rights_review_status <> 'unverified' or v_dataset.csv_export_enabled
-    or not v_dataset.explorer_enabled or cardinality(v_dataset.explorer_fields) <> 7 then
-    raise exception 'Legacy mode/backfill did not preserve existing public access';
+    or v_dataset.explorer_enabled or cardinality(v_dataset.explorer_fields) <> 7 then
+    raise exception 'Boston public modes or backfill are incorrect';
   end if;
   if 'id' = any(v_dataset.dashboard_fields)
     or v_config -> 'kpis' -> 0 ->> 'field' <> ''
@@ -35,9 +35,9 @@ begin
   if v_rows <> 3585 or v_pages <> 4 then
     raise exception 'Dashboard pagination or count changed';
   end if;
-  if public.get_published_explorer_page('boston-airbnb-listings-analysis', v_dataset.id, 0, 1) is null
+  if public.get_published_explorer_page('boston-airbnb-listings-analysis', v_dataset.id, 0, 1) is not null
     or public.can_export_published_explorer('boston-airbnb-listings-analysis', v_dataset.id) then
-    raise exception 'Legacy Explorer or CSV default is incorrect';
+    raise exception 'Boston Explorer or CSV is still public';
   end if;
   if public.get_published_dataset_rights('boston-airbnb-listings-analysis') ->> 'reviewed' <> 'false'
     or public.get_published_dataset_rights('boston-airbnb-listings-analysis') ->> 'snapshotDate' <> '2016-09-07' then
@@ -49,15 +49,16 @@ begin;
 update public.datasets set explorer_fields = array_remove(explorer_fields, 'price_usd')
 where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 do $$ begin
-  if jsonb_array_length(public.get_published_explorer_page('boston-airbnb-listings-analysis',
-    'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 0, 1) -> 'columns') <> 6 then
+  if (select cardinality(explorer_fields) from public.datasets
+    where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb') <> 6 then
     raise exception 'Legacy field removal was blocked';
   end if;
 end $$;
 rollback;
 do $$ declare v_rejected boolean := false; begin
   begin
-    update public.datasets set explorer_fields = array_append(explorer_fields, 'id')
+    update public.datasets set explorer_enabled = true,
+      explorer_fields = array_append(explorer_fields, 'id')
     where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
   exception when others then v_rejected := true;
   end;

@@ -1,4 +1,5 @@
--- Documentary staging only: never marks privacy/rights as verified and never changes public modes.
+-- Stage factual provenance without marking rights/privacy as verified.
+-- Boston keeps its public Case Study and Dashboard, while Explorer and CSV are disabled.
 -- Skip if the linked database does not match the documented processed Boston file.
 update public.datasets d
 set rights_metadata = jsonb_build_object(
@@ -28,6 +29,18 @@ where d.project_id = p.id
   and jsonb_array_length(d.schema -> 'columns') = 43
   and d.rights_review_status = 'unverified'
   and d.rights_metadata = '{}'::jsonb;
+
+update public.datasets d
+set explorer_enabled = false, csv_export_enabled = false
+from public.projects p
+where d.project_id = p.id
+  and p.slug = 'boston-airbnb-listings-analysis'
+  and p.status = 'published'
+  and d.name = 'Boston Airbnb Listings'
+  and d.record_count = 3585
+  and d.schema ->> 'originalFilename' = 'boston_airbnb_cleaned.csv'
+  and jsonb_typeof(d.schema -> 'columns') = 'array'
+  and jsonb_array_length(d.schema -> 'columns') = 43;
 
 -- Boston's three count aggregations do not use their configured field: the engine
 -- counts rows. Remove the unnecessary listing identifier from the public RPC
