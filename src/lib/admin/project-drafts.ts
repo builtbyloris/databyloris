@@ -1,4 +1,5 @@
 import type {AdminDatasetDraft, DashboardConfig, DashboardRecord, LocalizedText, Project, ProjectDetail, ProjectDraft} from "@/types";
+import {emptyDatasetRights} from "@/lib/datasets/rights";
 
 export function slugifyProjectTitle(value: string) {
   return value
@@ -69,6 +70,11 @@ export function createProjectDraft(project: Project, options?: {
       explorerEnabled: false,
       explorerFields: [],
       dictionary: {},
+      rights: emptyDatasetRights,
+      dashboardFields: [],
+      dashboardPublicEnabled: false,
+      csvExportEnabled: false,
+      rightsLegacy: false,
       source: "registry" as const,
       updatedAt: null,
     } : null),

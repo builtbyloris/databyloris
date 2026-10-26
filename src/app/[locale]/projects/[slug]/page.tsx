@@ -17,6 +17,10 @@ import type {AppLocale} from "@/i18n/routing";
 import {localize} from "@/lib/localize";
 import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
 import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
+import {getPublishedDatasetRights} from "@/lib/repositories/public-dataset-rights-repository";
+import {DatasetRightsFacts} from "@/components/projects/detail/dataset-rights-facts";
+import {getPublishedExplorerDatasetId} from "@/lib/repositories/public-explorer-repository";
+import {Link} from "@/i18n/navigation";
 import {createLocalizedMetadata, getAbsoluteUrl, getSiteUrl, serializeJsonLd} from "@/lib/seo";
 import type {Project, ProjectDetail} from "@/types";
 
@@ -64,6 +68,8 @@ export default async function ProjectPage({params}: ProjectPageProps) {
   if (!result) notFound();
 
   const {project, detail} = result;
+  const datasetRights = await getPublishedDatasetRights(project.slug).catch(() => null);
+  const explorerAvailable = Boolean(await getPublishedExplorerDatasetId(project.slug).catch(() => null));
   const projectUrl = getAbsoluteUrl(locale, `/projects/${project.slug}`);
   const projectImage = project.image === DEFAULT_PROJECT_IMAGE
     ? undefined
@@ -93,7 +99,7 @@ export default async function ProjectPage({params}: ProjectPageProps) {
         </Container>
       </section>
       {detail ? (
-        <ProjectCaseStudy project={project} detail={detail} locale={locale} />
+        <ProjectCaseStudy project={project} detail={detail} locale={locale} datasetRights={datasetRights} explorerAvailable={explorerAvailable} />
       ) : (
         <Container className="max-w-6xl">
           <ProjectDetailState kind="missing" />
@@ -108,10 +114,14 @@ async function ProjectCaseStudy({
   project,
   detail,
   locale,
+  datasetRights,
+  explorerAvailable,
 }: {
   project: Project;
   detail: ProjectDetail;
   locale: AppLocale;
+  datasetRights: Awaited<ReturnType<typeof getPublishedDatasetRights>>;
+  explorerAvailable: boolean;
 }) {
   const t = await getTranslations("ProjectDetail.sections");
   return (
@@ -132,6 +142,8 @@ async function ProjectCaseStudy({
         </ProjectDetailSection>
         <ProjectDetailSection id="dataset" title={t("dataset.title")}>
           <DatasetSummaryCard dataset={detail.dataset} locale={locale} />
+          {datasetRights ? <DatasetRightsFacts dataset={datasetRights} locale={locale} /> : null}
+          {explorerAvailable ? <Link href={`/projects/${project.slug}/dataset`} className="mt-5 inline-flex rounded-control border border-border px-4 py-2 text-sm font-semibold text-primary-strong transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-primary">{t("dataset.explore")} ↗</Link> : null}
         </ProjectDetailSection>
         <ProjectDetailSection id="methodology" title={t("methodology.title")}>
           <MethodologySteps steps={detail.methodology} locale={locale} />

@@ -6,7 +6,7 @@ import {DatasetExplorer} from "@/components/projects/explorer/dataset-explorer";
 import type {ExplorerControlsState} from "@/components/projects/explorer/explorer-url";
 import {Container} from "@/components/ui";
 import type {AppLocale} from "@/i18n/routing";
-import {getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
+import {canExportPublishedExplorer, getPublishedExplorerDatasetId, getPublishedExplorerPage} from "@/lib/repositories/public-explorer-repository";
 import {getPublishedDatasetQuality} from "@/lib/repositories/public-dataset-quality-repository";
 import {getPublishedExplorerTrustMetadata} from "@/lib/repositories/public-dataset-trust-repository";
 import {getPublishedProjectBySlug, getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-repository";
@@ -151,12 +151,13 @@ async function ExplorerResults({slug, datasetId, locale, project, source, pageNu
   if (!result) notFound();
   if (!safeControls.filterField) safeControls = {...safeControls, filterValue: ""};
   if (!safeControls.sortField) safeControls = {...safeControls, sortDirection: "asc"};
-  const [qualityResult, trustResult] = await Promise.allSettled([
+  const [qualityResult, trustResult, exportResult] = await Promise.allSettled([
     getPublishedDatasetQuality(slug, result.columns),
     getPublishedExplorerTrustMetadata(slug, datasetId, result.columns.length),
+    canExportPublishedExplorer(slug, datasetId),
   ]);
   // Supplemental evidence must not make the existing Explorer unavailable.
   const quality = qualityResult.status === "fulfilled" ? qualityResult.value : null;
   const trust = trustResult.status === "fulfilled" ? trustResult.value : null;
-  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} trust={trust} source={source} pageNumber={safePageNumber} controls={safeControls} />;
+  return <DatasetExplorer project={project} locale={locale} page={result} quality={quality} trust={trust} source={source} pageNumber={safePageNumber} controls={safeControls} exportAllowed={exportResult.status === "fulfilled" && exportResult.value} />;
 }

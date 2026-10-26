@@ -1,6 +1,6 @@
 import "server-only";
 
-import type {AdminProjectInput, AdminProjectRecord, DashboardConfig, ProjectDetail} from "@/types";
+import type {AdminDatasetDraft, AdminProjectInput, AdminProjectRecord, DashboardConfig, ProjectDetail} from "@/types";
 import {getDashboardConfig} from "@/lib/repositories/dashboard-configs-repository";
 import {getAdminProjectDataset, listProjectDatasets} from "@/lib/repositories/datasets-repository";
 import {getAdminProjectById, getAdminProjectDetail} from "@/lib/repositories/projects-repository";
@@ -38,14 +38,15 @@ export async function getPublishingQuality(projectId: string, locale: Locale, pr
   imagePath?: string | null;
   detail?: ProjectDetail | null;
   config?: DashboardConfig | null;
+  dataset?: AdminDatasetDraft | null;
 }): Promise<PublishingQualityResult | null> {
   const record = await getAdminProjectById(projectId, locale);
   if (!record) return null;
   const project = proposed?.project ?? projectInputFromRecord(record);
   const [detail, datasets, dataset, config] = await Promise.all([
     proposed && "detail" in proposed ? Promise.resolve(proposed.detail ?? null) : orNullOnInvalid(() => getAdminProjectDetail(projectId)),
-    project.dashboardAvailable ? listProjectDatasets(projectId) : Promise.resolve([]),
-    project.dashboardAvailable ? orNullOnInvalid(() => getAdminProjectDataset(projectId)) : Promise.resolve(null),
+    listProjectDatasets(projectId),
+    proposed && "dataset" in proposed ? Promise.resolve(proposed.dataset ?? null) : orNullOnInvalid(() => getAdminProjectDataset(projectId)),
     project.dashboardAvailable
       ? proposed && "config" in proposed ? Promise.resolve(proposed.config ?? null) : orNullOnInvalid(() => getDashboardConfig(projectId))
       : Promise.resolve(null),
@@ -53,6 +54,7 @@ export async function getPublishingQuality(projectId: string, locale: Locale, pr
 
   return evaluatePublishingQuality({
     project,
+    previouslyPublished: record.project.status === "published",
     imagePath: proposed && "imagePath" in proposed ? proposed.imagePath ?? null : record.imagePath,
     detail,
     dataset,

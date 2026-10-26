@@ -15,6 +15,7 @@ import {
   parseCsvDataset,
 } from "@/lib/datasets";
 import {isProjectCoverStoragePath, isValidProjectCoverFile} from "@/lib/project-media";
+import {isReviewedRights} from "@/lib/datasets/rights";
 import {
   dashboardConfigFromJson,
   dashboardConfigToJson,
@@ -24,6 +25,7 @@ import {
   createDatasetWithRows,
   deleteDataset,
   downloadDatasetFile,
+  getAdminProjectDataset,
   getAdminProjectDatasetFields,
   listProjectDatasets,
   removeDatasetFile,
@@ -31,6 +33,7 @@ import {
   updateDatasetName,
   updateDatasetExplorer,
   updateDatasetDictionary,
+  updateDatasetRights,
 } from "@/lib/repositories/datasets-repository";
 import {downloadProjectMediaFile, removeProjectMediaFile} from "@/lib/repositories/project-media-repository";
 import {
@@ -47,6 +50,7 @@ import type {
   AdminActionResult,
   AdminDatasetDraft,
   DatasetDictionary,
+  DatasetRights,
   AdminProjectInput,
   AdminProjectRecord,
   DashboardConfig,
@@ -358,7 +362,7 @@ export async function registerDatasetAction(
     }
 
     const existing = await listProjectDatasets(input.projectId);
-    if (project.project.status === "published" && project.project.dashboardAvailable && existing.length > 0) {
+    if (project.project.status === "published" && existing.length > 0) {
       await cleanupUploadedFile(input.storagePath);
       return {ok: false, error: "publishingBlocked"};
     }
@@ -465,16 +469,18 @@ export async function updateDatasetExplorerAction(
   datasetId: string,
   enabled: boolean,
   fields: string[],
+  confirmedExposure: boolean,
 ): Promise<AdminActionResult<AdminDatasetDraft>> {
   await requireAdmin(locale);
   if (!isValidProjectId(projectId) || !isValidProjectId(datasetId)
     || typeof enabled !== "boolean" || !Array.isArray(fields)
-    || fields.length > 100 || fields.some((field) => typeof field !== "string" || !field.trim())) {
+    || fields.length > 100 || fields.some((field) => typeof field !== "string" || !field.trim())
+    || typeof confirmedExposure !== "boolean") {
     return {ok: false, error: "invalidDataset"};
   }
 
   try {
-    const saved = await updateDatasetExplorer(projectId, datasetId, enabled, fields);
+    const saved = await updateDatasetExplorer(projectId, datasetId, enabled, fields, confirmedExposure);
     const project = await getAdminProjectById(projectId, locale);
     if (project) revalidateProjectSurfaces(locale, project.project.slug);
     return {ok: true, data: saved};
@@ -499,6 +505,42 @@ export async function updateDatasetDictionaryAction(
 
   try {
     const saved = await updateDatasetDictionary(projectId, datasetId, dictionary);
+    const project = await getAdminProjectById(projectId, locale);
+    if (project) revalidateProjectSurfaces(locale, project.project.slug);
+    return {ok: true, data: saved};
+  } catch (error) {
+    return {ok: false, error: error instanceof RepositoryError && error.code === "invalid_data"
+      ? "invalidDataset" : actionError(error)};
+  }
+}
+
+export async function updateDatasetRightsAction(
+  locale: AppLocale,
+  projectId: string,
+  datasetId: string,
+  rights: DatasetRights,
+  dashboardFields: string[],
+  dashboardPublicEnabled: boolean,
+  csvExportEnabled: boolean,
+): Promise<AdminActionResult<AdminDatasetDraft>> {
+  await requireAdmin(locale);
+  if (!isValidProjectId(projectId) || !isValidProjectId(datasetId)
+    || !rights || typeof rights !== "object" || Array.isArray(rights)
+    || !Array.isArray(dashboardFields) || dashboardFields.length > 100
+    || dashboardFields.some((field) => typeof field !== "string")
+    || typeof dashboardPublicEnabled !== "boolean" || typeof csvExportEnabled !== "boolean") {
+    return {ok: false, error: "invalidDataset"};
+  }
+  try {
+    const current = await getAdminProjectById(projectId, locale);
+    const dataset = await getAdminProjectDataset(projectId);
+    if (current?.project.status === "published" && dataset?.id === datasetId) {
+      const quality = await getPublishingQuality(projectId, locale, {
+        dataset: {...dataset, rights, dashboardFields, dashboardPublicEnabled, csvExportEnabled, rightsLegacy: dataset.rightsLegacy && !isReviewedRights(rights)},
+      });
+      if (quality && !quality.ready) return {ok: false, error: "publishingBlocked", issues: quality.issues};
+    }
+    const saved = await updateDatasetRights(projectId, datasetId, rights, dashboardFields, dashboardPublicEnabled, csvExportEnabled);
     const project = await getAdminProjectById(projectId, locale);
     if (project) revalidateProjectSurfaces(locale, project.project.slug);
     return {ok: true, data: saved};

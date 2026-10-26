@@ -19,7 +19,7 @@ function cellText(value: DashboardValue | undefined, locale: AppLocale, yes: str
   return value;
 }
 
-export async function DatasetExplorer({project, locale, page, quality, trust, source, pageNumber, controls}: {
+export async function DatasetExplorer({project, locale, page, quality, trust, source, pageNumber, controls, exportAllowed}: {
   project: Project;
   locale: AppLocale;
   page: ExplorerPage;
@@ -28,6 +28,7 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
   source: DatasetSummary | null;
   pageNumber: number;
   controls: ExplorerControlsState;
+  exportAllowed: boolean;
 }) {
   const t = await getTranslations("DatasetExplorer");
   const basePath = getLocalizedPath(locale, `/projects/${project.slug}/dataset`);
@@ -50,7 +51,7 @@ export async function DatasetExplorer({project, locale, page, quality, trust, so
           <p className="mt-3 text-muted">{t("intro", {project: project.title})}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <ExportButton key={exportHref} href={exportHref} fileName={`${project.slug}-dataset.csv`} />
+          {exportAllowed ? <ExportButton key={exportHref} href={exportHref} fileName={`${project.slug}-dataset.csv`} /> : null}
           <ShareButton projectTitle={project.title} context="datasetExplorer" />
         </div>
       </div>

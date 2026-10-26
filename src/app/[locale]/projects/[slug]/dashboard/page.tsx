@@ -7,6 +7,9 @@ import type {AppLocale} from "@/i18n/routing";
 import {DEFAULT_PROJECT_IMAGE} from "@/lib/project-media";
 import {getPublishedDashboardBySlug} from "@/lib/repositories/public-dashboards-repository";
 import {getPublishedProjectBySlug} from "@/lib/repositories/projects-repository";
+import {getPublishedDatasetRights} from "@/lib/repositories/public-dataset-rights-repository";
+import {DatasetRightsFacts} from "@/components/projects/detail/dataset-rights-facts";
+import {Container} from "@/components/ui";
 import {createLocalizedMetadata} from "@/lib/seo";
 
 interface DashboardPageProps {
@@ -51,11 +54,12 @@ export default async function DashboardPage({params}: DashboardPageProps) {
     return <DashboardState kind={result.kind} project={result.project} />;
   }
 
+  const datasetRights = await getPublishedDatasetRights(result.project.slug).catch(() => null);
+
   return (
-    <DashboardUrlState
-      project={{slug: result.project.slug, title: result.project.title}}
-      config={result.config}
-      records={result.records}
-    />
+    <>
+      <DashboardUrlState project={{slug: result.project.slug, title: result.project.title}} config={result.config} records={result.records} />
+      {datasetRights ? <Container className="pb-12"><DatasetRightsFacts dataset={datasetRights} locale={locale} compact /></Container> : null}
+    </>
   );
 }

@@ -260,7 +260,7 @@
     },
     "sections": {
       "overview": {"title": "Il progetto", "contextLabel": "Contesto", "objectiveLabel": "Obiettivo"},
-      "dataset": {"title": "Il dataset"},
+      "dataset": {"title": "Il dataset", "explore": "Esplora dataset"},
       "objective": {"title": "L'obiettivo"},
       "methodology": {"title": "La metodologia"},
       "insights": {"title": "Insight principali"}
@@ -381,6 +381,10 @@
       "typeScope": "Il controllo dei tipi si applica solo dove il tipo dello schema è verificabile in sicurezza.",
       "qualityUnavailable": "Le evidenze di qualità sono temporaneamente non disponibili."
     }
+  },
+  "DatasetRightsPublic": {
+    "title": "Provenienza e diritti del dataset", "author": "Autore / organizzazione", "period": "Periodo dei dati", "snapshot": "Snapshot", "license": "Licenza del dataset", "sourceLicense": "Licenza indicata dalla fonte (revisione pendente)", "transformations": "Trasformazioni", "restrictions": "Limitazioni d'uso", "viewSource": "Apri la fonte originale",
+    "licenses": {"cc0": "CC0", "cc-by": "CC BY", "cc-by-sa": "CC BY-SA", "cc-by-nc": "CC BY-NC", "cc-by-nd": "CC BY-ND", "odbl": "ODbL", "custom": "Licenza personalizzata", "competition-rules": "Regole della competizione", "unknown": "Licenza da verificare"}
   },
   "Dashboard": {
     "eyebrow": "Dashboard interattiva",
@@ -576,7 +580,7 @@
       "columns": {"project": "Progetto", "category": "Categoria", "status": "Stato", "dashboard": "Dashboard", "publishedAt": "Pubblicazione", "actions": "Azioni"}
     },
     "editor": {"newTitle": "Nuova bozza", "metadata": "Metadata progetto", "options": "Opzioni progetto"},
-    "hub": {"title": "Progetto in sintesi", "explorer": "Dataset Explorer", "dataset": "Dataset collegato", "openCaseStudy": "Apri Case Study", "openDashboard": "Apri Dashboard", "openExplorer": "Apri Dataset Explorer", "sections": "Sezioni del progetto", "sectionsNav": {"project": "Progetto", "caseStudy": "Case Study", "dataset": "Dataset", "dictionary": "Dizionario dati", "dashboard": "Dashboard"}},
+    "hub": {"title": "Progetto in sintesi", "explorer": "Dataset Explorer", "dataset": "Dataset collegato", "openCaseStudy": "Apri Case Study", "openDashboard": "Apri Dashboard", "openExplorer": "Apri Dataset Explorer", "sections": "Sezioni del progetto", "sectionsNav": {"project": "Progetto", "caseStudy": "Case Study", "dataset": "Dataset", "rights": "Diritti", "dictionary": "Dizionario dati", "dashboard": "Dashboard"}},
     "caseStudy": {
       "eyebrow": "Contenuto editoriale",
       "title": "Case Study",
@@ -636,7 +640,15 @@
       "savingName": "Salvataggio…",
       "configWarning": "La configurazione dashboard contiene {count} riferimenti non compatibili con i campi di questo dataset.",
       "feedback": {"uploaded": "Dataset caricato e salvato su Supabase.", "replaced": "Dataset sostituito correttamente.", "grainSaved": "Granularità aggiornata.", "nameSaved": "Nome del dataset aggiornato."},
-      "errors": {"csvRequired": "Seleziona un file con estensione .csv.", "confirmReplacement": "Conferma esplicitamente la sostituzione.", "invalidDataset": "CSV non valido: controlla intestazioni, righe e valori.", "datasetExists": "Esiste già un dataset: conferma la sostituzione e riprova.", "datasetTooLarge": "Il file supera il limite consentito.", "tooManyRows": "Il CSV supera il limite di 10.000 righe.", "datasetUploadFailed": "Upload su Storage non riuscito.", "datasetProcessingFailed": "Il dataset non è stato salvato. Il file appena caricato è stato rimosso quando possibile.", "publishingBlocked": "Riporta il progetto in bozza prima di sostituire il dataset della Dashboard pubblicata.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "databaseUnavailable": "Database non disponibile.", "unknown": "Operazione non riuscita. Riprova."}
+      "errors": {"csvRequired": "Seleziona un file con estensione .csv.", "confirmReplacement": "Conferma esplicitamente la sostituzione.", "invalidDataset": "CSV non valido: controlla intestazioni, righe e valori.", "datasetExists": "Esiste già un dataset: conferma la sostituzione e riprova.", "datasetTooLarge": "Il file supera il limite consentito.", "tooManyRows": "Il CSV supera il limite di 10.000 righe.", "datasetUploadFailed": "Upload su Storage non riuscito.", "datasetProcessingFailed": "Il dataset non è stato salvato. Il file appena caricato è stato rimosso quando possibile.", "publishingBlocked": "Riporta il progetto in bozza prima di sostituire il dataset di un progetto pubblicato.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "databaseUnavailable": "Database non disponibile.", "unknown": "Operazione non riuscita. Riprova."}
+    },
+    "rights": {
+      "title": "Dataset Rights & Publishing", "description": "Documenta fonte, licenza e revisione privacy prima di abilitare nuove modalità pubbliche.", "legacy": "Dataset preesistente: le modalità già online restano attive, ma i diritti non sono ancora verificati.",
+      "provenance": "Provenienza", "sourceAuthor": "Autore / organizzazione", "sourceUrl": "URL originale verificabile", "platform": "Piattaforma", "platforms": {"kaggle": "Kaggle", "open-data": "Open Data", "other": "Altro"}, "dataPeriod": "Periodo dei dati", "snapshotDate": "Data dello snapshot", "transformations": "Trasformazioni ({language})",
+      "license": "Licenza", "licenseType": "Tipo", "licenseUrl": "URL ufficiale della licenza", "licenseVersion": "Versione", "licenseCheckedAt": "Ultima verifica", "reviewStatus": "Stato revisione", "reviewNotes": "Note sulla revisione manuale (obbligatorie se non CC0)", "restrictions": "Restrizioni ({language})",
+      "licenses": {"cc0": "CC0", "cc-by": "CC BY", "cc-by-sa": "CC BY-SA", "cc-by-nc": "CC BY-NC", "cc-by-nd": "CC BY-ND", "odbl": "ODbL", "custom": "Personalizzata", "competition-rules": "Regole competizione", "unknown": "Sconosciuta"}, "statuses": {"unverified": "Da verificare", "verified": "Verificata", "needs-review": "Richiede revisione"},
+      "privacy": "Privacy e identificabilità", "privacyNote": "Un ID pseudonimo non è automaticamente anonimo. Verifica contenuti e combinazioni di campi prima della conferma.", "flaggedFields": "Campi da revisionare: {fields}", "privacyChecks": {"personalData": "Ho verificato dati personali e sensibili.", "directIdentifiers": "Ho verificato identificativi diretti, nomi, commenti e URL personali.", "quasiIdentifiers": "Ho verificato identificativi indiretti, coordinate precise e rischio di re-identificazione.", "fieldReview": "Ho revisionato tutti i campi autorizzati per ciascuna modalità."},
+      "publication": "Modalità di pubblicazione", "separateModes": "Dashboard, Explorer e download CSV hanno autorizzazioni indipendenti. I campi Explorer si gestiscono nella sezione seguente.", "dashboardEnabled": "Autorizza Dashboard pubblica", "dashboardFields": "Campi autorizzati per la Dashboard", "explorerFields": "Campi Explorer selezionati: {count}", "csvEnabled": "Autorizza download CSV", "csvExplanation": "Il download richiede Explorer attivo, diritti verificati e conferma esplicita.", "exposurePreview": "Anteprima dei campi esposti ({count})", "nothingExposed": "Nessun campo esposto da queste modalità.", "confirmation": "Confermo di aver verificato fonte, licenza, restrizioni e privacy per le modalità selezionate.", "save": "Salva diritti", "saving": "Salvataggio…", "saved": "Diritti salvati.", "error": "Verifica i campi, la configurazione Dashboard e le autorizzazioni prima di salvare."
     },
     "explorer": {
       "title": "Dataset Explorer",
@@ -645,6 +657,7 @@
       "fields": "Campi pubblici approvati",
       "emptyWarning": "Nessun campo selezionato: l’Explorer resta privato anche se abilitato.",
       "selected": "{count, plural, =1 {# campo selezionato} other {# campi selezionati}}",
+      "confirmExposure": "Confermo di aver verificato diritti e privacy dei nuovi campi pubblici selezionati.",
       "save": "Salva impostazioni Explorer",
       "saving": "Salvataggio…",
       "saved": "Impostazioni Explorer salvate.",
@@ -699,6 +712,7 @@
     "errors": {"databaseUnavailable": "Database non disponibile. Riprova tra poco.", "duplicateSlug": "Questo slug è già utilizzato da un altro progetto.", "invalidConfig": "La configurazione non è valida. Correggi i campi evidenziati.", "invalidDetail": "Il case study non è valido. Controlla i campi evidenziati.", "invalidProject": "I dati del progetto non sono validi.", "publishingBlocked": "Pubblicazione bloccata: completa i requisiti indicati nella checklist.", "projectNotFound": "Il progetto non esiste più o non è accessibile.", "unknown": "Salvataggio non riuscito. Riprova."},
     "quality": {
       "title": "Qualità pubblicazione",
+      "warningsTitle": "Avvisi da revisionare",
       "progress": "{passed} requisiti soddisfatti su {total}",
       "draftAllowed": "Le bozze incomplete possono essere salvate; i requisiti si applicano alla pubblicazione e ai progetti già online.",
       "checking": "Verifica in corso…",
@@ -729,7 +743,8 @@
         "dashboardConfig": "Salva la configurazione Dashboard.",
         "dashboardDatasetId": "Collega la configurazione al dataset del progetto.",
         "dashboardFields": "Correggi i campi della configurazione Dashboard.",
-        "dashboardContent": "Aggiungi almeno un KPI, grafico o ranking alla Dashboard."
+        "dashboardContent": "Aggiungi almeno un KPI, grafico o ranking alla Dashboard.",
+        "rightsReview": "Completa la revisione dei diritti e la conferma privacy del dataset.", "rightsSource": "Indica una fonte originale verificabile.", "rightsDashboard": "Autorizza la Dashboard e tutti i campi utilizzati dalla configurazione.", "rightsExplorer": "Seleziona solo campi reali approvati per l'Explorer.", "rightsDictionary": "Completa le descrizioni IT/EN dei campi pubblici nel Dizionario dati.", "rightsIdentifiers": "Alcuni campi autorizzati possono identificare persone: revisiona i valori e il rischio di re-identificazione."
       }
     },
     "options": {"select": "Selezione singola", "multi-select": "Selezione multipla", "sum": "Somma", "count": "Conteggio", "distinctCount": "Conteggio distinti", "average": "Media", "number": "Numero", "sales": "Vendite", "currency": "Valuta", "percentage": "Percentuale", "duration": "Durata", "line": "Linea", "bar": "Barre", "pie": "Torta", "donut": "Donut", "category-asc": "Categoria crescente", "category-desc": "Categoria decrescente", "value-asc": "Valore crescente", "value-desc": "Valore decrescente", "asc": "Crescente", "desc": "Decrescente"}

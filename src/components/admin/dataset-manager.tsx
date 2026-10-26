@@ -19,6 +19,7 @@ import type {AdminActionError, AdminDatasetDraft, DashboardConfig} from "@/types
 import {DatasetExplorerSettings} from "./dataset-explorer-settings";
 import {DataDictionaryEditor} from "./data-dictionary-editor";
 import {AdminSaveStatus} from "./admin-save-status";
+import {DatasetRightsEditor} from "./dataset-rights-editor";
 
 const inputClass = "mt-1.5 h-11 w-full rounded-control border border-border bg-surface px-3 text-sm outline-none focus:border-primary";
 
@@ -48,12 +49,13 @@ export function DatasetManager({
   const [message, setMessage] = useState<{kind: "success" | "error"; value: string} | null>(null);
   const [explorerDirty, setExplorerDirty] = useState(false);
   const [dictionaryDirty, setDictionaryDirty] = useState(false);
+  const [rightsDirty, setRightsDirty] = useState(false);
 
   const dbDataset = dataset?.source === "database" ? dataset : null;
   const configIssues = dataset ? validateDashboardConfig(dashboardConfig, dataset.fields) : [];
   const localDirty = Boolean(file) || Boolean(dbDataset && (name !== dbDataset.name || grain !== dbDataset.grain));
 
-  useEffect(() => onDirtyChange(localDirty || explorerDirty || dictionaryDirty), [localDirty, explorerDirty, dictionaryDirty, onDirtyChange]);
+  useEffect(() => onDirtyChange(localDirty || explorerDirty || dictionaryDirty || rightsDirty), [localDirty, explorerDirty, dictionaryDirty, rightsDirty, onDirtyChange]);
 
   const upload = async () => {
     setMessage(null);
@@ -162,6 +164,7 @@ export function DatasetManager({
 
       {dbDataset ? (
         <>
+          <DatasetRightsEditor key={`rights-${dbDataset.id}`} locale={locale} projectId={projectId} dataset={dbDataset} onDatasetChange={onDatasetChange} onDirtyChange={setRightsDirty} />
           <DatasetExplorerSettings
             key={`explorer-${dbDataset.id}`}
             locale={locale}
