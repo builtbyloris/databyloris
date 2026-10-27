@@ -300,6 +300,53 @@
       "backToProjects": "View all projects"
     }
   },
+  "AdidasStory": {
+    "navigation": {
+      "label": "Case study sections",
+      "overview": "Overview", "overviewDescription": "Context, objective and source.",
+      "kpis": "KPI", "kpisDescription": "Recomputed headline metrics.",
+      "methodology": "Method", "methodologyDescription": "How the analysis was prepared.",
+      "analysis": "Analysis", "analysisDescription": "Original charts and business interpretation.",
+      "insights": "Findings", "insightsDescription": "Evidence from the case study.",
+      "conclusions": "Conclusions", "conclusionsDescription": "Implications and limitations."
+    },
+    "overview": {"title": "The business question", "context": "Context", "objective": "Objective", "data": "Source and scope"},
+    "kpis": {
+      "title": "Performance at a glance",
+      "intro": "Observed records and units, alongside modeled financial measures derived from the explicit recomputation described below.",
+      "rows": {"label": "Source rows", "note": "Usable records in the sample"},
+      "units": {"label": "Units sold", "note": "Sum of source units"},
+      "revenue": {"label": "Recomputed revenue", "note": "Price per unit × units sold"},
+      "profit": {"label": "Modeled operating profit", "note": "Recomputed revenue × source margin"},
+      "margin": {"label": "Weighted operating margin", "note": "Modeled profit ÷ recomputed revenue"},
+      "caveatTitle": "Accounting caveat.",
+      "caveat": "The source reports $899.90M in sales, but 3,886 of 9,648 rows have reported sales exactly ten times price × units. The $120.17M revenue and $47.22M profit above use the recomputed convention; they must not be mixed with the original sales total or read as official Adidas results."
+    },
+    "methodology": {"title": "From source to analysis"},
+    "analysis": {
+      "title": "Six views of the business",
+      "intro": "Original figures from the ADInsight project. Every chart uses the same normalized sample and the recomputed sales convention unless its axis states otherwise.",
+      "openFigure": "Open full-size chart: {title}",
+      "credit": "Figures authored for ADInsight; underlying Kaggle workbook is not redistributed here. Figure labels remain in their original English.",
+      "figures": {
+        "retailer": {"title": "Revenue concentration by retailer", "caption": "Recomputed revenue across six retail partners.", "alt": "Bar chart of recomputed revenue by retailer, led by West Gear.", "interpretation": "West Gear leads revenue at $32.41M, while Sports Direct has the highest weighted retailer margin at 43.23%. Scale and margin point to different leaders."},
+        "monthly": {"title": "Time without a false growth story", "caption": "Monthly recomputed revenue, 2020–2021.", "alt": "Line chart of monthly recomputed revenue; 2021 values rise as dataset coverage changes.", "interpretation": "The sample records $95.93M in 2021 versus $24.24M in 2020, while state coverage rises from 9 to 46. The difference is not evidence of organic growth."},
+        "region": {"title": "Geographic scale", "caption": "Recomputed revenue by US region.", "alt": "Horizontal bars of recomputed revenue by region, with the West highest.", "interpretation": "The West contributes $36.44M in revenue; the South has the higher weighted margin at 44.76%. Regional decisions need both measures."},
+        "product": {"title": "Assortment mix", "caption": "Recomputed revenue across product labels.", "alt": "Horizontal bars of recomputed revenue by product, led by Men's Street Footwear.", "interpretation": "Men's Street Footwear contributes $27.68M. The labels describe product targeting, not customer demographics."},
+        "channel": {"title": "Channel economics", "caption": "Revenue-weighted operating margin by sales method.", "alt": "Horizontal bars of modeled operating margin by sales channel, with Online highest.", "interpretation": "Online records $44.97M in recomputed revenue and a 43.48% weighted margin. Channel mix is a hypothesis for further validation, not a causal result."},
+        "holiday": {"title": "Holiday windows, descriptively", "caption": "Observed units per day compared with nearby reference windows.", "alt": "Negative percentage differences for five 2021 holiday windows compared with their reference days.", "interpretation": "These are descriptive window comparisons. Overlapping dates, coverage shifts and missing causal controls prevent any claim about promotional lift."}
+      }
+    },
+    "insights": {"title": "Key findings"},
+    "conclusions": {
+      "title": "What the analysis suggests",
+      "lead": "Commercial scale and modeled margin do not tell the same story. The next decisions require validation, not a winner label.",
+      "reconcile": {"title": "Reconcile the source", "description": "Investigate the tenfold sales discrepancy against the upstream system before using these figures for financial decisions."},
+      "compare": {"title": "Compare like with like", "description": "Control for the changing geography and retailer coverage before interpreting year-over-year or regional differences."},
+      "validate": {"title": "Test operational changes", "description": "Pilot channel and assortment hypotheses with cost and demand information absent from this sample."},
+      "limit": "This is an independent, descriptive analysis of a third-party dataset—not an official Adidas report, an audited financial statement or evidence of causality."
+    }
+  },
   "DatasetExplorer": {
     "eyebrow": "Project data",
     "title": "Dataset Explorer",

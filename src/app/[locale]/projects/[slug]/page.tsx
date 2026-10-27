@@ -20,6 +20,7 @@ import {getPublishedProjectWithDetailBySlug} from "@/lib/repositories/projects-r
 import {getPublishedDatasetRights} from "@/lib/repositories/public-dataset-rights-repository";
 import {DatasetRightsFacts} from "@/components/projects/detail/dataset-rights-facts";
 import {getPublishedExplorerDatasetId} from "@/lib/repositories/public-explorer-repository";
+import {AdidasStory} from "@/components/projects/detail/adidas-story";
 import {Link} from "@/i18n/navigation";
 import {createLocalizedMetadata, getAbsoluteUrl, getSiteUrl, serializeJsonLd} from "@/lib/seo";
 import type {Project, ProjectDetail} from "@/types";
@@ -98,7 +99,9 @@ export default async function ProjectPage({params}: ProjectPageProps) {
           <ProjectDetailHero project={project} locale={locale} updatedAt={detail?.updatedAt} />
         </Container>
       </section>
-      {detail ? (
+      {detail && project.slug === "adidas-us-sales" ? (
+        <AdidasStory detail={detail} locale={locale} datasetRights={datasetRights} />
+      ) : detail ? (
         <ProjectCaseStudy project={project} detail={detail} locale={locale} datasetRights={datasetRights} explorerAvailable={explorerAvailable} />
       ) : (
         <Container className="max-w-6xl">

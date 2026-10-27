@@ -300,6 +300,53 @@
       "backToProjects": "Vedi tutti i progetti"
     }
   },
+  "AdidasStory": {
+    "navigation": {
+      "label": "Sezioni del caso studio",
+      "overview": "Panoramica", "overviewDescription": "Contesto, obiettivo e fonte.",
+      "kpis": "KPI", "kpisDescription": "Metriche principali ricalcolate.",
+      "methodology": "Metodo", "methodologyDescription": "Come è stata preparata l'analisi.",
+      "analysis": "Analisi", "analysisDescription": "Grafici originali e lettura di business.",
+      "insights": "Evidenze", "insightsDescription": "Risultati del caso studio.",
+      "conclusions": "Conclusioni", "conclusionsDescription": "Implicazioni e limiti."
+    },
+    "overview": {"title": "La domanda di business", "context": "Contesto", "objective": "Obiettivo", "data": "Fonte e perimetro"},
+    "kpis": {
+      "title": "Performance in sintesi",
+      "intro": "Record e unità osservati, accanto a misure finanziarie modellate tramite il ricalcolo esplicito descritto di seguito.",
+      "rows": {"label": "Righe della fonte", "note": "Record utilizzabili nel campione"},
+      "units": {"label": "Unità vendute", "note": "Somma delle unità nella fonte"},
+      "revenue": {"label": "Ricavi ricalcolati", "note": "Prezzo unitario × unità vendute"},
+      "profit": {"label": "Profitto operativo stimato", "note": "Ricavi ricalcolati × margine della fonte"},
+      "margin": {"label": "Margine operativo ponderato", "note": "Profitto stimato ÷ ricavi ricalcolati"},
+      "caveatTitle": "Avvertenza contabile.",
+      "caveat": "La fonte riporta vendite per 899,90 milioni di dollari, ma in 3.886 righe su 9.648 le vendite riportate sono esattamente dieci volte prezzo × unità. I 120,17 milioni di ricavi e i 47,22 milioni di profitto sopra seguono il ricalcolo: non vanno mescolati al totale originale né interpretati come risultati ufficiali Adidas."
+    },
+    "methodology": {"title": "Dalla fonte all'analisi"},
+    "analysis": {
+      "title": "Sei prospettive sul business",
+      "intro": "Grafici originali del progetto ADInsight. Ogni grafico usa lo stesso campione normalizzato e la convenzione dei ricavi ricalcolati, salvo diversa indicazione dell'asse.",
+      "openFigure": "Apri grafico a dimensione intera: {title}",
+      "credit": "Grafici realizzati per ADInsight; il workbook Kaggle sottostante non è ridistribuito qui. Le etichette interne ai grafici restano nell'inglese originale.",
+      "figures": {
+        "retailer": {"title": "Concentrazione dei ricavi per retailer", "caption": "Ricavi ricalcolati per sei partner commerciali.", "alt": "Grafico a barre dei ricavi ricalcolati per retailer, guidato da West Gear.", "interpretation": "West Gear guida i ricavi con 32,41 milioni di dollari, mentre Sports Direct ha il margine ponderato più alto tra i retailer, 43,23%. Scala e margine indicano leader diversi."},
+        "monthly": {"title": "Tempo senza una falsa storia di crescita", "caption": "Ricavi mensili ricalcolati, 2020–2021.", "alt": "Grafico lineare dei ricavi mensili ricalcolati; i valori del 2021 aumentano mentre cambia la copertura del dataset.", "interpretation": "Il campione registra 95,93 milioni di dollari nel 2021 contro 24,24 nel 2020, ma gli stati coperti passano da 9 a 46. La differenza non dimostra crescita organica."},
+        "region": {"title": "Scala geografica", "caption": "Ricavi ricalcolati per regione degli Stati Uniti.", "alt": "Barre orizzontali dei ricavi ricalcolati per regione, con l'Ovest al primo posto.", "interpretation": "L'Ovest contribuisce 36,44 milioni di dollari di ricavi; il Sud registra il margine ponderato più alto, 44,76%. Le decisioni regionali richiedono entrambe le misure."},
+        "product": {"title": "Mix di assortimento", "caption": "Ricavi ricalcolati per categoria di prodotto.", "alt": "Barre orizzontali dei ricavi ricalcolati per prodotto, guidate da Men's Street Footwear.", "interpretation": "Men's Street Footwear contribuisce 27,68 milioni di dollari. Le etichette descrivono il target dei prodotti, non la demografia dei clienti."},
+        "channel": {"title": "Economia dei canali", "caption": "Margine operativo ponderato per metodo di vendita.", "alt": "Barre orizzontali del margine operativo stimato per canale, con Online al primo posto.", "interpretation": "Online registra 44,97 milioni di dollari di ricavi ricalcolati e un margine ponderato del 43,48%. Il mix dei canali è un'ipotesi da validare, non un risultato causale."},
+        "holiday": {"title": "Finestre festive, in chiave descrittiva", "caption": "Unità osservate al giorno rispetto a finestre di riferimento vicine.", "alt": "Differenze percentuali negative per cinque finestre festive del 2021 rispetto ai giorni di riferimento.", "interpretation": "Sono confronti descrittivi tra finestre temporali. Date sovrapposte, variazioni di copertura e assenza di controlli causali impediscono conclusioni sull'efficacia delle promozioni."}
+      }
+    },
+    "insights": {"title": "Evidenze principali"},
+    "conclusions": {
+      "title": "Cosa suggerisce l'analisi",
+      "lead": "Scala commerciale e margine stimato raccontano storie diverse. Le prossime decisioni richiedono verifiche, non un vincitore automatico.",
+      "reconcile": {"title": "Riconciliare la fonte", "description": "Indagare la discrepanza di un fattore dieci nel sistema originario prima di usare queste cifre per decisioni finanziarie."},
+      "compare": {"title": "Confrontare perimetri omogenei", "description": "Controllare i cambiamenti di copertura geografica e dei retailer prima di interpretare differenze annuali o regionali."},
+      "validate": {"title": "Testare i cambiamenti operativi", "description": "Sperimentare le ipotesi su canali e assortimento con dati di costo e domanda assenti nel campione."},
+      "limit": "Questa è un'analisi indipendente e descrittiva di un dataset di terzi: non è un report ufficiale Adidas, un bilancio certificato o una dimostrazione di causalità."
+    }
+  },
   "DatasetExplorer": {
     "eyebrow": "Dati del progetto",
     "title": "Dataset Explorer",
